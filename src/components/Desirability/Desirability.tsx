@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
 import { ColorScheme, SemanticColors } from "../../colors";
 
-export interface DesirabilityPops extends BaseChartProps {
+export interface DesirabilityProps extends BaseChartProps {
   value: number;
   color?: ColorScheme;
   divider?: ColorScheme;
@@ -22,7 +22,7 @@ export function Desirability({
   color = SemanticColors.primary,
   divider = SemanticColors.divider,
   ...props
-}: DesirabilityPops): ReactNode {
+}: DesirabilityProps): ReactNode {
   const { layout, data } = useMemo(() => {
     const _isDark = !isPrint && isDark;
     const bgColor = _isDark ? divider.dark["400"] : divider.dark["200"];
