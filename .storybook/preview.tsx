@@ -12,7 +12,7 @@ const light = {
 
 const dark = {
   name: "Dark",
-  value: "#000",
+  value: "#374151",
 };
 
 const preview: Preview = {
