@@ -28,7 +28,7 @@ const meta: Meta<typeof Desirability> = {
     <Desirability
       {...args}
       isDark={
-        !["transparent", "#fff"].includes(context.globals.backgrounds.value)
+        !["transparent", "#fff"].includes(context.globals.backgrounds?.value)
       }
     />
   ),
