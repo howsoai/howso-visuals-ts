@@ -279,7 +279,7 @@ export const SemanticColors = {
 };
 
 const buildDiscreteColorWay = (scheme: keyof ColorScheme) => {
-  const shades = ["900", "700", "500"];
+  const shades = ["900", "700", "500", "300"];
   return shades.reduce((colorway, shade) => {
     return [
       Blue,
