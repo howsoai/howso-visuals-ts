@@ -18,6 +18,7 @@ export function Desirability({
   label,
   isDark,
   isPrint,
+  layout: layoutProp,
   color = SemanticColors.primary,
   divider = SemanticColors.divider,
   ...props
@@ -55,9 +56,8 @@ export function Desirability({
     const layout: Partial<Plotly.Layout> = {
       paper_bgcolor: "transparent",
       autosize: true,
-      margin: { t: 24, b: 6, l: 42, r: 42 },
-      ...props.layout,
-      font: { ...layoutFontDefaults, ...props.layout?.font, color: fontColor },
+      ...layoutProp,
+      font: { ...layoutFontDefaults, ...layoutProp?.font, color: fontColor },
     };
     if (label) {
       layout.annotations = [
@@ -76,7 +76,7 @@ export function Desirability({
     }
 
     return { layout, data };
-  }, [isDark, isPrint, color, value, label, props.layout]);
+  }, [isDark, isPrint, color, value, label, layoutProp]);
 
   return (
     <Plot

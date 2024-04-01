@@ -18,16 +18,18 @@ const meta: Meta<typeof Desirability> = {
     // className="h-40 w-full overflow-hidden sm:w-80"
     value: 4,
     label: "Desirability",
+    style: {
+      height: "100vh",
+      width: "100vw",
+      overflow: "hidden",
+    },
   },
-  render: (args, context) => {
-    console.info(context);
-    return (
-      <Desirability
-        {...args}
-        isDark={context.globals.backgrounds.value !== "#fff"}
-      />
-    );
-  },
+  render: (args, context) => (
+    <Desirability
+      {...args}
+      isDark={context.globals.backgrounds?.value !== "#fff"}
+    />
+  ),
 };
 
 export default meta;
@@ -44,5 +46,19 @@ export const PinkStory: Story = {
   args: {
     color: Pink,
     divider: Orange,
+  },
+};
+
+export const LayoutProps: Story = {
+  args: {
+    layout: {
+      margin: { t: 24, b: 6, l: 42, r: 42 },
+      width: 300,
+      height: 200,
+    },
+    style: {
+      width: "auto",
+      height: "auto",
+    },
   },
 };
