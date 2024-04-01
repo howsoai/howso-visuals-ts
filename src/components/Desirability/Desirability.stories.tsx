@@ -53,6 +53,9 @@ export const PinkStory: Story = {
 
 export const StyleSizing: Story = {
   args: {
+    layout: {
+      margin: { t: 24, b: 6, l: 42, r: 42 },
+    },
     style: {
       position: "relative",
       display: "inline-block",
