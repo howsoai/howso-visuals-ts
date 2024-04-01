@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
-import { ColorScheme, SemanticColors } from "../../colors";
+import { ColorScheme, SemanticColors, getTextColor } from "../../colors";
 
 export interface DesirabilityProps extends BaseChartProps {
   value: number;
@@ -25,9 +25,9 @@ export function Desirability({
 }: DesirabilityProps): ReactNode {
   const { layout, data } = useMemo(() => {
     const _isDark = !isPrint && isDark;
-    const bgColor = _isDark ? divider.dark["400"] : divider.dark["200"];
-    const fillColor = _isDark ? color.dark["700"] : color.light["600"];
-    const fontColor = _isDark ? divider.dark["200"] : divider.light["900"];
+    const bgColor = _isDark ? divider.dark["700"] : divider.dark["300"];
+    const fillColor = _isDark ? color.dark["900"] : color.light["900"];
+    const fontColor = _isDark ? "#fff" : "#000";
     const tickvals = [value];
     // Prevent label overlay
     if (value >= 0.2) tickvals.unshift(0);
