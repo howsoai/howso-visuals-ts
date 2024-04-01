@@ -49,6 +49,17 @@ export const PinkStory: Story = {
   },
 };
 
+export const StyleSizing: Story = {
+  args: {
+    style: {
+      position: "relative",
+      display: "inline-block",
+      width: "20rem",
+      height: "10rem",
+    },
+  },
+};
+
 export const LayoutProps: Story = {
   args: {
     layout: {
