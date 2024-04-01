@@ -1,6 +1,5 @@
 import React from "react";
-import type { Preview, StoryFn } from "@storybook/react";
-import { MemoryRouter } from "react-router-dom";
+import type { Preview } from "@storybook/react";
 // CSS
 // import "@fontsource/inter";
 import "@fontsource/inter/500.css";
@@ -34,12 +33,5 @@ const preview: Preview = {
     },
     viewport: { defaultViewport: "responsive" },
   },
-  decorators: [
-    (Story: StoryFn) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    ),
-  ],
 };
 export default preview;
