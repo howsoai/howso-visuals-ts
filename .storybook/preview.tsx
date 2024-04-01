@@ -1,9 +1,9 @@
-import React from "react";
 import type { Preview } from "@storybook/react";
 // CSS
 // import "@fontsource/inter";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/700.css";
+import "./preview.css";
 
 const light = {
   name: "Light",
