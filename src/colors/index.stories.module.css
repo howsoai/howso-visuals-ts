@@ -1,0 +1,39 @@
+.namedSets {
+  display: flex;
+  flex-direction: row;
+}
+
+.namedSet {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  border: solid 1px rgba(0, 0, 0, 0.3);
+}
+
+.setLight {
+  background: #fff;
+  color: #000;
+}
+
+.setDark {
+  background: #374151;
+  color: #fff;
+}
+
+.colorway {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.colorwayLabel {
+  margin-bottom: 0.5rem;
+}
+
+.colorwayItem {
+  padding: 1rem;
+  text-transform: uppercase;
+  min-width: 9ch;
+  text-align: center;
+}
