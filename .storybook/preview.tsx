@@ -27,11 +27,10 @@ const preview: Preview = {
     },
     controls: {
       matchers: {
-        color: /(background|color)$/i,
         date: /Date$/,
       },
     },
-    viewport: { defaultViewport: "responsive" },
+    // viewport: { defaultViewport: "responsive" },
   },
 };
 export default preview;
