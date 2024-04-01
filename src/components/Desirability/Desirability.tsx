@@ -1,6 +1,6 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
-import { BaseChartProps, layoutFont as layoutFontDefaults } from "../BaseChart";
+import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
 import { ColorScheme, SemanticColors } from "../../colors";
 
 export interface DesirabilityPops extends BaseChartProps {
