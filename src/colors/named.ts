@@ -271,6 +271,13 @@ buildColorWays(Gray);
 // I'm British: https://www.youtube.com/watch?v=FkF_XpA5P48&pp=ygUfcHJvZmVzc29yIGVsZW1lbnRhbCBJJ20gYnJpdGlzaA%3D%3D
 export const Grey = Gray;
 
+// Semantic colors
+export const SemanticColors = {
+  primary: Blue,
+  secondary: Gold,
+  divider: Gray,
+};
+
 const buildDiscreteColorWay = (scheme: keyof ColorScheme) => {
   const shades = ["900", "700", "500"];
   return shades.reduce((colorway, shade) => {
