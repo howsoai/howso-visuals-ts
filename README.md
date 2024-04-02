@@ -20,7 +20,7 @@ Your home directory must contain a `.npmrc` file pointing to the Azure DevOps ar
 Standard package installation makes imports available:
 
 ```bash
-npm i @howso/react-tailwind-flowbite-components
+npm i @howso/howso-visuals
 ```
 
 ## Contributing
@@ -45,5 +45,5 @@ When you are ready to publish a new verison, use the Github Release action.
 
 ### Chromatic
 
-[Chromatic - TODO](#) is used to review changes on this project.
-You may [invite yourself](#) to the project.
+[Chromatic](https://www.chromatic.com/library?appId=660ae6abe1f3044afce54bba&branch=main) is used to review changes on this project.
+You may [invite yourself](https://www.chromatic.com/start?inviteToken=chpi_4b32753dfe61496fab76da1667fc49f0&appId=660ae6abe1f3044afce54bba) to the project.
