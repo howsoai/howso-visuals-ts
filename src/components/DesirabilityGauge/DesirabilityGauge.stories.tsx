@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Desirability } from "./Desirability";
+import { DesirabilityGauge } from "./DesirabilityGauge";
 import { Orange, Pink } from "../../colors";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof Desirability> = {
-  component: Desirability,
+const meta: Meta<typeof DesirabilityGauge> = {
+  component: DesirabilityGauge,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/7.0/react/writing-docs/docs-page
   tags: ["autodocs"],
   parameters: {
@@ -25,7 +25,7 @@ const meta: Meta<typeof Desirability> = {
     },
   },
   render: (args, context) => (
-    <Desirability
+    <DesirabilityGauge
       {...args}
       isDark={
         !["transparent", "#fff"].includes(context.globals.backgrounds?.value)
@@ -35,7 +35,7 @@ const meta: Meta<typeof Desirability> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Desirability>;
+type Story = StoryObj<typeof DesirabilityGauge>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 export const Default: Story = {

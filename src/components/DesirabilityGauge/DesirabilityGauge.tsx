@@ -3,7 +3,9 @@ import Plot from "react-plotly.js";
 import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
 import { ColorScheme, SemanticColors } from "../../colors";
 
-export interface DesirabilityProps extends BaseChartProps {
+// See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
+
+export interface DesirabilityGaugeProps extends BaseChartProps {
   value: number;
   color?: ColorScheme;
   divider?: ColorScheme;
@@ -12,7 +14,7 @@ export interface DesirabilityProps extends BaseChartProps {
   style?: CSSProperties;
 }
 
-export function Desirability({
+export function DesirabilityGauge({
   className,
   value,
   label,
@@ -22,7 +24,7 @@ export function Desirability({
   color = SemanticColors.primary,
   divider = SemanticColors.divider,
   ...props
-}: DesirabilityProps): ReactNode {
+}: DesirabilityGaugeProps): ReactNode {
   const { layout, data } = useMemo(() => {
     const _isDark = !isPrint && isDark;
     const bgColor = _isDark ? divider.light["400"] : divider.dark["300"];
