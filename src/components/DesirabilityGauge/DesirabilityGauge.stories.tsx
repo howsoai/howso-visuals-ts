@@ -14,8 +14,6 @@ const meta: Meta<typeof DesirabilityGauge> = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
-    // color={color}
-    // className="h-40 w-full overflow-hidden sm:w-80"
     value: 4,
     label: "Desirability",
     style: {
@@ -43,11 +41,10 @@ export const Default: Story = {
   args: {},
 };
 
-export const PinkStory: Story = {
-  name: "Pink",
+export const PinkAndOrange: Story = {
   args: {
-    color: Pink,
-    divider: Orange,
+    color: Pink.dark[900],
+    background: Orange.dark[900],
   },
 };
 

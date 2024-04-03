@@ -1,3 +1,5 @@
+import { ColorShade, Discrete } from ".";
+
 /** Returns the contrasting text color for a given color. White or Black */
 export const getTextColor = (hex: `#${string}`, factorAlpha = false) => {
   const [r, g, b, a] = hex
@@ -11,4 +13,29 @@ export const getTextColor = (hex: `#${string}`, factorAlpha = false) => {
     (!!(~(128 / a) + 1) && factorAlpha)
     ? "#000"
     : "#FFF";
+};
+
+export type GetColorSchemeParams = {
+  isDark: boolean;
+  isPrint: boolean;
+};
+export const getColorScheme = ({
+  isDark,
+  isPrint,
+}: GetColorSchemeParams): "light" | "dark" =>
+  isDark && !isPrint ? "dark" : "light";
+
+export type GetDiscreteColorParams = GetColorSchemeParams & {
+  index?: number;
+};
+/**
+ * Returns a render context aware color from Discrete.
+ * Indexes overflows from available colors will loop back around to the Discrete start.
+ */
+export const getDiscreteColor = (
+  params: GetDiscreteColorParams
+): ColorShade => {
+  const scheme = getColorScheme(params);
+  const modulus = !params.index ? 0 : params.index % Discrete[scheme].length;
+  return Discrete[scheme][modulus];
 };
