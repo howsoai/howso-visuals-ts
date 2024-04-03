@@ -8,7 +8,7 @@ import { ColorShade, SemanticColors } from "../../colors";
 export interface DesirabilityGaugeProps extends BaseChartProps {
   value: number;
   color?: ColorShade;
-  divider?: ColorShade;
+  background?: ColorShade;
   label?: string;
   className?: string;
   style?: CSSProperties;
@@ -22,16 +22,18 @@ export function DesirabilityGauge({
   isPrint,
   layout: layoutProp,
   color: colorProp,
-  divider: dividerProp,
+  background: backgroundProp,
   ...props
 }: DesirabilityGaugeProps): ReactNode {
   const isDark = !isPrint && isDarkProps;
   const color =
     colorProp || SemanticColors.primary[isDark ? "dark" : "light"]["900"];
-  const divider =
-    dividerProp || isDark
-      ? SemanticColors.divider.light["400"]
-      : SemanticColors.divider.dark["300"];
+  const background = backgroundProp
+    ? backgroundProp
+    : isDark
+    ? SemanticColors.divider.light["400"]
+    : SemanticColors.divider.dark["300"];
+
   const { layout, data } = useMemo(() => {
     const fontColor = isDark ? "#fff" : "#000";
     const tickvals = [value];
@@ -54,7 +56,7 @@ export function DesirabilityGauge({
             tickfont: { size: 14 },
           },
           bar: { thickness: 1, color },
-          bgcolor: divider,
+          bgcolor: background,
           borderwidth: 0,
         },
       },
@@ -82,7 +84,7 @@ export function DesirabilityGauge({
     }
 
     return { layout, data };
-  }, [isDark, color, divider, value, label, layoutProp]);
+  }, [isDark, color, background, value, label, layoutProp]);
 
   return (
     <Plot

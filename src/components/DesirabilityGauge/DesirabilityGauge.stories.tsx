@@ -41,11 +41,10 @@ export const Default: Story = {
   args: {},
 };
 
-export const PinkStory: Story = {
-  name: "Pink",
+export const PinkAndOrange: Story = {
   args: {
     color: Pink.dark[900],
-    divider: Orange.dark[400],
+    background: Orange.dark[900],
   },
 };
 
