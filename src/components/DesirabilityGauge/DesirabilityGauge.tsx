@@ -1,14 +1,14 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
-import { ColorScheme, SemanticColors } from "../../colors";
+import { ColorScheme, ColorShade, SemanticColors } from "../../colors";
 
 // See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
 
 export interface DesirabilityGaugeProps extends BaseChartProps {
   value: number;
-  color?: ColorScheme;
-  divider?: ColorScheme;
+  color?: ColorShade;
+  divider?: ColorShade;
   label?: string;
   className?: string;
   style?: CSSProperties;
@@ -18,18 +18,22 @@ export function DesirabilityGauge({
   className,
   value,
   label,
-  isDark,
+  isDark: isDarkProps,
   isPrint,
   layout: layoutProp,
-  color = SemanticColors.primary,
-  divider = SemanticColors.divider,
+  color: colorProp,
+  divider: dividerProp,
   ...props
 }: DesirabilityGaugeProps): ReactNode {
+  const isDark = !isPrint && isDarkProps;
+  const color =
+    colorProp || SemanticColors.primary[isDark ? "dark" : "light"]["900"];
+  const divider =
+    dividerProp || isDark
+      ? SemanticColors.divider.light["400"]
+      : SemanticColors.divider.dark["300"];
   const { layout, data } = useMemo(() => {
-    const _isDark = !isPrint && isDark;
-    const bgColor = _isDark ? divider.light["400"] : divider.dark["300"];
-    const fillColor = _isDark ? color.dark["900"] : color.light["900"];
-    const fontColor = _isDark ? "#fff" : "#000";
+    const fontColor = isDark ? "#fff" : "#000";
     const tickvals = [value];
     // Prevent label overlay
     if (value >= 0.2) tickvals.unshift(0);
@@ -49,8 +53,8 @@ export function DesirabilityGauge({
             tickformat: ".2~f", // show up to 2 decimals
             tickfont: { size: 14 },
           },
-          bar: { thickness: 1, color: fillColor },
-          bgcolor: bgColor,
+          bar: { thickness: 1, color },
+          bgcolor: divider,
           borderwidth: 0,
         },
       },
@@ -78,7 +82,7 @@ export function DesirabilityGauge({
     }
 
     return { layout, data };
-  }, [isDark, isPrint, color, divider, value, label, layoutProp]);
+  }, [isDark, color, divider, value, label, layoutProp]);
 
   return (
     <Plot
