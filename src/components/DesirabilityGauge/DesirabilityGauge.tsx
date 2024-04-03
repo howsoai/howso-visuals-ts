@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { BaseChartProps, layoutFont as layoutFontDefaults } from "..";
-import { ColorScheme, ColorShade, SemanticColors } from "../../colors";
+import { ColorShade, SemanticColors } from "../../colors";
 
 // See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
 
