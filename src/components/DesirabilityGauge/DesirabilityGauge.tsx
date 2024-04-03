@@ -7,7 +7,15 @@ import { ColorShade, SemanticColors } from "../../colors";
 
 export interface DesirabilityGaugeProps extends BaseChartProps {
   value: number;
+  /**
+   * Provides the gauge's fill color if provided.
+   * Default: Scheme and print aware semantic primary.
+   */
   color?: ColorShade;
+  /**
+   * Provides the gauge's background color if provided.
+   * Default: Scheme and print aware semantic divider.
+   */
   background?: ColorShade;
   label?: string;
   className?: string;
@@ -18,14 +26,14 @@ export function DesirabilityGauge({
   className,
   value,
   label,
-  isDark: isDarkProps,
+  isDark: isDarkProp,
   isPrint,
   layout: layoutProp,
   color: colorProp,
   background: backgroundProp,
   ...props
 }: DesirabilityGaugeProps): ReactNode {
-  const isDark = !isPrint && isDarkProps;
+  const isDark = !isPrint && isDarkProp;
   const color =
     colorProp || SemanticColors.primary[isDark ? "dark" : "light"]["900"];
   const background = backgroundProp
