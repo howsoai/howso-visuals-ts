@@ -1,5 +1,5 @@
 import { Layout } from "plotly.js";
-import { useState, useLayoutEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Gray } from "../colors";
 
 export function useLayoutDefaults({
