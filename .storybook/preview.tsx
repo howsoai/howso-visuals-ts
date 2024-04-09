@@ -4,16 +4,7 @@ import type { Preview } from "@storybook/react";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/700.css";
 import "./preview.css";
-
-const light = {
-  name: "Light",
-  value: "#fff",
-};
-
-const dark = {
-  name: "Dark",
-  value: "#374151",
-};
+import { darkBackground, lightBackground } from "./constants";
 
 const preview: Preview = {
   parameters: {
@@ -21,9 +12,9 @@ const preview: Preview = {
     // layout: "fullscreen", // TODO not having any effect..
     backgrounds: {
       // Load them by hand, or make a nice loop if you wish
-      values: [light, dark],
+      values: [lightBackground, darkBackground],
       // Ensure a default is set, so you avoid type errors reading from undefined!
-      default: light.name,
+      default: lightBackground.name,
     },
     controls: {
       matchers: {
