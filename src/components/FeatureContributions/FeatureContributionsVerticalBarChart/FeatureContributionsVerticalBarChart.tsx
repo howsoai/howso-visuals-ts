@@ -81,7 +81,6 @@ export function FeatureContributionsVerticalBarChart({
         tickmode: "array",
         ticks: "outside",
         tickcolor: "transparent",
-
         gridcolor: "transparent",
         automargin: true,
       },
