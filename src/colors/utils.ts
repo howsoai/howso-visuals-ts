@@ -16,8 +16,8 @@ export const getTextColor = (hex: `#${string}`, factorAlpha = false) => {
 };
 
 export type GetColorSchemeParams = {
-  isDark: boolean;
-  isPrint: boolean;
+  isDark: boolean | undefined;
+  isPrint: boolean | undefined;
 };
 export const getColorScheme = ({
   isDark,

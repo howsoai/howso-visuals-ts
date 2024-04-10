@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { DesirabilityGauge } from "./DesirabilityGauge";
 import { Orange, Pink } from "../../colors";
+import { isDarkBackground } from "../../../.storybook/utils";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof DesirabilityGauge> = {
@@ -15,7 +16,6 @@ const meta: Meta<typeof DesirabilityGauge> = {
   argTypes: {},
   args: {
     value: 4,
-    label: "Desirability",
     style: {
       height: "100vh",
       width: "100vw",
@@ -23,12 +23,7 @@ const meta: Meta<typeof DesirabilityGauge> = {
     },
   },
   render: (args, context) => (
-    <DesirabilityGauge
-      {...args}
-      isDark={
-        !["transparent", "#fff"].includes(context.globals.backgrounds?.value)
-      }
-    />
+    <DesirabilityGauge {...args} isDark={isDarkBackground(context)} />
   ),
 };
 
@@ -41,7 +36,7 @@ export const Default: Story = {
   args: {},
 };
 
-export const PinkAndOrange: Story = {
+export const DefinedColors: Story = {
   args: {
     color: Pink.dark[900],
     background: Orange.dark[900],

@@ -1,2 +1,3 @@
-export * from "./BaseChart";
+export * from "./BaseVisual";
 export * from "./DesirabilityGauge";
+export * from "./FeatureContributions";
