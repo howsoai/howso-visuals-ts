@@ -1,6 +1,7 @@
 import { type Layout } from "plotly.js";
+import { type PlotParams } from "react-plotly.js";
 
-export type BaseChartProps = {
+export type BaseVisualProps = {
   isLoading?: boolean;
   isDark?: boolean;
   isPrint?: boolean;
@@ -11,8 +12,13 @@ export type BaseChartProps = {
    * We suggest a constant outside of your component or useMemo() if dynamic data is required.
    *  */
   layout?: Partial<Layout>;
+  /** A name for the visual typically used in captions */
+  name?: string;
 };
 
-export const layoutFont: Layout["font"] = {
-  family: "Inter, system-ui, sans-serif",
+export const plotDefaults: Partial<PlotParams> = {
+  useResizeHandler: true,
+  config: {
+    responsive: true,
+  },
 };
