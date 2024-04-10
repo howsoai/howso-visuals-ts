@@ -21,7 +21,7 @@ export interface DesirabilityGaugeProps extends BaseVisualProps {
 }
 
 /**
- * @see See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
+ * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
  */
 export function DesirabilityGauge({
   value,
