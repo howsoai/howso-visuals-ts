@@ -6,8 +6,6 @@ import { useLayoutDefaults } from "../../../hooks";
 import { Datum, Layout, type PlotData } from "plotly.js";
 import { formatCategoryTickText } from "../../../utils/formatting";
 
-// See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-116&mode=design&t=EAIu2Lqzf3bekOkQ-4
-
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {
   /**
@@ -28,6 +26,8 @@ export interface FeatureContributionsVerticalBarChartProps
 /**
  * Displays feature contributions.
  * By default the first first 10 are displayed.
+ *
+ * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-116&mode=design&t=EAIu2Lqzf3bekOkQ-4
  */
 export function FeatureContributionsVerticalBarChart({
   isDark,

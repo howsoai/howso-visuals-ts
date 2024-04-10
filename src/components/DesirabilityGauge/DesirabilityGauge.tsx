@@ -4,8 +4,6 @@ import { BaseVisualProps, plotDefaults } from "..";
 import { ColorShade, SemanticColors, getColorScheme } from "../../colors";
 import { useLayoutDefaults } from "../../hooks";
 
-// See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
-
 export interface DesirabilityGaugeProps extends BaseVisualProps {
   value: number;
   /**
@@ -22,6 +20,9 @@ export interface DesirabilityGaugeProps extends BaseVisualProps {
   style?: CSSProperties;
 }
 
+/**
+ * @see See https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
+ */
 export function DesirabilityGauge({
   value,
   name = "Desirability",
