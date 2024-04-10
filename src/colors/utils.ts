@@ -42,6 +42,10 @@ export const getDiscreteColor = (
 };
 
 export const getColorScale = (colors: ColorShade[]): ColorScale => {
+  if (colors.length < 2) {
+    throw new Error("At least two colors must be provided to make a scale");
+  }
+
   const step = 1 / colors.length;
   // @ts-expect-error TODO Types are wrong https://plotly.com/javascript/reference/heatmap/#heatmap-colorscale
   return colors.map((color, index) => [
