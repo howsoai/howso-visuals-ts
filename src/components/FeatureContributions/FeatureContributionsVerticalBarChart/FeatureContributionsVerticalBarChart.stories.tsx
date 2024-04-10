@@ -45,7 +45,7 @@ const meta: Meta<typeof FeatureContributionsVerticalBarChart> = {
       "frozen foods|pizza": 0.005208273607988813,
       beer: 0.0033027363628432027,
       wine: 0.0007389917986071854,
-      "condiments sauces and seasonings|condiments": 0.1048152073646825075,
+      "condiments sauces and seasonings|condiments": 0.0048152073646825075,
       "produce|nuts": 0.007063465104414912,
       "boxed meals": 0.0031431346168092162,
       "dairy|yogurt": 0.005278159324482991,
