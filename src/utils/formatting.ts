@@ -5,7 +5,7 @@ export const formatCategoryTickText = (string: string): string => {
     return string;
   }
   const regex = new RegExp(`.{1,${limit}}(?:\\s|$)`, "g");
-  const chunks = string.match(regex);
+  const chunks = string.replaceAll("|", " ").match(regex);
   if (!chunks) {
     return "";
   }
@@ -13,5 +13,5 @@ export const formatCategoryTickText = (string: string): string => {
   return [chunks.at(0), chunks.at(-1)]
     .map((chunk) => (chunk || "").trim())
     .filter(Boolean)
-    .join("<br />");
+    .join("...<br />");
 };
