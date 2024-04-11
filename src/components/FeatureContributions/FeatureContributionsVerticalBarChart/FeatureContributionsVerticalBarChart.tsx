@@ -1,10 +1,17 @@
-import { useMemo, type CSSProperties, ReactNode } from "react";
+import { useMemo, type CSSProperties, type ReactNode } from "react";
 import Plot from "react-plotly.js";
-import { FeatureContributionsBaseVisualProps, plotDefaults } from "../..";
-import { ColorShade, SemanticColors, getColorScheme } from "../../../colors";
+import { type FeatureContributionsBaseVisualProps, plotDefaults } from "../..";
+import {
+  type ColorShade,
+  SemanticColors,
+  getColorScheme,
+} from "../../../colors";
 import { useLayoutDefaults } from "../../../hooks";
-import { Datum, Layout, type PlotData } from "plotly.js";
-import { formatCategoryTickText } from "../../../utils/formatting";
+import type { Datum, Layout, PlotData } from "plotly.js";
+import {
+  UseLayoutCategoryAxisDefaultsParams,
+  useLayoutCategoryAxisDefaults,
+} from "../../../hooks";
 
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {
@@ -39,12 +46,7 @@ export function FeatureContributionsVerticalBarChart({
   limit = 10,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
-  const colorScheme = getColorScheme({ isDark, isPrint });
-
-  const color = colorProp || SemanticColors.primary[colorScheme]["900"];
-  const layoutDefaults = useLayoutDefaults({ colorScheme });
-
-  // Create sorted ata
+  // Create sorted data
   const sortedData = useMemo(() => {
     const sortedData = Object.entries(features).reduce(
       (data, [feature, value]) => {
@@ -59,27 +61,30 @@ export function FeatureContributionsVerticalBarChart({
     return sortedData.slice(0, sliceLimit);
   }, [limit, features]);
 
-  // Create the layout (which depends on the data sadly)
-  const layout = useMemo((): Partial<Layout> => {
-    const { ticktext, tickvals } = sortedData.reduce(
-      ({ ticktext, tickvals }, { feature }, index) => {
-        ticktext.push(formatCategoryTickText(feature));
-        tickvals.push(index);
-        return { ticktext, tickvals };
-      },
-      { ticktext: [] as string[], tickvals: [] as any[] }
-    );
+  // Create layout defaults
+  const colorScheme = getColorScheme({ isDark, isPrint });
+  const color = colorProp || SemanticColors.primary[colorScheme]["900"];
+  const layoutDefaults = useLayoutDefaults({ colorScheme });
 
+  // Create category axis defaults
+  const useLayoutCategoryAxisArgs = useMemo(
+    (): UseLayoutCategoryAxisDefaultsParams => ({
+      categories: sortedData.map(({ feature }) => feature),
+    }),
+    [sortedData]
+  );
+  const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
+    useLayoutCategoryAxisArgs
+  );
+
+  // Create the layout
+  const layout = useMemo((): Partial<Layout> => {
     return {
       ...layoutDefaults,
       xaxis: {
         ...layoutDefaults.xaxis,
+        ...categoryAxisDefaults,
         title: { text: "Feature" },
-        tickangle: 90,
-        ticktext,
-        tickvals,
-        tickmode: "array",
-        ticks: "outside",
         tickcolor: "transparent",
         gridcolor: "transparent",
         automargin: true,
@@ -87,18 +92,16 @@ export function FeatureContributionsVerticalBarChart({
       yaxis: {
         ...layoutDefaults.yaxis,
         title: { text: "Contribution" },
-        automargin: true,
-        ticks: "outside",
         tickcolor: "transparent",
       },
       // @ts-expect-error https://plotly.com/javascript/reference/layout/#layout-barcornerradius
       barcornerradius: 4,
       ...layoutProp,
     };
-  }, [layoutDefaults, layoutProp, sortedData]);
+  }, [layoutDefaults, categoryAxisDefaults, layoutProp]);
 
   // Create the data
-  const data = useMemo((): Partial<PlotData> => {
+  const data = useMemo((): [Partial<PlotData>] => {
     const { x, y } = sortedData.reduce(
       ({ x, y }, { feature, value }) => {
         x.push(feature);
@@ -107,29 +110,38 @@ export function FeatureContributionsVerticalBarChart({
       },
       { x: [], y: [] } as { x: Datum[]; y: Datum[] }
     );
-    return {
-      x,
-      y,
-      type: "bar",
-      name,
-      marker: { color },
-      hovertemplate:
-        "<b>%{hovertext}</b><br />%{yaxis.title.text}: %{y:.4~f}<extra></extra>",
-      hoverinfo: "y+text",
-      hovertext: x.map((datum) => (datum || "").toString()),
-    };
+
+    return [
+      {
+        x,
+        y,
+        type: "bar",
+        name,
+        marker: { color },
+        hovertemplate:
+          "<b>%{hovertext}</b><br />%{yaxis.title.text}: %{y:.4~f}<extra></extra>",
+        hoverinfo: "y+text",
+        hovertext: x.map((datum) => (datum || "").toString()),
+      },
+    ];
   }, [name, sortedData, color]);
+
+  // Create the config
+  const config = useMemo(
+    () => ({
+      ...plotDefaults.config,
+      displayModeBar: true,
+    }),
+    []
+  );
 
   return (
     <Plot
       {...plotDefaults}
       {...props}
-      data={[data]}
+      data={data}
       layout={layout}
-      config={{
-        ...plotDefaults.config,
-        displayModeBar: true,
-      }}
+      config={config}
     />
   );
 }
