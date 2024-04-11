@@ -33,6 +33,7 @@ export function DesirabilityGauge({
   background: backgroundProp,
   ...props
 }: DesirabilityGaugeProps): ReactNode {
+  // Create the layout
   const colorScheme = getColorScheme({ isDark: isDarkProp, isPrint });
   const color = colorProp || SemanticColors.primary[colorScheme]["900"];
   const background = backgroundProp
@@ -40,8 +41,8 @@ export function DesirabilityGauge({
     : colorScheme === "dark"
     ? SemanticColors.divider.light["400"]
     : SemanticColors.divider.dark["300"];
-  const layoutDefaults = useLayoutDefaults({ colorScheme });
 
+  const layoutDefaults = useLayoutDefaults({ colorScheme });
   const layout = useMemo((): Partial<Plotly.Layout> => {
     const layout: Partial<Plotly.Layout> = {
       ...layoutDefaults,
@@ -67,6 +68,7 @@ export function DesirabilityGauge({
     return layout;
   }, [name, layoutDefaults, layoutProp]);
 
+  // Create the data
   const data = useMemo((): Plotly.Data[] => {
     const tickvals = [value];
     // Prevent label overlay
@@ -95,16 +97,22 @@ export function DesirabilityGauge({
     ];
   }, [value, background, color]);
 
+  // Create the config
+  const config = useMemo(
+    () => ({
+      ...plotDefaults.config,
+      displayModeBar: true,
+    }),
+    []
+  );
+
   return (
     <Plot
       {...plotDefaults}
       {...props}
       data={data}
       layout={layout}
-      config={{
-        ...plotDefaults.config,
-        displayModeBar: false,
-      }}
+      config={config}
     />
   );
 }
