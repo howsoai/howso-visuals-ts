@@ -111,7 +111,7 @@ export function FeatureCorrelations({
         colorscale,
       },
     ];
-  }, [colors, features, correlations, colorscale]);
+  }, [features, correlations, colorscale]);
 
   return (
     <Plot
