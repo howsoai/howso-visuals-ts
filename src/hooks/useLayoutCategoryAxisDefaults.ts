@@ -10,7 +10,7 @@ export const useLayoutCategoryAxisDefaults = (
   params: UseLayoutCategoryAxisDefaultsParams
 ): Partial<LayoutAxis> => {
   const layoutDefaults = useMemo(
-    () => useLayoutCategoryAxisDefaults(params),
+    () => getLayoutCategoryAxisDefaults(params),
     [params]
   );
 
