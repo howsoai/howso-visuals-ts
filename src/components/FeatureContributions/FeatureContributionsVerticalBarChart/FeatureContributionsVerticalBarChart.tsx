@@ -55,6 +55,7 @@ export function FeatureContributionsVerticalBarChart({
   isDark,
   isPrint,
   name = "Feature contributions",
+  screenSizes,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
   // Create sorted data
@@ -82,8 +83,9 @@ export function FeatureContributionsVerticalBarChart({
     (): UseLayoutCategoryAxisDefaultsParams => ({
       categories: sortedData.map(({ feature }) => feature),
       formatParams,
+      screenSizes,
     }),
-    [sortedData, formatParams]
+    [sortedData, formatParams, screenSizes]
   );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs

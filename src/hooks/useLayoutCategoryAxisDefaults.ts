@@ -2,6 +2,7 @@ import type { LayoutAxis } from "plotly.js";
 import { useMemo } from "react";
 import {
   FormatCategoryTickTextParams,
+  ScreenSizes,
   formatCategoryTickText,
   useIsLgUp,
   useIsMdUp,
@@ -11,17 +12,20 @@ import {
 export type UseLayoutCategoryAxisDefaultsParams = Omit<
   GetLayoutCategoryAxisDefaultsParams,
   "isSmUp" | "isMdUp" | "isLgUp"
->;
+> & {
+  screenSizes?: ScreenSizes;
+};
 /**
  * Provides tick properties and category label formatting.
  * This hook is relatively expensive, ensure it's arguments are memoized.
  */
-export const useLayoutCategoryAxisDefaults = (
-  params: UseLayoutCategoryAxisDefaultsParams
-): Partial<LayoutAxis> => {
-  const isSmUp = useIsSmUp();
-  const isMdUp = useIsMdUp();
-  const isLgUp = useIsLgUp();
+export const useLayoutCategoryAxisDefaults = ({
+  screenSizes,
+  ...params
+}: UseLayoutCategoryAxisDefaultsParams): Partial<LayoutAxis> => {
+  const isSmUp = useIsSmUp(screenSizes);
+  const isMdUp = useIsMdUp(screenSizes);
+  const isLgUp = useIsLgUp(screenSizes);
 
   const layoutDefaults = useMemo(
     () => getLayoutCategoryAxisDefaults({ ...params, isSmUp, isMdUp, isLgUp }),

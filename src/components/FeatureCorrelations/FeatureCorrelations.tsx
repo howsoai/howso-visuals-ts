@@ -81,8 +81,9 @@ export function FeatureCorrelations({
     (): UseLayoutCategoryAxisDefaultsParams => ({
       categories: features,
       formatParams,
+      screenSizes,
     }),
-    [features, formatParams]
+    [features, formatParams, screenSizes]
   );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
