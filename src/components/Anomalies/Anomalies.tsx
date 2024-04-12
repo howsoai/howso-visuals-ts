@@ -136,6 +136,7 @@ export const Anomalies = ({
       annotations,
     };
   }, [
+    colorScheme,
     colorscale,
     layoutDefaults,
     categoryAxisDefaults,
@@ -163,7 +164,7 @@ export const Anomalies = ({
         hovertemplate: "Conviction=%{z}<extra></extra>",
       },
     ],
-    [anomalies, z]
+    [features, anomalies, z]
   );
 
   return (
