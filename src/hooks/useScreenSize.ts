@@ -1,7 +1,7 @@
 import { useMediaQuery } from ".";
 
 export const useScreenSize = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
+  screenSizes: ScreenSizes = _screenSizes
 ): ScreenSize => {
   const isSmUp = useIsSmUp(screenSizes);
   const isMdUp = useIsMdUp(screenSizes);
@@ -25,25 +25,20 @@ export const useScreenSize = (
   }
 };
 
-export const useIsSmUp = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
-): boolean => useMediaQuery(`'min-width: ${screenSizes.sm}'`);
+export const useIsSmUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
+  useMediaQuery(`'min-width: ${screenSizes.sm}'`);
 
-export const useIsMdUp = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
-): boolean => useMediaQuery(`'min-width: ${screenSizes.md}'`);
+export const useIsMdUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
+  useMediaQuery(`'min-width: ${screenSizes.md}'`);
 
-export const useIsLgUp = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
-): boolean => useMediaQuery(`'min-width: ${screenSizes.lg}'`);
+export const useIsLgUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
+  useMediaQuery(`'min-width: ${screenSizes.lg}'`);
 
-export const useIsXlUp = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
-): boolean => useMediaQuery(`'min-width: ${screenSizes.xl}'`);
+export const useIsXlUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
+  useMediaQuery(`'min-width: ${screenSizes.xl}'`);
 
-export const useIs2xlUp = (
-  screenSizes: Record<string, `${number}px`> = _screenSizes
-): boolean => useMediaQuery(`'min-width: ${screenSizes["2xl"]}'`);
+export const useIs2xlUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
+  useMediaQuery(`'min-width: ${screenSizes["2xl"]}'`);
 
 //  Based roughly on: https://tailwindcss.com/docs/screens
 export type PixelSize = `${number}px`;
@@ -58,3 +53,4 @@ export const screenSizes = {
 // Just an alias to allow defaults in functions
 const _screenSizes = screenSizes;
 export type ScreenSize = keyof typeof screenSizes;
+export type ScreenSizes = Record<ScreenSize, PixelSize>;
