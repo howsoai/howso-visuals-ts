@@ -26,19 +26,19 @@ export const useScreenSize = (
 };
 
 export const useIsSmUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
-  useMediaQuery(`'min-width: ${screenSizes.sm}'`);
+  useMediaQuery(`(min-width: ${screenSizes.sm})`);
 
 export const useIsMdUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
-  useMediaQuery(`'min-width: ${screenSizes.md}'`);
+  useMediaQuery(`(min-width: ${screenSizes.md})`);
 
 export const useIsLgUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
-  useMediaQuery(`'min-width: ${screenSizes.lg}'`);
+  useMediaQuery(`(min-width: ${screenSizes.lg})`);
 
 export const useIsXlUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
-  useMediaQuery(`'min-width: ${screenSizes.xl}'`);
+  useMediaQuery(`(min-width: ${screenSizes.xl})`);
 
 export const useIs2xlUp = (screenSizes: ScreenSizes = _screenSizes): boolean =>
-  useMediaQuery(`'min-width: ${screenSizes["2xl"]}'`);
+  useMediaQuery(`(min-width: ${screenSizes["2xl"]})`);
 
 //  Based roughly on: https://tailwindcss.com/docs/screens
 export type PixelSize = `${number}px`;
