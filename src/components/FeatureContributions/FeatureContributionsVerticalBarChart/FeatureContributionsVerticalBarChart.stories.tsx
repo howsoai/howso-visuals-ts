@@ -79,6 +79,9 @@ const meta: Meta<typeof FeatureContributionsVerticalBarChart> = {
       "beverages|juice": 0.0035308895965803755,
       "dairy|butter": 0.004481506729847437,
     },
+    formatParams: {
+      replacements: "|",
+    },
     style: {
       height: "90vh",
       width: "90vw",
@@ -86,7 +89,6 @@ const meta: Meta<typeof FeatureContributionsVerticalBarChart> = {
     },
   },
   render: (args, context) => {
-    console.info("backgrounds", context.globals.backgrounds);
     return (
       <FeatureContributionsVerticalBarChart
         {...args}

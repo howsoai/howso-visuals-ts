@@ -22,6 +22,8 @@ export interface DesirabilityGaugeProps extends BaseVisualProps {
 
 /**
  * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-10&mode=design&t=GEwaik02j7zxUBbx-4
+ *
+ * TODO Scale of the label feels off.
  */
 export function DesirabilityGauge({
   value,
@@ -101,7 +103,7 @@ export function DesirabilityGauge({
   const config = useMemo(
     () => ({
       ...plotDefaults.config,
-      displayModeBar: true,
+      displayModeBar: false,
     }),
     []
   );

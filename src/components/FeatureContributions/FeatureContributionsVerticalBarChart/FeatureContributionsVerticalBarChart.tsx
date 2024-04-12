@@ -6,28 +6,38 @@ import {
   SemanticColors,
   getColorScheme,
 } from "../../../colors";
-import { useLayoutDefaults } from "../../../hooks";
+import { ScreenSizes, useLayoutDefaults } from "../../../hooks";
 import type { Datum, Layout, PlotData } from "plotly.js";
 import {
   UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
 } from "../../../hooks";
+import { FormatCategoryTickTextParams } from "../../..";
 
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {
+  className?: string;
   /**
    * Provides the bar's fill color if provided.
    * Default: Scheme and print aware semantic primary.
    */
   color?: ColorShade;
-  className?: string;
-  style?: CSSProperties;
+  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
   /**
    * The number of bars to show.
    * Default: 10
    * If 0, all features will be displayed.
    **/
   limit?: number;
+  /**
+   * An optional set of redefined screen sizes to use in breakpoint logic.
+   * Labels will be wrapped to a secondary line based on screen size:
+   *   sm: <= 10
+   *   md: <= 20
+   *   lg: <= 25
+   **/
+  screenSizes?: ScreenSizes;
+  style?: CSSProperties;
 }
 
 /**
@@ -37,13 +47,15 @@ export interface FeatureContributionsVerticalBarChartProps
  * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-116&mode=design&t=EAIu2Lqzf3bekOkQ-4
  */
 export function FeatureContributionsVerticalBarChart({
+  color: colorProp,
+  features,
+  formatParams,
+  layout: layoutProp,
+  limit = 10,
   isDark,
   isPrint,
-  layout: layoutProp,
-  color: colorProp,
   name = "Feature contributions",
-  features,
-  limit = 10,
+  screenSizes,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
   // Create sorted data
@@ -70,8 +82,10 @@ export function FeatureContributionsVerticalBarChart({
   const useLayoutCategoryAxisArgs = useMemo(
     (): UseLayoutCategoryAxisDefaultsParams => ({
       categories: sortedData.map(({ feature }) => feature),
+      formatParams,
+      screenSizes,
     }),
-    [sortedData]
+    [sortedData, formatParams, screenSizes]
   );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
