@@ -1,3 +1,4 @@
+export * from "./Anomalies";
 export * from "./BaseVisual";
 export * from "./DesirabilityGauge";
 export * from "./FeatureContributions";
