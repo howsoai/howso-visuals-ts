@@ -9,12 +9,14 @@ import {
   getTextColor,
 } from "../../colors";
 import {
+  ScreenSizes,
   UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
 } from "../../hooks";
 import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
 import type { Annotations, ColorScale, Data, Datum, Layout } from "plotly.js";
+import { FormatCategoryTickTextParams } from "../..";
 
 export type FeatureCorrelationsProps = BaseVisualProps & {
   /**
@@ -24,8 +26,6 @@ export type FeatureCorrelationsProps = BaseVisualProps & {
    */
   colors?: ColorShade[];
   className?: string;
-  style?: CSSProperties;
-  features: string[];
   /**
    * A nested array structure of values where the indexes of any two features yield their correlation value.
    * Values should be between -1 and 1, undefined or null.
@@ -38,6 +38,17 @@ export type FeatureCorrelationsProps = BaseVisualProps & {
    * ]
    */
   correlations: FeatureCorrelationsValues[];
+  features: string[];
+  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
+  /**
+   * An optional set of redefined screen sizes to use in breakpoint logic.
+   * Labels will be wrapped to a secondary line based on screen size:
+   *   sm: <= 10
+   *   md: <= 20
+   *   lg: <= 25
+   **/
+  screenSizes?: ScreenSizes;
+  style?: CSSProperties;
 };
 
 type FeatureCorrelationsValue = number | undefined | null;
@@ -50,13 +61,15 @@ type FeatureCorrelationsValues = FeatureCorrelationsValue[];
  * @see https://plotly.com/javascript/reference/heatmap
  */
 export function FeatureCorrelations({
+  colors = Divergent1,
+  correlations,
+  features,
+  formatParams,
   isDark,
   isPrint,
   layout: layoutProp,
-  colors = Divergent1,
   name = "Feature correlations",
-  features,
-  correlations,
+  screenSizes,
   ...props
 }: FeatureCorrelationsProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
@@ -65,8 +78,11 @@ export function FeatureCorrelations({
   // Create layout
   const layoutDefaults = useLayoutDefaults({ colorScheme });
   const useLayoutCategoryAxisArgs = useMemo(
-    (): UseLayoutCategoryAxisDefaultsParams => ({ categories: features }),
-    [features]
+    (): UseLayoutCategoryAxisDefaultsParams => ({
+      categories: features,
+      formatParams,
+    }),
+    [features, formatParams]
   );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
@@ -109,6 +125,7 @@ export function FeatureCorrelations({
         // @ts-expect-error https://plotly.com/javascript/reference/heatmap/#heatmap-hoverongaps
         hoverongaps: false,
         colorscale,
+        colorbar: { borderwidth: 0, outlinewidth: 0 },
       },
     ];
   }, [features, correlations, colorscale]);
@@ -154,7 +171,7 @@ const getAnnotations = ({
           yref: "y",
           x: columnFeature,
           y: rowFeature,
-          text: z ? z.toString() : "",
+          text: z ? z.toPrecision(4) : "",
           showarrow: false,
           font: { color: textColor },
         };

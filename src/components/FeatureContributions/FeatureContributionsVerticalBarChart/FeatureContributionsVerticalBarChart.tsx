@@ -6,13 +6,7 @@ import {
   SemanticColors,
   getColorScheme,
 } from "../../../colors";
-import {
-  ScreenSizes,
-  useIsLgUp,
-  useIsMdUp,
-  useIsSmUp,
-  useLayoutDefaults,
-} from "../../../hooks";
+import { ScreenSizes, useLayoutDefaults } from "../../../hooks";
 import type { Datum, Layout, PlotData } from "plotly.js";
 import {
   UseLayoutCategoryAxisDefaultsParams,
@@ -22,14 +16,13 @@ import { FormatCategoryTickTextParams } from "../../..";
 
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {
+  className?: string;
   /**
    * Provides the bar's fill color if provided.
    * Default: Scheme and print aware semantic primary.
    */
   color?: ColorShade;
-  className?: string;
   formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-  style?: CSSProperties;
   /**
    * The number of bars to show.
    * Default: 10
@@ -44,6 +37,7 @@ export interface FeatureContributionsVerticalBarChartProps
    *   lg: <= 25
    **/
   screenSizes?: ScreenSizes;
+  style?: CSSProperties;
 }
 
 /**
@@ -79,37 +73,18 @@ export function FeatureContributionsVerticalBarChart({
   }, [limit, features]);
 
   // Create layout defaults
-  const isSmUp = useIsSmUp();
-  const isMdUp = useIsMdUp();
-  const isLgUp = useIsLgUp();
   const colorScheme = getColorScheme({ isDark, isPrint });
   const color = colorProp || SemanticColors.primary[colorScheme]["900"];
   const layoutDefaults = useLayoutDefaults({ colorScheme });
 
   // Create category axis defaults
-  const useLayoutCategoryAxisArgs =
-    useMemo((): UseLayoutCategoryAxisDefaultsParams => {
-      const getWrap = () => {
-        switch (true) {
-          case isLgUp:
-            return sortedData.length <= 25;
-          case isMdUp:
-            return sortedData.length <= 20;
-          case isSmUp:
-            return sortedData.length <= 10;
-          default:
-            return undefined;
-        }
-      };
-
-      return {
-        categories: sortedData.map(({ feature }) => feature),
-        formatParams: {
-          ...formatParams,
-          wrap: getWrap(),
-        },
-      };
-    }, [sortedData, formatParams, isLgUp, isMdUp, isSmUp]);
+  const useLayoutCategoryAxisArgs = useMemo(
+    (): UseLayoutCategoryAxisDefaultsParams => ({
+      categories: sortedData.map(({ feature }) => feature),
+      formatParams,
+    }),
+    [sortedData, formatParams]
+  );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
   );
