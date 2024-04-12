@@ -1,6 +1,6 @@
 import type { LayoutAxis } from "plotly.js";
 import { useMemo } from "react";
-import { formatCategoryTickText } from "..";
+import { FormatCategoryTickTextParams, formatCategoryTickText } from "..";
 
 /**
  * Provides tick properties and category label formatting.
@@ -19,14 +19,16 @@ export const useLayoutCategoryAxisDefaults = (
 
 export type UseLayoutCategoryAxisDefaultsParams = {
   categories: string[];
+  formatParams?: FormatCategoryTickTextParams;
 };
 /** A direct utility for getting defaults. For ease, you may prefer useLayoutDefaults. */
 export const getLayoutCategoryAxisDefaults = ({
   categories,
+  formatParams,
 }: UseLayoutCategoryAxisDefaultsParams): Partial<LayoutAxis> => {
   const { ticktext, tickvals } = categories.reduce(
     ({ ticktext, tickvals }, category, index) => {
-      ticktext.push(formatCategoryTickText(category));
+      ticktext.push(formatCategoryTickText(category, formatParams));
       tickvals.push(index);
       return { ticktext, tickvals };
     },
