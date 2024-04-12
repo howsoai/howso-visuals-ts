@@ -17,6 +17,7 @@ import {
 import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
 import type { Annotations, ColorScale, Data, Datum, Layout } from "plotly.js";
 import { FormatCategoryTickTextParams } from "../..";
+import { colorbarDefaults } from "../../plotly/colorbar";
 
 export type FeatureCorrelationsProps = BaseVisualProps & {
   /**
@@ -42,7 +43,7 @@ export type FeatureCorrelationsProps = BaseVisualProps & {
   formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
   /**
    * An optional set of redefined screen sizes to use in breakpoint logic.
-   * Labels will be wrapped to a secondary line based on screen size:
+   * Labels will be wrapped to a secondary line based on screen size.
    *   sm: <= 10
    *   md: <= 20
    *   lg: <= 25
@@ -114,8 +115,8 @@ export function FeatureCorrelations({
   }, [layoutDefaults, categoryAxisDefaults, layoutProp, annotations]);
 
   // Create data
-  const data = useMemo((): Data[] => {
-    return [
+  const data = useMemo(
+    (): Data[] => [
       {
         x: features,
         y: features,
@@ -126,10 +127,11 @@ export function FeatureCorrelations({
         // @ts-expect-error https://plotly.com/javascript/reference/heatmap/#heatmap-hoverongaps
         hoverongaps: false,
         colorscale,
-        colorbar: { borderwidth: 0, outlinewidth: 0 },
+        colorbar: colorbarDefaults,
       },
-    ];
-  }, [features, correlations, colorscale]);
+    ],
+    [features, correlations, colorscale]
+  );
 
   return (
     <Plot

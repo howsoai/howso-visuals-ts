@@ -1,82 +1,244 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode, useMemo } from "react";
+import {
+  BaseVisualProps,
+  ColorShade,
+  Divergent1,
+  FormatCategoryTickTextParams,
+  ScreenSizes,
+  UseLayoutCategoryAxisDefaultsParams,
+  getColorScaleShade,
+  getColorScheme,
+  getTextColor,
+  plotDefaults,
+  useLayoutCategoryAxisDefaults,
+  useLayoutDefaults,
+} from "../..";
+import type { Layout, Data, ColorScale, Annotations } from "plotly.js";
+import Plot from "react-plotly.js";
+import { colorbarDefaults } from "../../plotly/colorbar";
 
-/**
- *
- * @see https://plotly.com/javascript/subplots/
- */
-export const Anomalies = (): ReactNode => {
-  return <></>;
+export type AnomaliesProps = BaseVisualProps & {
+  anomalies: Record<string, string | number | null>[];
+  convictions: Record<string, number | null>[];
+  /**
+   * Number of cases to display.
+   * Default: 5
+   * If 0, all features will be displayed.
+   */
+  limit?: number;
+  /**
+   * Provides the bar's fill color if provided.
+   * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
+   * Default: Divergent1
+   */
+  colors?: ColorShade[];
+  className?: string;
+  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
+  /**
+   * An optional set of redefined screen sizes to use in breakpoint logic.
+   * Labels will be wrapped to a secondary line based on screen size.
+   *   sm: <= 10
+   *   md: <= 20
+   *   lg: <= 25
+   **/
+  screenSizes?: ScreenSizes;
+  style?: CSSProperties;
 };
 
-/*
-def compose_figures(
-    figures: List[go.Figure],
-    rows: int,
-    cols: int,
-    **make_subplots_kwargs,
-) -> go.Figure:
-    """
-    Helper function for composing several plotly `Figure`s.
+/**
+ * A heat map which shows conviction values for each feature.
+ *
+ * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=54-476&mode=design
+ * @see https://plotly.com/javascript/reference/heatmap
+ */
+export const Anomalies = ({
+  anomalies: allAnomalies,
+  convictions: allConvictions,
+  colors = Divergent1,
+  formatParams,
+  isDark,
+  isPrint,
+  layout: layoutProp,
+  limit = 5,
+  name = "Anomalies",
+  screenSizes,
+  ...props
+}: AnomaliesProps): ReactNode => {
+  const colorScheme = getColorScheme({ isDark, isPrint });
+  const colorscale = useMemo(() => getLocalColorScale(colors), [colors]);
 
-    This is particularly useful for `Figure`s created by ``plotly.express``. Any
-    unspecified keyword arguments are passed to ``plotly.subplots.make_subplots``.
+  const { anomalies, features, z } = useMemo(
+    () => ({
+      anomalies: allAnomalies.slice(0, limit),
+      features: Object.keys(allConvictions.at(0) || {}),
+      z: allConvictions.slice(0, limit).reduce((z, row, rowIndex) => {
+        z[rowIndex] ||= [];
+        Object.entries(row).forEach(([, conviction], columnIndex) => {
+          z[rowIndex][columnIndex] = conviction;
+        });
+        return z;
+      }, [] as (number | null)[][]),
+    }),
+    [allAnomalies, allConvictions, limit]
+  );
 
-    Parameters
-    ----------
-    figures : List[go.Figure]
-        The `Figure`s to compose in the order to compose them.
-    rows : int
-        The number of rows to include in the composed `Figure`.
-    cols : int
-        The number of columns to include in the composed `Figure`.
+  // Create layout
+  const layoutDefaults = useLayoutDefaults({ colorScheme });
+  const useLayoutCategoryAxisArgs = useMemo(
+    (): UseLayoutCategoryAxisDefaultsParams => ({
+      categories: features,
+      formatParams,
+      screenSizes,
+    }),
+    [features, formatParams, screenSizes]
+  );
+  const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
+    useLayoutCategoryAxisArgs
+  );
+  const annotations = useMemo(
+    () => getAnnotations({ colorscale, colorScheme, categories: features, z }),
+    [colorscale, colorScheme, features, z]
+  );
 
-    Returns
-    -------
-    go.Figure
-        The composed `Figure`.
-    """
-    figure_trace_map: Dict[Tuple[int, int], List] = {}
-    subplot_titles = []
+  const layout = useMemo((): Partial<Layout> => {
+    return {
+      ...layoutDefaults,
+      ...layoutProp,
+      // @ts-expect-error TODO https://plotly.com/javascript/reference/layout/coloraxis/#layout-coloraxis
+      coloraxis: {
+        colorbar: {
+          ...colorbarDefaults,
+          font: { color: colorScheme === "dark" ? "#fff" : "000" },
+          labelalias: { 5: "≥5" },
+          title: "Conviction",
+        },
+        colorscale,
+        cmax: 5,
+        cmin: 0,
+      },
+      xaxis: {
+        ...layoutDefaults.xaxis,
+        ...categoryAxisDefaults,
+        ...layoutProp?.xaxis,
+        automargin: true,
+        gridcolor: "transparent",
+        title: { text: "Feature" },
+        tickcolor: "transparent",
+      },
+      yaxis: {
+        ...layoutDefaults.yaxis,
+        ...layoutProp?.yaxis,
+        autorange: "reversed",
+        gridcolor: "transparent",
+        tickcolor: "transparent",
+        zeroline: false,
+      },
+      annotations,
+    };
+  }, [
+    colorscale,
+    layoutDefaults,
+    categoryAxisDefaults,
+    annotations,
+    layoutProp,
+  ]);
 
-    if rows < 1 or cols < 1:
-        raise ValueError("Neither `rows` nor `cols` can be less than 1.")
+  // Create data
+  const data = useMemo(
+    (): Data[] => [
+      {
+        type: "heatmap",
+        x: features,
+        xgap: gap,
+        y: anomalies.map((_, index) => index),
+        ygap: gap,
+        z,
+        zmin: min,
+        zmax: max,
+        // @ts-expect-error TODO https://plotly.com/javascript/reference/heatmap/#coloraxis
+        coloraxis: "coloraxis",
+        hoverongaps: false,
+        text: [],
+        texttemplate: "%{text}",
+        hovertemplate: "Conviction=%{z}<extra></extra>",
+      },
+    ],
+    [anomalies, z]
+  );
 
-    if rows * cols < len(figures):
-        raise ValueError(f"A {rows}x{cols} grid of subplots cannot fit {len(figures)} figures.")
+  return (
+    <Plot
+      {...plotDefaults}
+      {...props}
+      data={data}
+      layout={layout}
+      config={plotDefaults.config}
+    />
+  );
+};
 
-    # The figures to compose may be fewer than the total number of cells,
-    # e.g. when  we fill a 2x2 grid with 3 subplots. The fig_counter helps
-    # to break out when we are out of figures.
-    fig_counter = 0
-    for i in range(1, rows + 1):
-        for j in range(1, cols + 1):
-            figure_trace_map[(i, j)] = [
-                t for t in figures[fig_counter]["data"]
-            ]
-            subplot_titles.append(figures[fig_counter]["layout"]["title"]["text"])
-            fig_counter += 1
+const gap = 3;
+const min = 0;
+const max = 5;
 
-            if fig_counter == len(figures):
-                break
+type GetAnnotationsParams = {
+  colorscale: ColorScale;
+  colorScheme: "light" | "dark";
+  categories: string[];
+  z: (number | null)[][];
+};
+const getAnnotations = ({
+  colorscale,
+  colorScheme,
+  categories,
+  z,
+}: GetAnnotationsParams): Layout["annotations"] =>
+  z.reduce((annotations, row, rowIndex) => {
+    const additions = row.reduce((additions, value, columnIndex) => {
+      const backgroundColor = getColorScaleShade(Math.min(max, value || 1), {
+        colorscale: colorscale as [number, string][],
+        colorScheme,
+        fromRange: { max, min },
+      });
+      const textColor = getTextColor(backgroundColor);
+      const annotation: Partial<Annotations> = {
+        xref: "x",
+        yref: "y",
+        x: categories[columnIndex],
+        y: rowIndex,
+        text: value ? value.toPrecision(4) : "",
+        showarrow: false,
+        font: { color: textColor },
+      };
 
-    for k in {"rows", "cols", "subplot_titles"}:
-        make_subplots_kwargs.pop(k, None)
+      return [...additions, annotation];
+    }, [] as Layout["annotations"]);
 
-    return_figure = make_subplots(rows=rows, cols=cols, subplot_titles=subplot_titles, **make_subplots_kwargs)
-    for key, value in figure_trace_map.items():
-        row, col = key
-        return_figure.add_traces(value, rows=row, cols=col)
+    return [...annotations, ...additions];
+  }, [] as Layout["annotations"]);
 
-    # Remove duplicate entries from the legend
-    legend_names = set()
-    return_figure.for_each_trace(
-        lambda t: t.update(showlegend=False) if t.name in legend_names else legend_names.add(t.name)
-    )
+/**
+ * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
+ **/
+const getLocalColorScale = (colors: ColorShade[]): ColorScale => {
+  if (colors.length < 3) {
+    throw new Error("At least three colors must be provided to make a scale");
+  }
 
-    # Multiple subplots may have the same bingroup specified, so we override that here.
-    for i in range(1, rows + 1):
-        for j in range(1, cols + 1):
-            return_figure.update_traces(bingroup=f"subplot_{i},{j}", row=i, col=j)
+  const chunk1 = colors.slice(0, colors.length / 2);
+  const chunk2 = colors.slice(colors.length / 2, colors.length);
 
-    return return_figure
-    */
+  // Chunk 1 goes from 0-1
+  const chunk1Step = 0.2 / chunk1.length;
+  // Chunk 2 goes from 1-5, but we can use 0-4 in terms of step
+  const chunk2Step = 0.8 / chunk2.length;
+
+  // @ts-expect-error TODO Types are wrong https://plotly.com/javascript/reference/heatmap/#heatmap-colorscale
+  return [
+    ...chunk1.map((color, index) => [chunk1Step * index, color as string]),
+    ...chunk2.map((color, index) => [
+      index === chunk2.length - 1 ? 1 : 0.2 + chunk2Step * index,
+      color as string,
+    ]),
+  ];
+};
