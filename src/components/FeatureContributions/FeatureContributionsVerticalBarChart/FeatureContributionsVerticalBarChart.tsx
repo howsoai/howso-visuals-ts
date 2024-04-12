@@ -6,12 +6,19 @@ import {
   SemanticColors,
   getColorScheme,
 } from "../../../colors";
-import { useLayoutDefaults } from "../../../hooks";
+import {
+  ScreenSizes,
+  useIsLgUp,
+  useIsMdUp,
+  useIsSmUp,
+  useLayoutDefaults,
+} from "../../../hooks";
 import type { Datum, Layout, PlotData } from "plotly.js";
 import {
   UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
 } from "../../../hooks";
+import { FormatCategoryTickTextParams } from "../../..";
 
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {
@@ -21,6 +28,7 @@ export interface FeatureContributionsVerticalBarChartProps
    */
   color?: ColorShade;
   className?: string;
+  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
   style?: CSSProperties;
   /**
    * The number of bars to show.
@@ -28,6 +36,14 @@ export interface FeatureContributionsVerticalBarChartProps
    * If 0, all features will be displayed.
    **/
   limit?: number;
+  /**
+   * An optional set of redefined screen sizes to use in breakpoint logic.
+   * Labels will be wrapped to a secondary line based on screen size:
+   *   sm: <= 10
+   *   md: <= 20
+   *   lg: <= 25
+   **/
+  screenSizes?: ScreenSizes;
 }
 
 /**
@@ -37,13 +53,14 @@ export interface FeatureContributionsVerticalBarChartProps
  * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=20-116&mode=design&t=EAIu2Lqzf3bekOkQ-4
  */
 export function FeatureContributionsVerticalBarChart({
+  color: colorProp,
+  features,
+  formatParams,
+  layout: layoutProp,
+  limit = 10,
   isDark,
   isPrint,
-  layout: layoutProp,
-  color: colorProp,
   name = "Feature contributions",
-  features,
-  limit = 10,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
   // Create sorted data
@@ -62,17 +79,37 @@ export function FeatureContributionsVerticalBarChart({
   }, [limit, features]);
 
   // Create layout defaults
+  const isSmUp = useIsSmUp();
+  const isMdUp = useIsMdUp();
+  const isLgUp = useIsLgUp();
   const colorScheme = getColorScheme({ isDark, isPrint });
   const color = colorProp || SemanticColors.primary[colorScheme]["900"];
   const layoutDefaults = useLayoutDefaults({ colorScheme });
 
   // Create category axis defaults
-  const useLayoutCategoryAxisArgs = useMemo(
-    (): UseLayoutCategoryAxisDefaultsParams => ({
-      categories: sortedData.map(({ feature }) => feature),
-    }),
-    [sortedData]
-  );
+  const useLayoutCategoryAxisArgs =
+    useMemo((): UseLayoutCategoryAxisDefaultsParams => {
+      const getWrap = () => {
+        switch (true) {
+          case isLgUp:
+            return sortedData.length <= 25;
+          case isMdUp:
+            return sortedData.length <= 20;
+          case isSmUp:
+            return sortedData.length <= 10;
+          default:
+            return undefined;
+        }
+      };
+
+      return {
+        categories: sortedData.map(({ feature }) => feature),
+        formatParams: {
+          ...formatParams,
+          wrap: getWrap(),
+        },
+      };
+    }, [sortedData, formatParams, isLgUp, isMdUp, isSmUp]);
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
   );
