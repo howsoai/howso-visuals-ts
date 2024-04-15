@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from "jest";
+
+const config: Config = {
   moduleFileExtensions: ["js", "ts", "tsx", "json"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
@@ -14,3 +16,5 @@ module.exports = {
   coverageReporters: ["text", "cobertura"],
   testEnvironment: "jsdom",
 };
+
+export default config;

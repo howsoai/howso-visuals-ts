@@ -1,3 +1,4 @@
+import { ColorScale } from "plotly.js";
 import { ColorShade, Discrete } from ".";
 
 /** Returns the contrasting text color for a given color. White or Black */
@@ -16,8 +17,8 @@ export const getTextColor = (hex: `#${string}`, factorAlpha = false) => {
 };
 
 export type GetColorSchemeParams = {
-  isDark: boolean;
-  isPrint: boolean;
+  isDark: boolean | undefined;
+  isPrint: boolean | undefined;
 };
 export const getColorScheme = ({
   isDark,
@@ -38,4 +39,17 @@ export const getDiscreteColor = (
   const scheme = getColorScheme(params);
   const modulus = !params.index ? 0 : params.index % Discrete[scheme].length;
   return Discrete[scheme][modulus];
+};
+
+export const getColorScale = (colors: ColorShade[]): ColorScale => {
+  if (colors.length < 2) {
+    throw new Error("At least two colors must be provided to make a scale");
+  }
+
+  const step = 1 / colors.length;
+  // @ts-expect-error TODO Types are wrong https://plotly.com/javascript/reference/heatmap/#heatmap-colorscale
+  return colors.map((color, index) => [
+    index === colors.length - 1 ? 1 : step * index,
+    color as string,
+  ]);
 };
