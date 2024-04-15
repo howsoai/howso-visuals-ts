@@ -12,20 +12,20 @@ describe("utils/formatting", () => {
       const category =
         "Example A, Example B, Example C, Example D, Example E, Example F";
       const formatted = formatCategoryTickText(category);
-      expect(formatted).toBe("Example A,...<br />Example F");
+      expect(formatted).toBe("Example A,…<br />Example F");
     });
 
     it("should return a string containing the first and last set of words split by word boundary separated a single without word wrap", () => {
       const category =
         "Example A, Example B, Example C, Example D, Example E, Example F";
       const formatted = formatCategoryTickText(category, { wrap: false });
-      expect(formatted).toBe("Example A, ... Example F");
+      expect(formatted).toBe("Example A, … Example F");
     });
 
     it("should return a string containing the first and last set of words split by | separated a single <br />", () => {
       const category = "condiments sauces and seasonings|condiments";
       const formatted = formatCategoryTickText(category, { replacements: "|" });
-      expect(formatted).toBe("condiments...<br />condiments");
+      expect(formatted).toBe("condiments…<br />condiments");
     });
   });
 });
