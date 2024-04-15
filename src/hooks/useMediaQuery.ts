@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export function useMediaQuery(query: string) {
   // Run initially
@@ -6,7 +6,7 @@ export function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(mediaMatch.matches);
 
   // Add a listener for changes
-  useLayoutEffect(() => {
+  useEffect(() => {
     const handler = (evt: MediaQueryListEvent) => setMatches(evt.matches);
     mediaMatch.addEventListener("change", handler);
     return () => mediaMatch.removeEventListener("change", handler);
