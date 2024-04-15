@@ -39,5 +39,5 @@ export const formatCategoryTickText = (
   return [chunks.at(0), chunks.at(-1)]
     .map((chunk) => (chunk || "").trim())
     .filter(Boolean)
-    .join(wrap ? "...<br />" : " ... ");
+    .join(wrap ? "…<br />" : " … ");
 };
