@@ -99,7 +99,7 @@ export function InfluentialCases({
     // const isInteger = false; // TODO maybe?
     // const mae = isInteger ? Math.ceil(rawMae) : rawMae;
     const markerLine: Partial<ScatterMarkerLine> = {
-      width: 2,
+      width: 1,
       color: colorScheme === "dark" ? "#fff" : "#000",
     };
 
