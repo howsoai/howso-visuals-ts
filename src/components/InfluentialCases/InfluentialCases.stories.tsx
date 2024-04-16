@@ -34,6 +34,7 @@ export const Cholesterol: Story = {
   args: {
     feature: "chol",
     actualValue: 252,
+    idFeatures: ["age", "chol"],
     influenceCases: [
       {
         ".session": "3028ea6e-de18-41cf-8579-07eb0304059d",

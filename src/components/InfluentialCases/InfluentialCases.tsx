@@ -19,6 +19,12 @@ export type InfluentialCasesProps = BaseVisualProps & {
   actualValue?: number;
   className?: string;
   feature: string;
+  /**
+   * A list of features which uniquely identify an influence case.
+   * These will be used in hover states for influence cases.
+   * If not supplied the internal `.training_session_index` value will be used.
+   **/
+  idFeatures?: string[];
   /** response.content?.boundary_cases?.[0] ?? []; */
   influenceCases: Record<string, string | number | null>[];
   predictionCase: Record<string, string | number | null>;
@@ -42,6 +48,7 @@ export type InfluentialCasesProps = BaseVisualProps & {
 export function InfluentialCases({
   actualValue,
   feature,
+  idFeatures,
   influenceCases,
   isDark,
   isPrint,
@@ -91,7 +98,6 @@ export function InfluentialCases({
 
   // Create data
   const data = useMemo((): Data[] => {
-    console.clear();
     const data: Data[] = [];
     const maxInfluenceWeight = getMaximumInfluenceWeight({ influenceCases });
     const testValue = predictionCase[feature] as number;
@@ -156,16 +162,13 @@ export function InfluentialCases({
           const xValue = typeof rawX === "number" ? parseNA(rawX) : undefined;
           const rawY = ic[".influence_weight"];
           const yValue = typeof rawY === "number" ? parseNA(rawY) : undefined;
-          const indexRaw = ic[".session_training_index"];
-          const index = indexRaw ? indexRaw.toString() : "";
-
           if (xValue === undefined || yValue === undefined) {
             return values;
           }
 
           values.x.push(xValue);
           values.y.push(yValue);
-          values.text.push(index);
+          values.text.push(getInfluenceCaseText({ ic, idFeatures }));
           return values;
         },
         { x: [], y: [], text: [] } as {
@@ -188,7 +191,7 @@ export function InfluentialCases({
           line: markerLine,
         },
         hovertemplate:
-          "Value: %{x}<br />Influence: %{y}%<br />Index: %{text}<extra></extra>",
+          "Value: %{x}<br />Influence: %{y}%<br />%{text}<extra></extra>",
         text: influenceValues.text,
       };
       data.push(influenceData);
@@ -223,6 +226,7 @@ export function InfluentialCases({
         hoverinfo: "skip",
         line: {
           color: Blue[colorScheme]["900"],
+          shape: "spline",
         },
         opacity: 0.2,
       };
@@ -234,6 +238,7 @@ export function InfluentialCases({
     actualValue,
     colorScheme,
     feature,
+    idFeatures,
     influenceCases,
     mae,
     predictionCase,
@@ -328,4 +333,24 @@ const getXValues = ({
     totalMax,
     values: xValues,
   };
+};
+
+type InfluenceCaseTextParams = Pick<InfluentialCasesProps, "idFeatures"> & {
+  ic: Record<string, string | number | null>;
+};
+const getInfluenceCaseText = ({
+  ic,
+  idFeatures,
+}: InfluenceCaseTextParams): string => {
+  if (!idFeatures?.length) {
+    return `Case: ${ic[".session"]}:${ic[".training_session_index"]}`;
+  }
+
+  const prefix = idFeatures.length > 0 ? "Ids" : "Id";
+  return (
+    `${prefix}: ` +
+    idFeatures
+      .map((feature) => `${feature}: ${ic[feature] || "null"}`)
+      .join(", ")
+  );
 };
