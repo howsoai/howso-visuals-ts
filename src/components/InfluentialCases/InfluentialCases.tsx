@@ -4,7 +4,6 @@ import { useLayoutDefaults } from "../../hooks";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 import { Layout, Data, ScatterMarkerLine } from "plotly.js";
 import Plot from "react-plotly.js";
-import type { PredictionStats } from "@howso/openapi-client";
 import {
   isNA,
   parseNA,
@@ -20,24 +19,14 @@ export type InfluentialCasesProps = BaseVisualProps & {
   actualValue?: number;
   className?: string;
   feature: string;
-  //   formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-  /**
-   * response.content?.boundary_cases?.[0] ?? [];
-   */
+  /** response.content?.boundary_cases?.[0] ?? []; */
   influenceCases: Record<string, string | number | null>[];
   predictionCase: Record<string, string | number | null>;
   predictedValue: number;
-  stats: PredictionStats | undefined | null;
+  /** stats.mae */
+  mae?: number | undefined | null;
   /** react['details']['feature_residuals'][0][action_feature[0]] */
   residual?: number;
-  /**
-   * An optional set of redefined screen sizes to use in breakpoint logic.
-   * Labels will be wrapped to a secondary line based on screen size.
-   *   sm: <= 10
-   *   md: <= 20
-   *   lg: <= 25
-   **/
-  //   screenSizes?: ScreenSizes;
   style?: CSSProperties;
 };
 
@@ -53,17 +42,14 @@ export type InfluentialCasesProps = BaseVisualProps & {
 export function InfluentialCases({
   actualValue,
   feature,
-  //   formatParams,
   influenceCases,
   isDark,
   isPrint,
   layout: layoutProp,
-  name = "Influential cases",
   predictionCase,
   predictedValue,
   residual,
-  //   screenSizes,
-  stats,
+  mae,
   ...props
 }: InfluentialCasesProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
@@ -110,9 +96,8 @@ export function InfluentialCases({
     const maxInfluenceWeight = getMaximumInfluenceWeight({ influenceCases });
     const testValue = predictionCase[feature] as number;
     const isTestValueNaN = isNA(testValue);
-    const isInteger = false; // TODO maybe?
-    const rawMae = parseNA(stats?.mae);
-    const mae = isInteger ? Math.ceil(rawMae) : rawMae;
+    // const isInteger = false; // TODO maybe?
+    // const mae = isInteger ? Math.ceil(rawMae) : rawMae;
     const markerLine: Partial<ScatterMarkerLine> = {
       width: 2,
       color: colorScheme === "dark" ? "#fff" : "#000",
@@ -122,7 +107,7 @@ export function InfluentialCases({
       feature,
       influenceCases,
       isTestValueNaN,
-      mae,
+      mae: mae || 0,
       testValue,
     });
 
@@ -250,10 +235,10 @@ export function InfluentialCases({
     colorScheme,
     feature,
     influenceCases,
+    mae,
     predictionCase,
     predictedValue,
     residual,
-    stats,
   ]);
 
   return (

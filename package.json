@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@fontsource/inter": "^5.0.5",
-    "@howso/openapi-client": "^0.0.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@storybook/addon-a11y": "^8.0.6",
     "@storybook/addon-actions": "^8.0.6",

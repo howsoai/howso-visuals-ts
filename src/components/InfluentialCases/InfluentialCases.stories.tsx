@@ -14,6 +14,24 @@ const meta: Meta<typeof InfluentialCases> = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
+    style: {
+      height: "90vh",
+      width: "90vw",
+      // overflow: "hidden",
+    },
+  },
+  render: (args, context) => {
+    return <InfluentialCases {...args} isDark={isDarkBackground(context)} />;
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof InfluentialCases>;
+
+// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
+export const Cholesterol: Story = {
+  // More on args: https://storybook.js.org/docs/react/writing-stories/args
+  args: {
     feature: "chol",
     actualValue: 252,
     influenceCases: [
@@ -56,6 +74,7 @@ const meta: Meta<typeof InfluentialCases> = {
         oldpeak: 1.2,
       },
     ],
+    mae: 52.80061553591218,
     predictionCase: {
       age: 50,
       sex: 1,
@@ -74,27 +93,17 @@ const meta: Meta<typeof InfluentialCases> = {
     },
     predictedValue: 262,
     residual: 38.02014353196766,
-    stats: {
-      contribution: 0.04617695577760673,
-      mae: 52.80061553591218,
-      mda: 0.006652253390817597,
-    },
-    style: {
-      height: "90vh",
-      width: "90vw",
-      // overflow: "hidden",
-    },
-  },
-  render: (args, context) => {
-    return <InfluentialCases {...args} isDark={isDarkBackground(context)} />;
   },
 };
 
-export default meta;
-type Story = StoryObj<typeof InfluentialCases>;
-
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-export const Default: Story = {
-  // More on args: https://storybook.js.org/docs/react/writing-stories/args
-  args: {},
+export const Asteroids: Story = {
+  args: {
+    feature: "moid",
+    actualValue: 252,
+    influenceCases: [],
+    mae: 52.80061553591218,
+    predictionCase: {},
+    predictedValue: 262,
+    residual: 38.02014353196766,
+  },
 };
