@@ -22,7 +22,7 @@ function _safeMinMax(
     if (isNA(x)) continue;
     targets.push(x);
   }
-  if (targets.length == 0 && values.length > 0) return NaN;
+  if (targets.length === 0 && values.length > 0) return NaN;
   return fn(...targets);
 }
 
@@ -92,7 +92,7 @@ export function sortPyramid<T, U extends number>(
 
     // Keep popping largest item and alternate inserting before/after
     while (copy.length) {
-      if (copy.length % 2 == 0) {
+      if (copy.length % 2 === 0) {
         newArr.push(copy.pop() as T);
       } else {
         newArr.unshift(copy.pop() as T);
