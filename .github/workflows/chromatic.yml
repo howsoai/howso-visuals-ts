@@ -8,6 +8,7 @@ on: push
 jobs:
   chromatic:
     runs-on: ubuntu-latest
+    secrets: inherit
     env:
       NODE_AUTH_TOKEN: ${{ secrets.JFROG_ACCESS_TOKEN }}
     steps:
