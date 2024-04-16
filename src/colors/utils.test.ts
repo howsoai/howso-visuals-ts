@@ -1,6 +1,13 @@
-import { Divergent1, getColorScale } from ".";
+import { Divergent1, Purple, getColorScale, getTextColor } from ".";
 
 describe("colors/utils", () => {
+  describe("getTextColor", () => {
+    it("should return white for Purple['light'][900]", () => {
+      const textColor = getTextColor(Purple["light"]["900"]);
+      expect(textColor).toBe("#fff");
+    });
+  });
+
   describe("getColorScale", () => {
     it("should return Divergent1 allocated between 0 and 1", () => {
       const colorScale = getColorScale(Divergent1);
