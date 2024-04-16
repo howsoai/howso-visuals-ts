@@ -8,14 +8,7 @@ on: push
 jobs:
   chromatic:
     runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.JFROG_ACCESS_TOKEN }}
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "21.x"
-          registry-url: ${{ secrets.JFROG_URL }}/artifactory/npm-remote
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
