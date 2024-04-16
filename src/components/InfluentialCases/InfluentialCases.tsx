@@ -142,7 +142,6 @@ export function InfluentialCases({
         hovertemplate: "Predicted: %{x}<br />Influence: N/A<extra></extra>",
         error_x: !residual ? undefined : { type: "constant", value: residual },
       };
-      console.info(predictedValueData);
       data.push(predictedValueData);
     }
 
@@ -161,18 +160,11 @@ export function InfluentialCases({
         },
         hovertemplate: "Value: %{x}<br />Influence: N/A<extra></extra>",
       };
-      console.info(actualValueData);
       data.push(actualValueData);
     }
 
     // Influence cases
     if (influenceCases) {
-      // return Math.max(
-      //   ...influenceCases.map((ic) => {
-      //     const value = ;
-      //     return typeof value === "number" ? parseNA(value) : 0;
-      //   })
-      // );
       const influenceValues = influenceCases.reduce(
         (values, ic) => {
           const rawX = ic[feature];
@@ -214,7 +206,6 @@ export function InfluentialCases({
           "Value: %{x}<br />Influence: %{y}%<br />Index: %{text}<extra></extra>",
         text: influenceValues.text,
       };
-      console.info(influenceData);
       data.push(influenceData);
     }
 
@@ -250,19 +241,7 @@ export function InfluentialCases({
         },
         opacity: 0.2,
       };
-      console.info(densityData);
       data.push(densityData);
-
-      //   const dataPoints: ApexDataPoint[] = [];
-      //   for (const row of cases) {
-      //     if (!isNA(row[selectedFeature])) {
-      //       dataPoints.push({
-      //         x: row[selectedFeature],
-      //         y: roundTo(row[".influence_weight"] * 100, 2),
-      //         meta: { orig: row },
-      //       });
-      //     }
-      //   }
     }
 
     return data;
