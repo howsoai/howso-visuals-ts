@@ -45,5 +45,11 @@ export const getLayoutDefaults = ({
     yaxis: {
       ...axisDefaults,
     },
+    hoverlabel: {
+      bgcolor: colorScheme === "dark" ? "#374151" : "#FFF",
+      font: {
+        color: colorScheme === "dark" ? "#FFF" : "#000",
+      },
+    },
   };
 };
