@@ -396,18 +396,47 @@ const getDensity = (xStats: XStats): { x: number[]; y: number[] } => {
     ticks
   );
   const densityEstimation = estimator(xStats.values);
-  return densityEstimation.reduce(
-    (values, [x, y]) => {
-      if (!y) {
-        return values;
+  const values = densityEstimation.reduce(
+    (values, [x, y], index) => {
+      values.firstNonZeroIndex ||= y > 0 ? index : undefined;
+
+      if (
+        y > 0 &&
+        (values.lastNonZeroIndex === undefined ||
+          values.lastNonZeroIndex < index)
+      ) {
+        values.lastNonZeroIndex = index;
       }
 
       values.x.push(x);
       values.y.push(y);
       return values;
     },
-    { x: [], y: [] } as { x: number[]; y: number[] }
+    {
+      x: [],
+      y: [],
+      firstNonZeroIndex: undefined,
+      lastNonZeroIndex: undefined,
+    } as {
+      x: number[];
+      y: number[];
+      firstNonZeroIndex: undefined | number;
+      lastNonZeroIndex: undefined | number;
+    }
   );
+
+  const startIndex = Math.max(
+    0,
+    values.firstNonZeroIndex ? values.firstNonZeroIndex - 1 : 0
+  );
+  const endIndex = values.lastNonZeroIndex
+    ? values.lastNonZeroIndex + 2
+    : undefined;
+
+  return {
+    x: values.x.slice(startIndex, endIndex),
+    y: values.y.slice(startIndex, endIndex),
+  };
 };
 
 type InfluenceCaseTextParams = Pick<InfluentialCasesProps, "idFeatures"> & {
