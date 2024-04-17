@@ -13,26 +13,62 @@ import {
   kernelDensityEstimator,
 } from "../..";
 import { extent, range } from "d3-array";
+import { Case } from "../../types";
 
 export type InfluentialCasesProps = BaseVisualProps & {
   /** The actual value from react */
   actualValue?: number;
   className?: string;
+  /**
+   * An optional list of values for the action feature to visualize. This will be used to visualize a
+        KDE plot to characterize the distribution of values around the predicted and actual values. If this is None,
+        the distribution of influential cases in the react will be used instead, if present.
+   *
+   * Using a reaction loop of 100+ to generate a spread using an actual test case is also possible.
+   *   Demonstrating for predictions like a
+   *   See:
+   * ```python
+   * gen_reacts = list()
+   * for i in range(0,100):
+   *    result =  trainee.react(context_features=context_features,
+   *                            action_features=action_feature,
+   *                            contexts=[context_values],
+   *                            desired_conviction = 5000)
+   *    gen_reacts.append(result['action'].loc[0, 'moid'])
+   * ```
+   **/
+  densityValues?: number[];
+  /**
+   * If provided the x ranges will be expanded by this value to allow for that uncertainty.
+   * If not supplied predictedUncertainty will be used as a fallback.
+   * See stats.mae
+   **/
+  densityUncertainty?: number | undefined | null;
   feature: string;
   /**
    * A list of features which uniquely identify an influence case.
    * These will be used in hover states for influence cases.
-   * If not supplied the internal `.training_session_index` value will be used.
+   * If not supplied the internal `.session` and `.training_session_index` value will be used.
    **/
   idFeatures?: string[];
   /** response.content?.boundary_cases?.[0] ?? []; */
-  influenceCases: Record<string, string | number | null>[];
-  predictionCase: Record<string, string | number | null>;
+  influenceCases: Case[];
+  predictionCase: Case;
+  /**
+   * Draws a prediction's dot above the density.
+   * Usually obtained through react for action features.
+   **/
   predictedValue: number;
-  /** stats.mae */
-  mae?: number | undefined | null;
-  /** react['details']['feature_residuals'][0][action_feature[0]] */
-  residual?: number;
+  /**
+   * Draws a prediction value's uncertainty values, also known as residuals.
+   * Using global feature stats.mae value will explain the average across the whole data set,
+   *   that predictions should be within those bars 50% of the time.
+   *   See: await getGlobalFeatureStats<DatasetCase>(cl, trainee, DATASET.actionFeatures[0]).mae;
+   * Using a local value will explain for a specific test case,
+   *   you should see the prediction within the bars 50% of the time.
+   *   See: react['details']['feature_residuals'][0][action_feature[0]]
+   **/
+  predictedUncertainty?: number;
   style?: CSSProperties;
 };
 
@@ -47,6 +83,8 @@ export type InfluentialCasesProps = BaseVisualProps & {
  */
 export function InfluentialCases({
   actualValue,
+  densityValues,
+  densityUncertainty,
   feature,
   idFeatures,
   influenceCases,
@@ -55,8 +93,7 @@ export function InfluentialCases({
   layout: layoutProp,
   predictionCase,
   predictedValue,
-  residual,
-  mae,
+  predictedUncertainty,
   ...props
 }: InfluentialCasesProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
@@ -109,12 +146,13 @@ export function InfluentialCases({
       color: colorScheme === "dark" ? "#fff" : "#000",
     };
 
-    const xStats = getXValues({
+    const xStats = getXStats({
       feature,
+      values: densityValues,
       influenceCases,
       isTestValueNaN,
-      mae: mae || 0,
       testValue,
+      uncertainty: densityUncertainty || predictedUncertainty,
     });
 
     if (predictedValue) {
@@ -131,7 +169,10 @@ export function InfluentialCases({
           line: markerLine,
         },
         hovertemplate: "Predicted: %{x}<br />Influence: N/A<extra></extra>",
-        error_x: !residual ? undefined : { type: "constant", value: residual },
+        error_x:
+          typeof predictedUncertainty === "number"
+            ? { type: "constant", value: predictedUncertainty }
+            : undefined,
       };
       data.push(predictedValueData);
     }
@@ -162,6 +203,7 @@ export function InfluentialCases({
           const xValue = typeof rawX === "number" ? parseNA(rawX) : undefined;
           const rawY = ic[".influence_weight"];
           const yValue = typeof rawY === "number" ? parseNA(rawY) : undefined;
+
           if (xValue === undefined || yValue === undefined) {
             return values;
           }
@@ -198,24 +240,8 @@ export function InfluentialCases({
     }
 
     // Density
-    if (xStats.xDelta) {
-      const increment = Math.ceil((xStats.totalMax - xStats.totalMin) / 10);
-      const ticks = range(xStats.totalMin, xStats.totalMax, increment);
-      if (ticks[ticks.length - 1] < xStats.totalMax)
-        ticks.push(xStats.totalMax); // ensure max is in ticks
-      const kde = kernelDensityEstimator(
-        KERNELS.epanechnikov(increment),
-        ticks
-      );
-      const density = kde(xStats.values).reduce(
-        (values, [x, y]) => {
-          values.x.push(x);
-          values.y.push(y); // TODO Round to 6 you say...?
-          return values;
-        },
-        { x: [], y: [] } as { x: number[]; y: number[] }
-      );
-
+    const density = getDensity(xStats);
+    if (density.x.length) {
       const densityData: Data = {
         name: "Density",
         x: density.x,
@@ -237,13 +263,14 @@ export function InfluentialCases({
   }, [
     actualValue,
     colorScheme,
+    densityValues,
+    densityUncertainty,
     feature,
     idFeatures,
     influenceCases,
-    mae,
     predictionCase,
     predictedValue,
-    residual,
+    predictedUncertainty,
   ]);
 
   return (
@@ -280,70 +307,118 @@ const getMaximumInfluenceWeight = ({
 type XValuesParams = {
   isTestValueNaN: boolean;
   /** Mean absolute error */
-  mae: number;
+  uncertainty?: number | null;
   testValue: number;
+  values?: number[];
 } & Pick<InfluentialCasesProps, "feature" | "influenceCases">;
-type XValues = {
-  xMin: number;
-  xMax: number;
-  xDelta: number;
+type XStats = {
+  min: number;
+  max: number;
+  delta: number;
   totalMin: number;
   totalMax: number;
-  /* The x value from all influence cases */
+  /*
+   * The x values to be displayed.
+   * If values are not supplied, they will be extracted from influenceCases[feature].
+   * Uncertainty will be applied to the standardized values creating the statistics
+   **/
   values: number[];
 };
-const getXValues = ({
+const getXStats = ({
   feature,
   influenceCases,
   isTestValueNaN,
-  mae,
+  uncertainty,
   testValue,
-}: XValuesParams): XValues => {
-  const xValues = !influenceCases
-    ? []
+  values,
+}: XValuesParams): XStats => {
+  const standardizedUncertainty =
+    typeof uncertainty === "number" ? uncertainty : 0;
+
+  const standardizedValues = values
+    ? (values.filter((ic) => !isNA(ic)) as number[])
     : (influenceCases
         .map((ic) => ic[feature])
         .filter((ic) => !isNA(ic)) as number[]);
-  const [xMin = 0, xMax = 0] = extent(xValues);
-  const xDelta = safeMax(
+
+  const [min = 0, max = 0] = extent(standardizedValues);
+  const delta = safeMax(
     1,
-    (safeMax(xMax, testValue + mae) - safeMin(xMin, testValue - mae)) / 10
+    (safeMax(max, testValue + standardizedUncertainty) -
+      safeMin(min, testValue - standardizedUncertainty)) /
+      10
   );
+  //      const xDelta = safeMax(1, (safeMax(xMax, testValue + mae) - safeMin(xMin, testValue - mae)) / 10);
 
   if (isTestValueNaN) {
-    const totalMin = safeMax(0, xMin - xDelta);
-    const totalMax = xMax + xDelta;
+    const totalMin = safeMax(0, min - delta);
+    const totalMax = max + delta;
     return {
-      xMin,
-      xMax,
-      xDelta,
+      min: min,
+      max: max,
+      delta: delta,
       totalMin,
       totalMax,
-      values: xValues,
+      values: standardizedValues,
     };
   }
 
-  const totalMin = safeMax(0, safeMin(testValue - mae - xDelta, xMin - xDelta));
-  const totalMax = safeMax(testValue + mae + xDelta, xMax + xDelta);
+  const totalMin = safeMax(
+    0,
+    safeMin(testValue - standardizedUncertainty - delta, min - delta)
+  );
+  //        totalMin = safeMax(0, safeMin(testValue - mae - xDelta, xMin - xDelta));
+
+  const totalMax = safeMax(
+    testValue + standardizedUncertainty + delta,
+    max + delta
+  );
   return {
-    xMin,
-    xMax,
-    xDelta,
+    min,
+    max,
+    delta,
     totalMin,
     totalMax,
-    values: xValues,
+    values: standardizedValues,
   };
 };
 
+const getDensity = (xStats: XStats): { x: number[]; y: number[] } => {
+  const startDensity = xStats.totalMin;
+  const stopDensity = xStats.totalMax;
+  const totalDelta = stopDensity - startDensity;
+  const increment = totalDelta / xStats.values.length;
+  const ticks = range(startDensity, stopDensity, increment);
+  if (ticks[ticks.length - 1] < xStats.totalMax) ticks.push(xStats.totalMax); // ensure max is in ticks
+
+  const estimator = kernelDensityEstimator(
+    KERNELS.epanechnikov(increment),
+    ticks
+  );
+  const densityEstimation = estimator(xStats.values);
+  return densityEstimation.reduce(
+    (values, [x, y]) => {
+      if (!y) {
+        return values;
+      }
+
+      values.x.push(x);
+      values.y.push(y);
+      return values;
+    },
+    { x: [], y: [] } as { x: number[]; y: number[] }
+  );
+};
+
 type InfluenceCaseTextParams = Pick<InfluentialCasesProps, "idFeatures"> & {
-  ic: Record<string, string | number | null>;
+  ic: Case;
 };
 const getInfluenceCaseText = ({
   ic,
   idFeatures,
 }: InfluenceCaseTextParams): string => {
   if (!idFeatures?.length) {
-    return `Case: ${ic[".session"]}:${ic[".training_session_index"]}`;
+    return `Ids: session: ${ic[".session"]}, index: ${ic[".session_training_index"]}`;
   }
 
   const prefix = idFeatures.length > 0 ? "Ids" : "Id";
