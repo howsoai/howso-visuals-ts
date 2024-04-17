@@ -128,8 +128,12 @@ export function InfluentialCases({
         gridcolor: "transparent",
         hoverformat: ".4f",
       },
-      //   annotations,
-      // legend: {},
+      legend: {
+        yanchor: "top",
+        y: 0.99,
+        xanchor: "right",
+        x: 0.99,
+      },
     };
   }, [layoutDefaults, layoutProp, feature]);
 
