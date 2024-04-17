@@ -129,6 +129,8 @@ export function InfluentialCases({
         hoverformat: ".4f",
       },
       legend: {
+        ...layoutDefaults.legend,
+        ...layoutProp?.legend,
         yanchor: "top",
         y: 0.99,
         xanchor: "right",

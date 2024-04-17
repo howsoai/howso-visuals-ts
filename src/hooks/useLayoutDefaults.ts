@@ -26,6 +26,9 @@ export const getLayoutDefaults = ({
       colorScheme === "dark" ? Gray["dark"]["700"] : Gray["light"]["700"],
   };
 
+  const paperColor = colorScheme === "dark" ? "#374151" : "#FFF";
+  const textColor = colorScheme === "dark" ? "#FFF" : "#000";
+
   return {
     autosize: true,
     paper_bgcolor: "transparent",
@@ -36,7 +39,7 @@ export const getLayoutDefaults = ({
     },
     font: {
       family: "Inter, system-ui, sans-serif",
-      color: colorScheme === "dark" ? "#fff" : "#000",
+      color: textColor,
     },
     xaxis: {
       ...axisDefaults,
@@ -46,9 +49,15 @@ export const getLayoutDefaults = ({
       ...axisDefaults,
     },
     hoverlabel: {
-      bgcolor: colorScheme === "dark" ? "#374151" : "#FFF",
+      bgcolor: paperColor,
       font: {
-        color: colorScheme === "dark" ? "#FFF" : "#000",
+        color: textColor,
+      },
+    },
+    legend: {
+      bgcolor: paperColor,
+      font: {
+        color: textColor,
       },
     },
   };
