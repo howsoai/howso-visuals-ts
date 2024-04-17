@@ -352,7 +352,6 @@ const getXStats = ({
       safeMin(min, testValue - standardizedUncertainty)) /
       10
   );
-  //      const xDelta = safeMax(1, (safeMax(xMax, testValue + mae) - safeMin(xMin, testValue - mae)) / 10);
 
   if (isTestValueNaN) {
     const totalMin = safeMax(0, min - delta);
@@ -371,7 +370,6 @@ const getXStats = ({
     0,
     safeMin(testValue - standardizedUncertainty - delta, min - delta)
   );
-  //        totalMin = safeMax(0, safeMin(testValue - mae - xDelta, xMin - xDelta));
 
   const totalMax = safeMax(
     testValue + standardizedUncertainty + delta,
