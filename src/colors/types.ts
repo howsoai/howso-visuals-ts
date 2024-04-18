@@ -1,16 +1,28 @@
-export type ColorShade = `#${string}`;
 // Fits the shape of Layout['colorway']
-export type Colorway = ColorShade[];
-export type Color = {
+export type Colorway = string[];
+export type NamedColor = {
   colorway: Colorway;
-  "900": ColorShade;
-  "800": ColorShade;
-  "700": ColorShade;
-  "600": ColorShade;
-  "500": ColorShade;
-  "400": ColorShade;
-  "300": ColorShade;
-  "200": ColorShade;
-  "100": ColorShade;
+  "900": string;
+  "800": string;
+  "700": string;
+  "600": string;
+  "500": string;
+  "400": string;
+  "300": string;
+  "200": string;
+  "100": string;
+  "50": string;
 };
-export type ColorScheme = { light: Color; dark: Color };
+export type SemanticColors = {
+  primary: string;
+  secondary: string;
+  divider: string;
+  background: {
+    default: string;
+    paper: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+  };
+};

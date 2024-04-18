@@ -1,6 +1,6 @@
 import type { Layout, LayoutAxis } from "plotly.js";
 import { useMemo } from "react";
-import { Gray } from "../colors";
+import { getSemanticColors } from "./useSemanticColors";
 
 export const useLayoutDefaults = (
   params: UseLayoutDefaultsParams
@@ -17,17 +17,13 @@ export type UseLayoutDefaultsParams = {
 export const getLayoutDefaults = ({
   colorScheme,
 }: UseLayoutDefaultsParams): Partial<Layout> => {
+  const semanticColors = getSemanticColors({ colorScheme });
   const axisDefaults: Partial<LayoutAxis> = {
     automargin: true,
     ticks: "outside",
-    gridcolor:
-      colorScheme === "dark" ? Gray["dark"]["100"] : Gray["light"]["900"],
-    tickcolor:
-      colorScheme === "dark" ? Gray["dark"]["700"] : Gray["light"]["700"],
+    gridcolor: semanticColors.divider,
+    tickcolor: semanticColors.text.secondary,
   };
-
-  const paperColor = colorScheme === "dark" ? "#374151" : "#FFF";
-  const textColor = colorScheme === "dark" ? "#FFF" : "#000";
 
   return {
     autosize: true,
@@ -39,7 +35,7 @@ export const getLayoutDefaults = ({
     },
     font: {
       family: "Inter, system-ui, sans-serif",
-      color: textColor,
+      color: semanticColors.text.primary,
     },
     xaxis: {
       ...axisDefaults,
@@ -49,15 +45,15 @@ export const getLayoutDefaults = ({
       ...axisDefaults,
     },
     hoverlabel: {
-      bgcolor: paperColor,
+      bgcolor: semanticColors.background.paper,
       font: {
-        color: textColor,
+        color: semanticColors.text.primary,
       },
     },
     legend: {
-      bgcolor: paperColor,
+      bgcolor: semanticColors.background.paper,
       font: {
-        color: textColor,
+        color: semanticColors.text.primary,
       },
     },
   };

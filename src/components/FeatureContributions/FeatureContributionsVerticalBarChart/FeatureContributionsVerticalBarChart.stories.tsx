@@ -109,7 +109,7 @@ export const Default: Story = {
 
 export const DefinedColor: Story = {
   args: {
-    color: Pink.dark[900],
+    color: Pink[500],
   },
 };
 

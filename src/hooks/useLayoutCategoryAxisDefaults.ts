@@ -1,13 +1,10 @@
 import type { LayoutAxis } from "plotly.js";
 import { useMemo } from "react";
+import { ScreenSizes, useIsLgUp, useIsMdUp, useIsSmUp } from "./useScreenSize";
 import {
   FormatCategoryTickTextParams,
-  ScreenSizes,
   formatCategoryTickText,
-  useIsLgUp,
-  useIsMdUp,
-  useIsSmUp,
-} from "..";
+} from "../utils/formatting";
 
 export type UseLayoutCategoryAxisDefaultsParams = Omit<
   GetLayoutCategoryAxisDefaultsParams,

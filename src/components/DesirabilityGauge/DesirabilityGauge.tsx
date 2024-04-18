@@ -1,8 +1,8 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { BaseVisualProps, plotDefaults } from "..";
-import { ColorShade, SemanticColors, getColorScheme } from "../../colors";
-import { useLayoutDefaults } from "../../hooks";
+import { getColorScheme } from "../../colors";
+import { useLayoutDefaults, useSemanticColors } from "../../hooks";
 
 export interface DesirabilityGaugeProps extends BaseVisualProps {
   value: number;
@@ -10,12 +10,12 @@ export interface DesirabilityGaugeProps extends BaseVisualProps {
    * Provides the gauge's fill color if provided.
    * Default: Scheme and print aware semantic primary.
    */
-  color?: ColorShade;
+  color?: string;
   /**
    * Provides the gauge's background color if provided.
    * Default: Scheme and print aware semantic divider.
    */
-  background?: ColorShade;
+  background?: string;
   className?: string;
   style?: CSSProperties;
 }
@@ -37,12 +37,9 @@ export function DesirabilityGauge({
 }: DesirabilityGaugeProps): ReactNode {
   // Create the layout
   const colorScheme = getColorScheme({ isDark: isDarkProp, isPrint });
-  const color = colorProp || SemanticColors.primary[colorScheme]["900"];
-  const background = backgroundProp
-    ? backgroundProp
-    : colorScheme === "dark"
-    ? SemanticColors.divider.light["400"]
-    : SemanticColors.divider.dark["300"];
+  const semanticColors = useSemanticColors({ colorScheme });
+  const color = colorProp || semanticColors.primary;
+  const background = backgroundProp ? backgroundProp : semanticColors.divider;
 
   const layoutDefaults = useLayoutDefaults({ colorScheme });
   const layout = useMemo((): Partial<Plotly.Layout> => {

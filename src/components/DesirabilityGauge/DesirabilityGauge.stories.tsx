@@ -38,8 +38,8 @@ export const Default: Story = {
 
 export const DefinedColors: Story = {
   args: {
-    color: Pink.dark[900],
-    background: Orange.dark[900],
+    color: Pink[500],
+    background: Orange[500],
   },
 };
 

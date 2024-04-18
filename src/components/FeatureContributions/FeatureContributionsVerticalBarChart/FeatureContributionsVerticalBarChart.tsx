@@ -1,12 +1,12 @@
 import { useMemo, type CSSProperties, type ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { type FeatureContributionsBaseVisualProps, plotDefaults } from "../..";
+import { getColorScheme } from "../../../colors";
 import {
-  type ColorShade,
-  SemanticColors,
-  getColorScheme,
-} from "../../../colors";
-import { ScreenSizes, useLayoutDefaults } from "../../../hooks";
+  ScreenSizes,
+  useLayoutDefaults,
+  useSemanticColors,
+} from "../../../hooks";
 import type { Datum, Layout, PlotData } from "plotly.js";
 import {
   UseLayoutCategoryAxisDefaultsParams,
@@ -21,7 +21,7 @@ export interface FeatureContributionsVerticalBarChartProps
    * Provides the bar's fill color if provided.
    * Default: Scheme and print aware semantic primary.
    */
-  color?: ColorShade;
+  color?: string;
   formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
   /**
    * The number of bars to show.
@@ -75,7 +75,8 @@ export function FeatureContributionsVerticalBarChart({
 
   // Create layout defaults
   const colorScheme = getColorScheme({ isDark, isPrint });
-  const color = colorProp || SemanticColors.primary[colorScheme]["900"];
+  const semanticColors = useSemanticColors({ colorScheme });
+  const color = colorProp || semanticColors.primary;
   const layoutDefaults = useLayoutDefaults({ colorScheme });
 
   // Create category axis defaults
