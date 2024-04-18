@@ -1,18 +1,17 @@
 import { useMemo, type CSSProperties, type ReactNode } from "react";
 import Plot from "react-plotly.js";
-import { type FeatureContributionsBaseVisualProps, plotDefaults } from "../..";
 import { getColorScheme } from "../../../colors";
 import {
   ScreenSizes,
   useLayoutDefaults,
   useSemanticColors,
-} from "../../../hooks";
-import type { Datum, Layout, PlotData } from "plotly.js";
-import {
   UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
 } from "../../../hooks";
-import { FormatCategoryTickTextParams } from "../../..";
+import type { Datum, Layout, PlotData } from "plotly.js";
+import { FeatureContributionsBaseVisualProps } from "../FeatureContributions.types";
+import { FormatCategoryTickTextParams } from "../../../utils";
+import { plotDefaults } from "../../BaseVisual";
 
 export interface FeatureContributionsVerticalBarChartProps
   extends FeatureContributionsBaseVisualProps {

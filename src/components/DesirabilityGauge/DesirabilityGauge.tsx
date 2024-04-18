@@ -1,8 +1,8 @@
 import { useMemo, type CSSProperties, ReactNode } from "react";
 import Plot from "react-plotly.js";
-import { BaseVisualProps, plotDefaults } from "..";
 import { getColorScheme } from "../../colors";
 import { useLayoutDefaults, useSemanticColors } from "../../hooks";
+import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 
 export interface DesirabilityGaugeProps extends BaseVisualProps {
   value: number;

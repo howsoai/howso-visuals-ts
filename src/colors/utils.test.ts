@@ -4,18 +4,18 @@ import {
   Divergent2Colorway,
   getColorScale,
   getContrastingTextColor,
+  getSemanticColors,
 } from ".";
-import { getSemanticColors } from "../hooks";
 
 describe("colors/utils", () => {
-  // Just skipping this. Jest is all mad with:
-  //     TypeError: (0 , tinycolor2_1.default) is not a function
+  // TypeError: (0 , tinycolor2_1.default) is not a function. Yeah... it is
   describe.skip("getContrastingTextColor", () => {
     it("should return white for the named color shades over 500 and black for the rest of named colors", () => {
       const lightSemanticColors = getSemanticColors({ colorScheme: "light" });
       const lightColor = lightSemanticColors.text.primary;
       const darkSemanticColors = getSemanticColors({ colorScheme: "dark" });
       const darkColor = darkSemanticColors.text.primary;
+
       Object.entries(ChartColors).forEach(([name, namedColor]) => {
         const contrast900 = getContrastingTextColor(namedColor["900"]);
         expect(contrast900).toBe(lightColor);

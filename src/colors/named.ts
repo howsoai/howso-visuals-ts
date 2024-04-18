@@ -1,4 +1,3 @@
-import { buildColorWay, buildDiscreteColorWay } from "./utils";
 import { Colorway, NamedColor } from "./types";
 
 export const Blue: NamedColor = {
@@ -183,3 +182,28 @@ export const Divergent2Colorway: Colorway = [
   "#7cd8ad",
   "#56d19c",
 ];
+
+function buildColorWay(namedColor: NamedColor) {
+  namedColor.colorway = [
+    namedColor["900"],
+    namedColor["800"],
+    namedColor["700"],
+    namedColor["600"],
+    namedColor["500"],
+    namedColor["400"],
+    namedColor["300"],
+    namedColor["200"],
+    namedColor["100"],
+  ];
+}
+
+function buildDiscreteColorWay(namedColors: NamedColor[]) {
+  const shades = ["900", "700", "500", "300"];
+  return shades.reduce((colorway, shade) => {
+    return namedColors.reduce((colorway, color) => {
+      // @ts-expect-error
+      colorway.push(color[shade]);
+      return colorway;
+    }, colorway);
+  }, [] as Colorway);
+}

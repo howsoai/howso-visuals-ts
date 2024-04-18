@@ -1,6 +1,6 @@
-import { Colorway, DiscreteColorway, NamedColor } from ".";
 import tinycolor from "tinycolor2";
-import { getSemanticColors } from "../hooks";
+import { ChartColors, DiscreteColorway } from "./named";
+import { SemanticColors } from "./types";
 
 /** Returns the contrasting semantic text color for a given color. */
 export const getContrastingTextColor = (color: string) => {
@@ -46,27 +46,47 @@ export const getColorScale = (colors: string[]): [number, string][] => {
   ]);
 };
 
-export const buildColorWay = (namedColor: NamedColor) => {
-  namedColor.colorway = [
-    namedColor["900"],
-    namedColor["800"],
-    namedColor["700"],
-    namedColor["600"],
-    namedColor["500"],
-    namedColor["400"],
-    namedColor["300"],
-    namedColor["200"],
-    namedColor["100"],
-  ];
-};
+export type SemanticColorsParams = {
+  colorScheme: "light" | "dark";
+} & Partial<SemanticColors>;
+/** A direct utility for getting defaults. For ease, you may prefer useSemanticColors. */
+export const getSemanticColors = ({
+  colorScheme,
+  ...semanticColorsProps
+}: SemanticColorsParams): SemanticColors => {
+  if (colorScheme === "dark") {
+    return {
+      primary: ChartColors.Blue[400],
+      secondary: ChartColors.Gold[400],
+      divider: ChartColors.Gray[300],
+      background: {
+        default: "#222",
+        paper: "#374151",
+        ...semanticColorsProps.background,
+      },
+      text: {
+        primary: "#FFF",
+        secondary: "#ddd",
+        ...semanticColorsProps.text,
+      },
+      ...semanticColorsProps,
+    };
+  }
 
-export const buildDiscreteColorWay = (namedColors: NamedColor[]) => {
-  const shades = ["900", "700", "500", "300"];
-  return shades.reduce((colorway, shade) => {
-    return namedColors.reduce((colorway, color) => {
-      // @ts-expect-error
-      colorway.push(color[shade]);
-      return colorway;
-    }, colorway);
-  }, [] as Colorway);
+  return {
+    primary: ChartColors.Blue[600],
+    secondary: ChartColors.Gold[600],
+    divider: ChartColors.Gray[700],
+    background: {
+      default: "#efefef",
+      paper: "#fff",
+      ...semanticColorsProps.background,
+    },
+    text: {
+      primary: "#000",
+      secondary: "#222",
+      ...semanticColorsProps.text,
+    },
+    ...semanticColorsProps,
+  };
 };

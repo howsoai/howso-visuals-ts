@@ -1,20 +1,21 @@
 import { CSSProperties, ReactNode, useMemo } from "react";
-import {
-  BaseVisualProps,
-  Divergent1Colorway,
-  FormatCategoryTickTextParams,
-  ScreenSizes,
-  UseLayoutCategoryAxisDefaultsParams,
-  getColorFromScale,
-  getColorScheme,
-  getContrastingTextColor,
-  plotDefaults,
-  useLayoutCategoryAxisDefaults,
-  useLayoutDefaults,
-} from "../..";
 import type { Layout, Data, ColorScale, Annotations } from "plotly.js";
 import Plot from "react-plotly.js";
 import { colorbarDefaults } from "../../plotly/colorbar";
+import { BaseVisualProps, plotDefaults } from "../BaseVisual";
+import { FormatCategoryTickTextParams } from "../../utils";
+import { ScreenSizes } from "../../hooks/useScreenSize";
+import {
+  Divergent1Colorway,
+  getColorFromScale,
+  getColorScheme,
+  getContrastingTextColor,
+} from "../../colors";
+import {
+  UseLayoutCategoryAxisDefaultsParams,
+  useLayoutCategoryAxisDefaults,
+  useLayoutDefaults,
+} from "../../hooks";
 
 export type AnomaliesProps = BaseVisualProps & {
   anomalies: Record<string, string | number | null>[];

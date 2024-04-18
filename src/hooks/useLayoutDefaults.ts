@@ -1,6 +1,6 @@
 import type { Layout, LayoutAxis } from "plotly.js";
 import { useMemo } from "react";
-import { getSemanticColors } from "./useSemanticColors";
+import { getSemanticColors } from "../colors";
 
 export const useLayoutDefaults = (
   params: UseLayoutDefaultsParams

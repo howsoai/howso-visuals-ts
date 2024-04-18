@@ -4,16 +4,16 @@ import { useLayoutDefaults, useSemanticColors } from "../../hooks";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 import { Layout, Data, ScatterMarkerLine } from "plotly.js";
 import Plot from "react-plotly.js";
+import { extent, range } from "d3-array";
+import { Case } from "../../types";
 import {
+  KERNELS,
   isNA,
+  kernelDensityEstimator,
   parseNA,
   safeMax,
   safeMin,
-  KERNELS,
-  kernelDensityEstimator,
-} from "../..";
-import { extent, range } from "d3-array";
-import { Case } from "../../types";
+} from "../../utils";
 
 export type InfluentialCasesProps = BaseVisualProps & {
   /** The actual value from react */
