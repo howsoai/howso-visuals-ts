@@ -5,16 +5,15 @@ import {
   Gold,
   Gray,
   Green,
-  LightOrange,
-  Magenta,
+  Teal,
+  Red,
   Orange,
   Pink,
   Purple,
-  getTextColor,
   Colorway,
-  Discrete,
-  Divergent1,
-  Divergent2,
+  DiscreteColorway,
+  Divergent1Colorway,
+  Divergent2Colorway,
 } from ".";
 import Styles from "./index.stories.module.css";
 
@@ -37,33 +36,16 @@ type Story = StoryObj;
 export const Named: Story = {
   render: () => (
     <div className={Styles.namedSets}>
-      <section className={[Styles.namedSet, Styles.setLight].join(" ")}>
-        <ColorwayWithLabel label="Blue" colorway={Blue.light.colorway} />
-        <ColorwayWithLabel label="Gold" colorway={Gold.light.colorway} />
-        <ColorwayWithLabel label="Green" colorway={Green.light.colorway} />
-        <ColorwayWithLabel label="Pink" colorway={Pink.light.colorway} />
-        <ColorwayWithLabel label="Orange" colorway={Orange.light.colorway} />
-        <ColorwayWithLabel label="Purple" colorway={Purple.light.colorway} />
-        <ColorwayWithLabel
-          label="LightOrange"
-          colorway={LightOrange.light.colorway}
-        />
-        <ColorwayWithLabel label="Magenta" colorway={Magenta.light.colorway} />
-        <ColorwayWithLabel label="Gray" colorway={Gray.light.colorway} />
-      </section>
-      <section className={[Styles.namedSet, Styles.setDark].join(" ")}>
-        <ColorwayWithLabel label="Blue" colorway={Blue.dark.colorway} />
-        <ColorwayWithLabel label="Gold" colorway={Gold.dark.colorway} />
-        <ColorwayWithLabel label="Green" colorway={Green.dark.colorway} />
-        <ColorwayWithLabel label="Pink" colorway={Pink.dark.colorway} />
-        <ColorwayWithLabel label="Orange" colorway={Orange.dark.colorway} />
-        <ColorwayWithLabel label="Purple" colorway={Purple.dark.colorway} />
-        <ColorwayWithLabel
-          label="LightOrange"
-          colorway={LightOrange.dark.colorway}
-        />
-        <ColorwayWithLabel label="Magenta" colorway={Magenta.dark.colorway} />
-        <ColorwayWithLabel label="Gray" colorway={Gray.dark.colorway} />
+      <section className={[Styles.namedSet].join(" ")}>
+        <ColorwayWithLabel label="Blue" colorway={Blue.colorway} />
+        <ColorwayWithLabel label="Gold" colorway={Gold.colorway} />
+        <ColorwayWithLabel label="Green" colorway={Green.colorway} />
+        <ColorwayWithLabel label="Pink" colorway={Pink.colorway} />
+        <ColorwayWithLabel label="Teal" colorway={Teal.colorway} />
+        <ColorwayWithLabel label="Orange" colorway={Orange.colorway} />
+        <ColorwayWithLabel label="Purple" colorway={Purple.colorway} />
+        <ColorwayWithLabel label="Red" colorway={Red.colorway} />
+        <ColorwayWithLabel label="Gray" colorway={Gray.colorway} />
       </section>
     </div>
   ),
@@ -73,11 +55,8 @@ export const DiscreteStory: Story = {
   name: "Discrete",
   render: () => (
     <div style={{ maxWidth: "122ch" }}>
-      <section className={[Styles.namedSet, Styles.setLight].join(" ")}>
-        <ColorwayWithLabel label="Light" colorway={Discrete.light} />
-      </section>
-      <section className={[Styles.namedSet, Styles.setDark].join(" ")}>
-        <ColorwayWithLabel label="Dark" colorway={Discrete.dark} />
+      <section className={[Styles.namedSet].join(" ")}>
+        <ColorwayWithLabel label="Light" colorway={DiscreteColorway} />
       </section>
     </div>
   ),
@@ -87,13 +66,9 @@ export const DivergentStory: Story = {
   name: "Divergent",
   render: () => (
     <div>
-      <section className={[Styles.namedSet, Styles.setLight].join(" ")}>
-        <ColorwayWithLabel label="Divergent1" colorway={Divergent1} />
-        <ColorwayWithLabel label="Divergent2" colorway={Divergent2} />
-      </section>
-      <section className={[Styles.namedSet, Styles.setDark].join(" ")}>
-        <ColorwayWithLabel label="Divergent1" colorway={Divergent1} />
-        <ColorwayWithLabel label="Divergent2" colorway={Divergent2} />
+      <section className={[Styles.namedSet].join(" ")}>
+        <ColorwayWithLabel label="Divergent1" colorway={Divergent1Colorway} />
+        <ColorwayWithLabel label="Divergent2" colorway={Divergent2Colorway} />
       </section>
     </div>
   ),
@@ -108,7 +83,10 @@ const ColorwayWithLabel: FC<ColorwayWithLabelProps> = ({ label, colorway }) => (
         <div
           key={color}
           className={Styles.colorwayItem}
-          style={{ backgroundColor: color, color: getTextColor(color) }}
+          style={{
+            backgroundColor: color,
+            color: "#fff",
+          }}
         >
           {color}
         </div>

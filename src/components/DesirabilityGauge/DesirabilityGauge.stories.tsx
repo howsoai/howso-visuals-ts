@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { DesirabilityGauge } from "./DesirabilityGauge";
-import { Orange, Pink } from "../../colors";
+import { ChartColors } from "../../colors";
 import { isDarkBackground } from "../../../.storybook/utils";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -38,8 +38,8 @@ export const Default: Story = {
 
 export const DefinedColors: Story = {
   args: {
-    color: Pink.dark[900],
-    background: Orange.dark[900],
+    color: ChartColors.Pink[500],
+    background: ChartColors.Teal[500],
   },
 };
 

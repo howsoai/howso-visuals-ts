@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { FeatureCorrelations } from "./FeatureCorrelations";
 import { isDarkBackground } from "../../../.storybook/utils";
-import { Divergent2 } from "../../colors";
+import { Divergent2Colorway } from "../../colors";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof FeatureCorrelations> = {
@@ -56,6 +56,6 @@ export const Default: Story = {
 
 export const DefinedColors: Story = {
   args: {
-    colors: Divergent2,
+    colors: Divergent2Colorway,
   },
 };

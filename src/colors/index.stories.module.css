@@ -7,24 +7,13 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 1rem;
-  border: solid 1px rgba(0, 0, 0, 0.3);
-}
-
-.setLight {
-  background: #fff;
-  color: #000;
-}
-
-.setDark {
-  background: #374151;
-  color: #fff;
 }
 
 .colorway {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  border: solid 1px #333;
 }
 
 .colorwayLabel {

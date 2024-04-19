@@ -1,19 +1,19 @@
 import { CSSProperties, ReactNode, useMemo } from "react";
-import { getColorScheme, Blue, Purple, Orange, Green } from "../../colors";
-import { useLayoutDefaults } from "../../hooks";
+import { getColorScheme, ChartColors, NamedColor } from "../../colors";
+import { useLayoutDefaults, useSemanticColors } from "../../hooks";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 import { Layout, Data, ScatterMarkerLine } from "plotly.js";
 import Plot from "react-plotly.js";
+import { extent, range } from "d3-array";
+import { Case } from "../../types";
 import {
+  KERNELS,
   isNA,
+  kernelDensityEstimator,
   parseNA,
   safeMax,
   safeMin,
-  KERNELS,
-  kernelDensityEstimator,
-} from "../..";
-import { extent, range } from "d3-array";
-import { Case } from "../../types";
+} from "../../utils";
 
 export type InfluentialCasesProps = BaseVisualProps & {
   /** The actual value from react */
@@ -97,6 +97,8 @@ export function InfluentialCases({
   ...props
 }: InfluentialCasesProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
+  const semanticColors = useSemanticColors({ colorScheme });
+  const colorShade: keyof NamedColor = colorScheme === "dark" ? "400" : "600";
 
   // Create layout
   const layoutDefaults = useLayoutDefaults({ colorScheme });
@@ -149,7 +151,7 @@ export function InfluentialCases({
     // const mae = isInteger ? Math.ceil(rawMae) : rawMae;
     const markerLine: Partial<ScatterMarkerLine> = {
       width: 1,
-      color: colorScheme === "dark" ? "#fff" : "#000",
+      color: semanticColors.text.primary,
     };
 
     const xStats = getXStats({
@@ -171,7 +173,7 @@ export function InfluentialCases({
         mode: "markers",
         marker: {
           size: 15,
-          color: Purple[colorScheme]["900"],
+          color: ChartColors.Purple[colorShade],
           line: markerLine,
         },
         hovertemplate: "Predicted: %{x}<br />Influence: N/A<extra></extra>",
@@ -193,7 +195,7 @@ export function InfluentialCases({
         mode: "markers",
         marker: {
           size: 15,
-          color: Orange[colorScheme]["900"],
+          color: ChartColors.Orange[colorShade],
           line: markerLine,
         },
         hovertemplate: "Value: %{x}<br />Influence: N/A<extra></extra>",
@@ -235,7 +237,7 @@ export function InfluentialCases({
         mode: "markers",
         marker: {
           size: 15,
-          color: Green[colorScheme]["900"],
+          color: ChartColors.Green[colorShade],
           line: markerLine,
         },
         hovertemplate:
@@ -257,7 +259,7 @@ export function InfluentialCases({
         fill: "tozeroy",
         hoverinfo: "skip",
         line: {
-          color: Blue[colorScheme]["900"],
+          color: ChartColors.Blue[colorShade],
           shape: "spline",
         },
         opacity: 0.2,
@@ -268,7 +270,8 @@ export function InfluentialCases({
     return data;
   }, [
     actualValue,
-    colorScheme,
+    colorShade,
+    semanticColors,
     densityValues,
     densityUncertainty,
     feature,

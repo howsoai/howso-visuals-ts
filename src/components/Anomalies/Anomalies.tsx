@@ -1,21 +1,21 @@
 import { CSSProperties, ReactNode, useMemo } from "react";
-import {
-  BaseVisualProps,
-  ColorShade,
-  Divergent1,
-  FormatCategoryTickTextParams,
-  ScreenSizes,
-  UseLayoutCategoryAxisDefaultsParams,
-  getColorScaleShade,
-  getColorScheme,
-  getTextColor,
-  plotDefaults,
-  useLayoutCategoryAxisDefaults,
-  useLayoutDefaults,
-} from "../..";
 import type { Layout, Data, ColorScale, Annotations } from "plotly.js";
 import Plot from "react-plotly.js";
 import { colorbarDefaults } from "../../plotly/colorbar";
+import { BaseVisualProps, plotDefaults } from "../BaseVisual";
+import { FormatCategoryTickTextParams } from "../../utils";
+import { ScreenSizes } from "../../hooks/useScreenSize";
+import {
+  Divergent1Colorway,
+  getColorFromScale,
+  getColorScheme,
+  getContrastingTextColor,
+} from "../../colors";
+import {
+  UseLayoutCategoryAxisDefaultsParams,
+  useLayoutCategoryAxisDefaults,
+  useLayoutDefaults,
+} from "../../hooks";
 
 export type AnomaliesProps = BaseVisualProps & {
   anomalies: Record<string, string | number | null>[];
@@ -31,7 +31,7 @@ export type AnomaliesProps = BaseVisualProps & {
    * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
    * Default: Divergent1
    */
-  colors?: ColorShade[];
+  colors?: string[];
   className?: string;
   formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
   /**
@@ -54,7 +54,7 @@ export type AnomaliesProps = BaseVisualProps & {
 export const Anomalies = ({
   anomalies: allAnomalies,
   convictions: allConvictions,
-  colors = Divergent1,
+  colors = Divergent1Colorway,
   formatParams,
   isDark,
   isPrint,
@@ -196,12 +196,12 @@ const getAnnotations = ({
 }: GetAnnotationsParams): Layout["annotations"] =>
   z.reduce((annotations, row, rowIndex) => {
     const additions = row.reduce((additions, value, columnIndex) => {
-      const backgroundColor = getColorScaleShade(Math.min(max, value || 1), {
+      const backgroundColor = getColorFromScale(Math.min(max, value || 1), {
         colorscale: colorscale as [number, string][],
         colorScheme,
         fromRange: { max, min },
       });
-      const textColor = getTextColor(backgroundColor);
+      const textColor = getContrastingTextColor(backgroundColor);
       const annotation: Partial<Annotations> = {
         xref: "x",
         yref: "y",
@@ -221,7 +221,7 @@ const getAnnotations = ({
 /**
  * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
  **/
-const getLocalColorScale = (colors: ColorShade[]): ColorScale => {
+const getLocalColorScale = (colors: string[]): ColorScale => {
   if (colors.length < 3) {
     throw new Error("At least three colors must be provided to make a scale");
   }

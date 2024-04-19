@@ -1,12 +1,11 @@
 import { type CSSProperties, type ReactNode, useMemo } from "react";
 import Plot from "react-plotly.js";
 import {
-  ColorShade,
-  Divergent1,
+  Divergent1Colorway,
+  getColorFromScale,
   getColorScale,
-  getColorScaleShade,
   getColorScheme,
-  getTextColor,
+  getContrastingTextColor,
 } from "../../colors";
 import {
   ScreenSizes,
@@ -25,7 +24,7 @@ export type FeatureCorrelationsProps = BaseVisualProps & {
    * Colors will be distributed evenly along -1 to 1 scale based on array index.
    * Default: Divergent1
    */
-  colors?: ColorShade[];
+  colors?: string[];
   className?: string;
   /**
    * A nested array structure of values where the indexes of any two features yield their correlation value.
@@ -62,7 +61,7 @@ type FeatureCorrelationsValues = FeatureCorrelationsValue[];
  * @see https://plotly.com/javascript/reference/heatmap
  */
 export function FeatureCorrelations({
-  colors = Divergent1,
+  colors = Divergent1Colorway,
   correlations,
   features,
   formatParams,
@@ -163,12 +162,12 @@ const getAnnotations = ({
     const additions = features.reduce(
       (additions, columnFeature, columnIndex) => {
         const z = correlations[rowIndex][columnIndex];
-        const backgroundColor = getColorScaleShade(z, {
+        const backgroundColor = getColorFromScale(z, {
           colorscale: colorscale as [number, string][],
           colorScheme,
           fromRange: { max, min },
         });
-        const textColor = getTextColor(backgroundColor);
+        const textColor = getContrastingTextColor(backgroundColor);
         const annotation: Partial<Annotations> = {
           xref: "x",
           yref: "y",

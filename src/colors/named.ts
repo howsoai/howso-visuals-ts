@@ -1,310 +1,161 @@
-import { ColorScheme, Colorway } from "./types";
+import { Colorway, NamedColor } from "./types";
 
-const buildColorWays = (colorSet: ColorScheme) => {
-  const schemes: (keyof ColorScheme)[] = ["light", "dark"];
-  schemes.forEach((scheme) => {
-    colorSet[scheme].colorway = [
-      colorSet[scheme]["900"],
-      colorSet[scheme]["800"],
-      colorSet[scheme]["700"],
-      colorSet[scheme]["600"],
-      colorSet[scheme]["500"],
-      colorSet[scheme]["400"],
-      colorSet[scheme]["300"],
-      colorSet[scheme]["200"],
-      colorSet[scheme]["100"],
-    ];
-  });
+export const Blue: NamedColor = {
+  "900": "#003880",
+  "800": "#004CAD",
+  "700": "#005DD6",
+  "600": "#006EF8",
+  "500": "#258CF7",
+  "400": "#6CA7F8",
+  "300": "#99BFFA",
+  "200": "#BFD6FC",
+  "100": "#E6EEFE",
+  "50": "#F8FAFF",
+  colorway: [],
 };
+buildColorWay(Blue);
 
-export const Blue: ColorScheme = {
-  light: {
-    "900": "#1c64f2",
-    "800": "#4368e5",
-    "700": "#586dd8",
-    "600": "#6672cb",
-    "500": "#7177bf",
-    "400": "#7a7cb2",
-    "300": "#8181a5",
-    "200": "#878698",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#1c64f2",
-    "800": "#4368e5",
-    "700": "#586dd8",
-    "600": "#6672cb",
-    "500": "#7177bf",
-    "400": "#7a7cb2",
-    "300": "#8181a5",
-    "200": "#878698",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Gold: NamedColor = {
+  "900": "#443706",
+  "800": "#5c4a08",
+  "700": "#735d0a",
+  "600": "#886e0B",
+  "500": "#a8870E",
+  "400": "#c7a111",
+  "300": "#e4B813",
+  "200": "#fbd133",
+  "100": "#Fdeeb3",
+  "50": "#fffae9",
+  colorway: [],
 };
-buildColorWays(Blue);
+buildColorWay(Gold);
 
-export const Gold: ColorScheme = {
-  light: {
-    "900": "#ffd700",
-    "800": "#f2cd2f",
-    "700": "#e5c344",
-    "600": "#d7b953",
-    "500": "#c9b061",
-    "400": "#bba66c",
-    "300": "#ac9d77",
-    "200": "#9c9481",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#ffd700",
-    "800": "#f2cd2f",
-    "700": "#e5c344",
-    "600": "#d7b953",
-    "500": "#c9b061",
-    "400": "#bba66c",
-    "300": "#ac9d77",
-    "200": "#9c9481",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Green: NamedColor = {
+  "900": "#03412D",
+  "800": "#04583d",
+  "700": "#046d4c",
+  "600": "#11805D",
+  "500": "#419A7E",
+  "400": "#6eb29c",
+  "300": "#96c7b7",
+  "200": "#bcdbd1",
+  "100": "#e4f1ec",
+  "50": "#f7fbf9",
+  colorway: [],
 };
-buildColorWays(Gold);
+buildColorWay(Green);
 
-export const Green: ColorScheme = {
-  light: {
-    "900": "#56d19c",
-    "800": "#61c89a",
-    "700": "#6bc098",
-    "600": "#72b796",
-    "500": "#79ae94",
-    "400": "#7fa692",
-    "300": "#839d8f",
-    "200": "#87948d",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#56d19c",
-    "800": "#61c89a",
-    "700": "#6bc098",
-    "600": "#72b796",
-    "500": "#79ae94",
-    "400": "#7fa692",
-    "300": "#839d8f",
-    "200": "#87948d",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Pink: NamedColor = {
+  "900": "#6e1900",
+  "800": "#922300",
+  "700": "#b52b00",
+  "600": "#d73100",
+  "500": "#f05645",
+  "400": "#f7837c",
+  "300": "#faa7a5",
+  "200": "#fcc8c8",
+  "100": "#fee9e9",
+  "50": "#fff8f9",
+  colorway: [],
 };
-buildColorWays(Green);
+buildColorWay(Pink);
 
-export const Pink: ColorScheme = {
-  light: {
-    "900": "#ea5f94",
-    "800": "#df6793",
-    "700": "#d46e92",
-    "600": "#c97491",
-    "500": "#be7a8f",
-    "400": "#b27f8e",
-    "300": "#a5838d",
-    "200": "#99878c",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#ea5f94",
-    "800": "#df6793",
-    "700": "#d46e92",
-    "600": "#c97491",
-    "500": "#be7a8f",
-    "400": "#b27f8e",
-    "300": "#a5838d",
-    "200": "#99878c",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Orange: NamedColor = {
+  "900": "#582c12",
+  "800": "#783c19",
+  "700": "#854b1f",
+  "600": "#b15825",
+  "500": "#d96c2d",
+  "400": "#e88f58",
+  "300": "#efaf8a",
+  "200": "#f5cdb5",
+  "100": "#fbebe1",
+  "50": "#fef9f6",
+  colorway: [],
 };
-buildColorWays(Pink);
+buildColorWay(Orange);
 
-export const Orange: ColorScheme = {
-  light: {
-    "900": "#ffb14e",
-    "800": "#f2ac57",
-    "700": "#e4a760",
-    "600": "#d6a368",
-    "500": "#c89e70",
-    "400": "#ba9977",
-    "300": "#ab947e",
-    "200": "#9c9085",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#ffb14e",
-    "800": "#f2ac57",
-    "700": "#e4a760",
-    "600": "#d6a368",
-    "500": "#c89e70",
-    "400": "#ba9977",
-    "300": "#ab947e",
-    "200": "#9c9085",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Teal: NamedColor = {
+  "900": "#033f45",
+  "800": "#03555d",
+  "700": "#046a74",
+  "600": "#057d89",
+  "500": "#1299a7",
+  "400": "#4eb3bd",
+  "300": "#80c9d0",
+  "200": "#afdde1",
+  "100": "#dff1f3",
+  "50": "#f5fbfb",
+  colorway: [],
 };
-buildColorWays(Orange);
+buildColorWay(Teal);
 
-export const Purple: ColorScheme = {
-  light: {
-    "900": "#9061f9",
-    "800": "#9267eb",
-    "700": "#936ddd",
-    "600": "#9472cf",
-    "500": "#9378c2",
-    "400": "#927db4",
-    "300": "#9182a6",
-    "200": "#8e8699",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#9061f9",
-    "800": "#9267eb",
-    "700": "#936ddd",
-    "600": "#9472cf",
-    "500": "#9378c2",
-    "400": "#927db4",
-    "300": "#9182a6",
-    "200": "#8e8699",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Purple: NamedColor = {
+  "900": "#452085",
+  "800": "#5d2bb2",
+  "700": "#7335de",
+  "600": "#8849f3",
+  "500": "#a170f6",
+  "400": "#b892f8",
+  "300": "#cbb0fa",
+  "200": "#decdfc",
+  "100": "#f2ebfe",
+  "50": "#fbf9ff",
+  colorway: [],
 };
-buildColorWays(Purple);
+buildColorWay(Purple);
 
-export const LightOrange: ColorScheme = {
-  light: {
-    "900": "#fa8775",
-    "800": "#ed8878",
-    "700": "#e0897b",
-    "600": "#d38a7d",
-    "500": "#c68b80",
-    "400": "#b88b83",
-    "300": "#aa8b86",
-    "200": "#9b8b88",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#fa8775",
-    "800": "#ed8878",
-    "700": "#e0897b",
-    "600": "#d38a7d",
-    "500": "#c68b80",
-    "400": "#b88b83",
-    "300": "#aa8b86",
-    "200": "#9b8b88",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Red: NamedColor = {
+  "900": "#711212",
+  "800": "#971818",
+  "700": "#ba1e1e",
+  "600": "#db2323",
+  "500": "#e85d5d",
+  "400": "#ee8888",
+  "300": "#f3aaaa",
+  "200": "#f7caca",
+  "100": "#fce9e9",
+  "50": "#fef9f9",
+  colorway: [],
 };
-buildColorWays(LightOrange);
+buildColorWay(Red);
 
-export const Magenta: ColorScheme = {
-  light: {
-    "900": "#cd34b5",
-    "800": "#c646b0",
-    "700": "#bf54ab",
-    "600": "#b760a6",
-    "500": "#af6aa0",
-    "400": "#a7749b",
-    "300": "#9e7c96",
-    "200": "#958490",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#cd34b5",
-    "800": "#c646b0",
-    "700": "#bf54ab",
-    "600": "#b760a6",
-    "500": "#af6aa0",
-    "400": "#a7749b",
-    "300": "#9e7c96",
-    "200": "#958490",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
+export const Gray: NamedColor = {
+  "900": "#303943",
+  "800": "#424d5b",
+  "700": "#526172",
+  "600": "#617388",
+  "500": "#7d8c9f",
+  "400": "#9aa6b5",
+  "300": "#b5bec8",
+  "200": "#d0d5dc",
+  "100": "#eceef1",
+  "50": "#f9fafb",
+  colorway: [],
 };
-buildColorWays(Magenta);
-
-export const Gray: ColorScheme = {
-  light: {
-    "900": "#d5d5dc",
-    "800": "#cbcbd2",
-    "700": "#c2c2c7",
-    "600": "#b9b9bd",
-    "500": "#afafb3",
-    "400": "#a6a6a9",
-    "300": "#9d9d9f",
-    "200": "#949495",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-  dark: {
-    "900": "#d5d5dc",
-    "800": "#cbcbd2",
-    "700": "#c2c2c7",
-    "600": "#b9b9bd",
-    "500": "#afafb3",
-    "400": "#a6a6a9",
-    "300": "#9d9d9f",
-    "200": "#949495",
-    "100": "#8b8b8b",
-    colorway: [],
-  },
-};
-buildColorWays(Gray);
+buildColorWay(Gray);
 // I'm British: https://www.youtube.com/watch?v=FkF_XpA5P48&pp=ygUfcHJvZmVzc29yIGVsZW1lbnRhbCBJJ20gYnJpdGlzaA%3D%3D
 export const Grey = Gray;
 
-// Semantic colors
-export const SemanticColors = {
-  primary: Blue,
-  secondary: Gold,
-  divider: Gray,
+// Named colors
+export const ChartColors = {
+  Blue,
+  Gold,
+  Green,
+  Pink,
+  Orange,
+  Teal,
+  Purple,
+  Red,
+  Gray,
+  Grey,
 };
 
-const buildDiscreteColorWay = (scheme: keyof ColorScheme) => {
-  const shades = ["900", "700", "500", "300"];
-  return shades.reduce((colorway, shade) => {
-    return [
-      Blue,
-      Gold,
-      Green,
-      Pink,
-      Orange,
-      Purple,
-      LightOrange,
-      Magenta,
-      Gray,
-    ].reduce((colorway, color) => {
-      // @ts-expect-error
-      colorway.push(color[scheme][shade]);
-      return colorway;
-    }, colorway);
-  }, [] as Colorway);
-};
+export const DiscreteColorway: Colorway = buildDiscreteColorWay(
+  Object.values(ChartColors)
+);
 
-export const Discrete: { light: Colorway; dark: Colorway } = {
-  light: buildDiscreteColorWay("light"),
-  dark: buildDiscreteColorWay("dark"),
-};
-
-export const Divergent1: Colorway = [
+export const Divergent1Colorway: Colorway = [
   "#ea5f94",
   "#ef7fa6",
   "#f29db8",
@@ -318,7 +169,7 @@ export const Divergent1: Colorway = [
   "#1c64f2",
 ];
 
-export const Divergent2: Colorway = [
+export const Divergent2Colorway: Colorway = [
   "#9061f9",
   "#a87ef8",
   "#bd9af7",
@@ -331,3 +182,28 @@ export const Divergent2: Colorway = [
   "#7cd8ad",
   "#56d19c",
 ];
+
+function buildColorWay(namedColor: NamedColor) {
+  namedColor.colorway = [
+    namedColor["900"],
+    namedColor["800"],
+    namedColor["700"],
+    namedColor["600"],
+    namedColor["500"],
+    namedColor["400"],
+    namedColor["300"],
+    namedColor["200"],
+    namedColor["100"],
+  ];
+}
+
+function buildDiscreteColorWay(namedColors: NamedColor[]) {
+  const shades = ["900", "700", "500", "300"];
+  return shades.reduce((colorway, shade) => {
+    return namedColors.reduce((colorway, color) => {
+      // @ts-expect-error
+      colorway.push(color[shade]);
+      return colorway;
+    }, colorway);
+  }, [] as Colorway);
+}

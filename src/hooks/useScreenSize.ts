@@ -1,4 +1,4 @@
-import { useMediaQuery } from ".";
+import { useMediaQuery } from "./useMediaQuery";
 
 export const useScreenSize = (
   screenSizes: ScreenSizes = _screenSizes

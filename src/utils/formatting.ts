@@ -13,6 +13,7 @@ export type FormatCategoryTickTextParams = {
   /** A list of characters to replace with spaces as candidates for truncation breaks */
   replacements?: string | RegExp;
 };
+
 export const formatCategoryTickText = (
   string: string,
   params: FormatCategoryTickTextParams = {
