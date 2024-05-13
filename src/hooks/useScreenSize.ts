@@ -54,3 +54,14 @@ export const screenSizes = {
 const _screenSizes = screenSizes;
 export type ScreenSize = keyof typeof screenSizes;
 export type ScreenSizes = Record<ScreenSize, PixelSize>;
+
+export type ScreenSizeHookProps = {
+  /**
+   * An optional set of redefined screen sizes to use in breakpoint logic.
+   * Labels will be wrapped to a secondary line based on screen size.
+   *   sm: <= 10
+   *   md: <= 20
+   *   lg: <= 25
+   **/
+  screenSizes?: ScreenSizes;
+};

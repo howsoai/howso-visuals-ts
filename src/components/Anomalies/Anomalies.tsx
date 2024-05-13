@@ -4,7 +4,7 @@ import Plot from "react-plotly.js";
 import { colorbarDefaults } from "../../plotly/colorbar";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 import { FormatCategoryTickTextParams } from "../../utils";
-import { ScreenSizes } from "../../hooks/useScreenSize";
+import { type ScreenSizeHookProps } from "../../hooks";
 import {
   Divergent1Colorway,
   getColorFromScale,
@@ -12,38 +12,31 @@ import {
   getContrastingTextColor,
 } from "../../colors";
 import {
-  UseLayoutCategoryAxisDefaultsParams,
+  type UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
 } from "../../hooks";
 
-export type AnomaliesProps = BaseVisualProps & {
-  anomalies: Record<string, string | number | null>[];
-  convictions: Record<string, number | null>[];
-  /**
-   * Number of cases to display.
-   * Default: 5
-   * If 0, all features will be displayed.
-   */
-  limit?: number;
-  /**
-   * Provides the bar's fill color if provided.
-   * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
-   * Default: Divergent1
-   */
-  colors?: string[];
-  className?: string;
-  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-  /**
-   * An optional set of redefined screen sizes to use in breakpoint logic.
-   * Labels will be wrapped to a secondary line based on screen size.
-   *   sm: <= 10
-   *   md: <= 20
-   *   lg: <= 25
-   **/
-  screenSizes?: ScreenSizes;
-  style?: CSSProperties;
-};
+export type AnomaliesProps = BaseVisualProps &
+  ScreenSizeHookProps & {
+    anomalies: Record<string, string | number | null>[];
+    convictions: Record<string, number | null>[];
+    /**
+     * Number of cases to display.
+     * Default: 5
+     * If 0, all features will be displayed.
+     */
+    limit?: number;
+    /**
+     * Provides the bar's fill color if provided.
+     * Colors will be distributed unevenly from 0 to 5 scale compressing the first half into 0 - 1 and the rest expanded 1-5.
+     * Default: Divergent1
+     */
+    colors?: string[];
+    className?: string;
+    formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
+    style?: CSSProperties;
+  };
 
 /**
  * A heat map which shows conviction values for each feature.

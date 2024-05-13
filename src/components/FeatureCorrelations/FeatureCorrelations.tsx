@@ -8,8 +8,8 @@ import {
   getContrastingTextColor,
 } from "../../colors";
 import {
-  ScreenSizes,
-  UseLayoutCategoryAxisDefaultsParams,
+  type ScreenSizeHookProps,
+  type UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
 } from "../../hooks";
@@ -18,38 +18,31 @@ import type { Annotations, ColorScale, Data, Datum, Layout } from "plotly.js";
 import { FormatCategoryTickTextParams } from "../..";
 import { colorbarDefaults } from "../../plotly/colorbar";
 
-export type FeatureCorrelationsProps = BaseVisualProps & {
-  /**
-   * Provides the bar's fill color if provided.
-   * Colors will be distributed evenly along -1 to 1 scale based on array index.
-   * Default: Divergent1
-   */
-  colors?: string[];
-  className?: string;
-  /**
-   * A nested array structure of values where the indexes of any two features yield their correlation value.
-   * Values should be between -1 and 1, undefined or null.
-   *
-   * Example:
-   * [
-   *   [.1, null, .3, .5, .1],
-   *   [.2, .1, .6, .8, .3],
-   *   [.3, .6, .1, -.1, .20],
-   * ]
-   */
-  correlations: FeatureCorrelationsValues[];
-  features: string[];
-  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-  /**
-   * An optional set of redefined screen sizes to use in breakpoint logic.
-   * Labels will be wrapped to a secondary line based on screen size.
-   *   sm: <= 10
-   *   md: <= 20
-   *   lg: <= 25
-   **/
-  screenSizes?: ScreenSizes;
-  style?: CSSProperties;
-};
+export type FeatureCorrelationsProps = BaseVisualProps &
+  ScreenSizeHookProps & {
+    /**
+     * Provides the bar's fill color if provided.
+     * Colors will be distributed evenly along -1 to 1 scale based on array index.
+     * Default: Divergent1
+     */
+    colors?: string[];
+    className?: string;
+    /**
+     * A nested array structure of values where the indexes of any two features yield their correlation value.
+     * Values should be between -1 and 1, undefined or null.
+     *
+     * Example:
+     * [
+     *   [.1, null, .3, .5, .1],
+     *   [.2, .1, .6, .8, .3],
+     *   [.3, .6, .1, -.1, .20],
+     * ]
+     */
+    correlations: FeatureCorrelationsValues[];
+    features: string[];
+    formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
+    style?: CSSProperties;
+  };
 
 type FeatureCorrelationsValue = number | undefined | null;
 type FeatureCorrelationsValues = FeatureCorrelationsValue[];
