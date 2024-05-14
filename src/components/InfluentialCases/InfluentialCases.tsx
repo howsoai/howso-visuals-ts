@@ -1,11 +1,15 @@
 import { CSSProperties, ReactNode, useMemo } from "react";
 import { getColorScheme, ChartColors, NamedColor } from "../../colors";
-import { useLayoutDefaults, useSemanticColors } from "../../hooks";
+import {
+  getCaseLabel,
+  useLayoutDefaults,
+  useSemanticColors,
+} from "../../hooks";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 import { Layout, Data, ScatterMarkerLine } from "plotly.js";
 import Plot from "react-plotly.js";
 import { extent, range } from "d3-array";
-import { Case } from "../../types";
+import { Case, IdFeaturesProps } from "../../types";
 import {
   KERNELS,
   isNA,
@@ -15,11 +19,12 @@ import {
   safeMin,
 } from "../../utils";
 
-export type InfluentialCasesProps = BaseVisualProps & {
-  /** The actual value from react */
-  actualValue?: number;
-  className?: string;
-  /**
+export type InfluentialCasesProps = BaseVisualProps &
+  IdFeaturesProps & {
+    /** The actual value from react */
+    actualValue?: number;
+    className?: string;
+    /**
    * An optional list of values for the action feature to visualize. This will be used to visualize a
         KDE plot to characterize the distribution of values around the predicted and actual values. If this is None,
         the distribution of influential cases in the react will be used instead, if present.
@@ -37,40 +42,34 @@ export type InfluentialCasesProps = BaseVisualProps & {
    *    gen_reacts.append(result['action'].loc[0, 'moid'])
    * ```
    **/
-  densityValues?: number[];
-  /**
-   * If provided the x ranges will be expanded by this value to allow for that uncertainty.
-   * If not supplied predictedUncertainty will be used as a fallback.
-   * See stats.mae
-   **/
-  densityUncertainty?: number | undefined | null;
-  feature: string;
-  /**
-   * A list of features which uniquely identify an influence case.
-   * These will be used in hover states for influence cases.
-   * If not supplied the internal `.session` and `.training_session_index` value will be used.
-   **/
-  idFeatures?: string[];
-  /** response.content?.boundary_cases?.[0] ?? []; */
-  influenceCases: Case[];
-  predictionCase: Case;
-  /**
-   * Draws a prediction's dot above the density.
-   * Usually obtained through react for action features.
-   **/
-  predictedValue: number;
-  /**
-   * Draws a prediction value's uncertainty values, also known as residuals.
-   * Using global feature stats.mae value will explain the average across the whole data set,
-   *   that predictions should be within those bars 50% of the time.
-   *   See: await getGlobalFeatureStats<DatasetCase>(cl, trainee, DATASET.actionFeatures[0]).mae;
-   * Using a local value will explain for a specific test case,
-   *   you should see the prediction within the bars 50% of the time.
-   *   See: react['details']['feature_residuals'][0][action_feature[0]]
-   **/
-  predictedUncertainty?: number;
-  style?: CSSProperties;
-};
+    densityValues?: number[];
+    /**
+     * If provided the x ranges will be expanded by this value to allow for that uncertainty.
+     * If not supplied predictedUncertainty will be used as a fallback.
+     * See stats.mae
+     **/
+    densityUncertainty?: number | undefined | null;
+    feature: string;
+    /** response.content?.boundary_cases?.[0] ?? []; */
+    influenceCases: Case[];
+    predictionCase: Case;
+    /**
+     * Draws a prediction's dot above the density.
+     * Usually obtained through react for action features.
+     **/
+    predictedValue: number;
+    /**
+     * Draws a prediction value's uncertainty values, also known as residuals.
+     * Using global feature stats.mae value will explain the average across the whole data set,
+     *   that predictions should be within those bars 50% of the time.
+     *   See: await getGlobalFeatureStats<DatasetCase>(cl, trainee, DATASET.actionFeatures[0]).mae;
+     * Using a local value will explain for a specific test case,
+     *   you should see the prediction within the bars 50% of the time.
+     *   See: react['details']['feature_residuals'][0][action_feature[0]]
+     **/
+    predictedUncertainty?: number;
+    style?: CSSProperties;
+  };
 
 /**
  * Displays a prediction with additional information for interpreting the result.
@@ -218,7 +217,7 @@ export function InfluentialCases({
 
           values.x.push(xValue);
           values.y.push(yValue);
-          values.text.push(getInfluenceCaseText({ ic, idFeatures }));
+          values.text.push(getCaseLabel({ case: ic, idFeatures }));
           return values;
         },
         { x: [], y: [], text: [] } as {
@@ -444,24 +443,4 @@ const getDensity = (xStats: XStats): { x: number[]; y: number[] } => {
     x: values.x.slice(startIndex, endIndex),
     y: values.y.slice(startIndex, endIndex),
   };
-};
-
-type InfluenceCaseTextParams = Pick<InfluentialCasesProps, "idFeatures"> & {
-  ic: Case;
-};
-const getInfluenceCaseText = ({
-  ic,
-  idFeatures,
-}: InfluenceCaseTextParams): string => {
-  if (!idFeatures?.length) {
-    return `Ids: session: ${ic[".session"]}, index: ${ic[".session_training_index"]}`;
-  }
-
-  const prefix = idFeatures.length > 0 ? "Ids" : "Id";
-  return (
-    `${prefix}: ` +
-    idFeatures
-      .map((feature) => `${feature}: ${ic[feature] || "null"}`)
-      .join(", ")
-  );
 };
