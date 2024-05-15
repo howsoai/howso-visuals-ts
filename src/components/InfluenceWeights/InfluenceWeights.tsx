@@ -5,6 +5,9 @@ import {
   type ScreenSizeHookProps,
   useLayoutDefaults,
   getCaseLabel,
+  getDataMeta,
+  UseLayoutCategoryAxisDefaultsParams,
+  useLayoutCategoryAxisDefaults,
 } from "../../hooks";
 import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
 import type { Data, Layout } from "plotly.js";
@@ -47,24 +50,44 @@ export function InfluenceWeights({
 
   // Create layout
   const layoutDefaults = useLayoutDefaults({ colorScheme });
-  // const useLayoutCategoryAxisArgs = useMemo(
-  //   (): UseLayoutCategoryAxisDefaultsParams => ({
-  //     categories: features,
-  //     formatParams,
-  //     screenSizes,
-  //   }),
-  //   [features, formatParams, screenSizes]
-  // );
-  // const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
-  //   useLayoutCategoryAxisArgs
-  // );
+  // X Axis
+  const xMeta = useMemo(() => {
+    const values = influenceCases.map((ic) => ic[featureX]);
+    return getDataMeta([...values, predictionCase[featureX]]);
+  }, [featureX, influenceCases, predictionCase]);
+  const xAxisUseLayoutCategoryAxisArgs = useMemo(
+    (): UseLayoutCategoryAxisDefaultsParams | undefined =>
+      !xMeta.categories
+        ? undefined
+        : { categories: xMeta.categories, formatParams, screenSizes },
+    [xMeta, formatParams, screenSizes]
+  );
+  const xAxisCategoryDefaults = useLayoutCategoryAxisDefaults(
+    xAxisUseLayoutCategoryAxisArgs
+  );
+  // Y Axis
+  const yMeta = useMemo(() => {
+    const values = influenceCases.map((ic) => ic[featureY]);
+    return getDataMeta([...values, predictionCase[featureY]]);
+  }, [featureY, influenceCases, predictionCase]);
+  const yAxisUseLayoutCategoryAxisArgs = useMemo(
+    (): UseLayoutCategoryAxisDefaultsParams | undefined =>
+      !yMeta.categories
+        ? undefined
+        : { categories: yMeta.categories, formatParams, screenSizes },
+    [yMeta, formatParams, screenSizes]
+  );
+  const yAxisCategoryDefaults = useLayoutCategoryAxisDefaults(
+    yAxisUseLayoutCategoryAxisArgs
+  );
+
   const layout = useMemo((): Partial<Layout> => {
     return {
       ...layoutDefaults,
       ...layoutProp,
       xaxis: {
         ...layoutDefaults.xaxis,
-        // ...categoryAxisDefaults,
+        ...xAxisCategoryDefaults,
         ...layoutProp?.xaxis,
         tickcolor: "transparent",
         automargin: true,
@@ -72,7 +95,7 @@ export function InfluenceWeights({
       },
       yaxis: {
         ...layoutDefaults.yaxis,
-        // ...categoryAxisDefaults,
+        ...yAxisCategoryDefaults,
         ...layoutProp?.yaxis,
         tickcolor: "transparent",
         title: featureY,
@@ -83,7 +106,14 @@ export function InfluenceWeights({
         ...layoutProp?.legend,
       },
     };
-  }, [layoutDefaults, featureX, featureY, layoutProp]);
+  }, [
+    layoutDefaults,
+    featureX,
+    xAxisCategoryDefaults,
+    featureY,
+    yAxisCategoryDefaults,
+    layoutProp,
+  ]);
 
   // Create data
   const data = useMemo((): Data[] => {
@@ -141,9 +171,9 @@ export function InfluenceWeights({
     const influenceValues = influenceCases.reduce(
       (values, ic) => {
         const rawX = ic[featureX as string];
-        const xValue = typeof rawX === "number" ? parseNA(rawX) : undefined;
+        const xValue = typeof rawX === "number" ? parseNA(rawX) : rawX;
         const rawY = ic[featureY as string];
-        const yValue = typeof rawY === "number" ? parseNA(rawY) : undefined;
+        const yValue = typeof rawY === "number" ? parseNA(rawY) : rawY;
         const rawZ = ic[".influence_weight"];
         const zValue = typeof rawZ === "number" ? parseNA(rawZ) : 0;
 
