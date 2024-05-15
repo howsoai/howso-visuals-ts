@@ -1,10 +1,4 @@
-import {
-  type CSSProperties,
-  type ReactNode,
-  useMemo,
-  useState,
-  LegacyRef,
-} from "react";
+import { type CSSProperties, type ReactNode, useMemo, useState } from "react";
 import Plot from "react-plotly.js";
 import { getColorScheme } from "../../colors";
 import {
@@ -84,6 +78,11 @@ export function InfluenceWeights({
         tickcolor: "transparent",
         title: featureY,
       },
+      legend: {
+        ...layoutDefaults.legend,
+        itemsizing: "constant",
+        ...layoutProp?.legend,
+      },
     };
   }, [layoutDefaults, featureX, featureY, layoutProp]);
 
@@ -143,7 +142,7 @@ export function InfluenceWeights({
 
     // @ts-expect-error poor typings...
     const element: HTMLElement = plot.el;
-    const sizemin = 10;
+    const sizemin = 6;
 
     const influenceValues = influenceCases.reduce(
       (values, ic) => {
@@ -235,14 +234,13 @@ export function InfluenceWeights({
         mode: "markers",
         marker: {
           size: maxSize,
-          // sizeref,
+          sizeref,
           sizemin,
           sizemode: "area",
         },
         hovertemplate: `${featureX}: %{x}<br />${featureY}: %{y}<br />Predicted<extra></extra>`,
       };
       data.push(predictedData);
-      console.info("predictedData", predictedData);
     }
 
     // Build series objects
