@@ -40,9 +40,11 @@ export const getLayoutDefaults = ({
     xaxis: {
       ...axisDefaults,
       tickangle: 90,
+      gridcolor: semanticColors.divider,
     },
     yaxis: {
       ...axisDefaults,
+      gridcolor: semanticColors.divider,
     },
     hoverlabel: {
       bgcolor: semanticColors.background.paper,
