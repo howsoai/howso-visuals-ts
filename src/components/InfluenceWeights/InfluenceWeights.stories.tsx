@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { InfluenceWeights } from "./InfluenceWeights";
 import { isDarkBackground } from "../../../.storybook/utils";
+import { ScatterData } from "plotly.js";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof InfluenceWeights> = {
@@ -50,7 +51,7 @@ export const AgeAndCholesterol: Story = {
         ".session_training_index": 109,
         age: 39,
         ".influence_weight": 0.26548661040784065,
-        class: 1,
+        class: 0,
       },
       {
         ".session": "b83205cf-bc84-453e-bb6e-472c151c6a62",
@@ -65,6 +66,51 @@ export const AgeAndCholesterol: Story = {
       age: 50,
       chol: 262,
       class: 1,
+    },
+  },
+};
+
+export const AgeAndCholesterolGroupedByClassification: Story = {
+  args: {
+    ...AgeAndCholesterol.args,
+    getInfluenceDataGroups: (data) => {
+      if (!AgeAndCholesterol.args?.influenceCases) {
+        throw new Error("AgeAndCholesterol.args?.influenceCases is undefined");
+      }
+      // We'd like to separate the data into two groups, based on the classification
+      const classesIndexes = AgeAndCholesterol.args.influenceCases.reduce(
+        (classes, ic, index) => {
+          classes[ic.class] ||= [];
+          classes[ic.class].push(index);
+          return classes;
+        },
+        {} as Record<number, number[]>
+      );
+
+      return Object.entries(classesIndexes).map(([classification, indexes]) => {
+        const isIndexInIndex = (_: unknown, index: number) =>
+          indexes.includes(index);
+
+        const isPositiveClassification = classification === "1";
+        const groupData: Partial<ScatterData> = {
+          ...data,
+          // @ts-expect-error It works
+          x: data.x!.filter(isIndexInIndex),
+          // @ts-expect-error It works
+          y: data.y!.filter(isIndexInIndex),
+          // @ts-expect-error It works
+          text: data.text!.filter(isIndexInIndex),
+          marker: {
+            ...data.marker,
+            // @ts-expect-error It works
+            size: data.marker!.size!.filter(isIndexInIndex),
+            color: isPositiveClassification ? "#ff000" : "#00ffff",
+          },
+          name: isPositiveClassification ? "Positive" : "Negative",
+        };
+
+        return groupData;
+      });
     },
   },
 };
@@ -89,7 +135,7 @@ export const MealAndBloodSugar: Story = {
         ".session_training_index": 109,
         blood_sugar: 39,
         ".influence_weight": 0.26548661040784065,
-        class: 1,
+        class: 0,
       },
       {
         ".session": "b83205cf-bc84-453e-bb6e-472c151c6a62",

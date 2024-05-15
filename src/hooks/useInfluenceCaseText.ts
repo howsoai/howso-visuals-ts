@@ -18,7 +18,14 @@ export const getCaseLabel = (props: CaseLabelParams): string => {
   return (
     `${prefix}: ` +
     props.idFeatures
-      .map((feature) => `${feature}: ${props.case[feature] || "null"}`)
+      .map(
+        (feature) =>
+          `${feature}: ${
+            ["number", "string"].includes(typeof props.case[feature])
+              ? props.case[feature]
+              : "null"
+          }`
+      )
       .join(", ")
   );
 };

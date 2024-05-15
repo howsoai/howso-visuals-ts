@@ -8,16 +8,31 @@ import {
   getDataMeta,
   UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
+  useSemanticColors,
 } from "../../hooks";
 import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
-import type { Data, Layout } from "plotly.js";
+import type { Data, Layout, ScatterData } from "plotly.js";
 import { FormatCategoryTickTextParams, parseNA, roundTo } from "../..";
 import { Case, IdFeaturesProps } from "../../types";
+
+type GetInfluenceDataGroups = (
+  data: Partial<ScatterData>
+) => Partial<ScatterData>[];
+const getDefaultInfluenceDataGroups: GetInfluenceDataGroups = (data) => [data];
 
 export type InfluenceWeightsProps = BaseVisualProps &
   IdFeaturesProps &
   ScreenSizeHookProps & {
     className?: string;
+    /**
+     * A function that uses the created ScatterData for all cases that would be rendered.
+     * It may split the data into different groups assigning specific additional
+     * customizations as required.
+     *
+     * Access to the original influence cases is expected to be maintained on the providing system.
+     * Ensure this function is static. If dynamic, apply a useCallback pattern.
+     */
+    getInfluenceDataGroups?: GetInfluenceDataGroups;
     /** response.content?.influential_cases?.[0] ?? [], */
     influenceCases: Case[];
     predictionCase: Case;
@@ -31,11 +46,13 @@ export type InfluenceWeightsProps = BaseVisualProps &
  * Displays cases in space based on X and Y as their location and weight as their size.
  *
  * @see https://www.figma.com/file/uipiKBGe2ma0EGfkioXdF2/Howso-Visuals?type=design&node-id=54-819&mode=design
+ * @see https://plotly.com/python/reference/scatter/
  */
 export function InfluenceWeights({
   featureX,
   featureY,
   formatParams,
+  getInfluenceDataGroups = getDefaultInfluenceDataGroups,
   idFeatures,
   influenceCases,
   isDark,
@@ -47,6 +64,7 @@ export function InfluenceWeights({
   ...props
 }: InfluenceWeightsProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
+  const semanticColors = useSemanticColors({ colorScheme });
 
   // Create layout
   const layoutDefaults = useLayoutDefaults({ colorScheme });
@@ -208,13 +226,14 @@ export function InfluenceWeights({
     // The absolute sizes are controlled by sizeref
     const sizeref = (2.0 * maxZ) / maxSize ** 2;
 
-    const influenceData: Data = {
+    const influenceData: Partial<ScatterData> = {
       name: "Influence case",
       x: influenceValues.x,
       y: influenceValues.y,
       type: "scatter",
       mode: "markers",
       marker: {
+        color: semanticColors.secondary,
         size: influenceValues.z,
         sizeref,
         sizemin,
@@ -223,7 +242,9 @@ export function InfluenceWeights({
       hovertemplate: `${featureX}: %{x:.3~f}<br />${featureY}: %{y:.3~f}<br />%{text}<extra></extra>`,
       text: influenceValues.text,
     };
-    data.push(influenceData);
+    getInfluenceDataGroups(influenceData).forEach((influenceData) =>
+      data.push(influenceData)
+    );
 
     // const predicted: ApexDataPoint[] = [];
     // if (isNA(predictionCase[xFeature]) || isNA(predictionCase[yFeature])) {
@@ -251,6 +272,7 @@ export function InfluenceWeights({
         type: "scatter",
         mode: "markers",
         marker: {
+          color: semanticColors.primary,
           size: maxSize,
           sizeref,
           sizemin,
@@ -289,7 +311,15 @@ export function InfluenceWeights({
     //   },
     // ];
     return data;
-  }, [featureX, featureY, idFeatures, influenceCases, predictionCase]);
+  }, [
+    semanticColors,
+    getInfluenceDataGroups,
+    featureX,
+    featureY,
+    idFeatures,
+    influenceCases,
+    predictionCase,
+  ]);
 
   return (
     <Plot
