@@ -1,3 +1,4 @@
+export * from "./useDataMeta";
 export * from "./useInfluenceCaseText";
 export * from "./useLayoutCategoryAxisDefaults";
 export * from "./useLayoutDefaults";
