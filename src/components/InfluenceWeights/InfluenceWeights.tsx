@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode, useMemo, useState } from "react";
+import { type CSSProperties, type ReactNode, useMemo } from "react";
 import Plot from "react-plotly.js";
 import { getColorScheme } from "../../colors";
 import {
@@ -44,7 +44,6 @@ export function InfluenceWeights({
   ...props
 }: InfluenceWeightsProps): ReactNode {
   const colorScheme = getColorScheme({ isDark, isPrint });
-  const [plot, setPlot] = useState<Plot | null>(null);
 
   // Create layout
   const layoutDefaults = useLayoutDefaults({ colorScheme });
@@ -88,9 +87,6 @@ export function InfluenceWeights({
 
   // Create data
   const data = useMemo((): Data[] => {
-    if (!plot) {
-      return [];
-    }
     // Naive implementation
     const data: Data[] = [];
 
@@ -140,10 +136,8 @@ export function InfluenceWeights({
     // );
     // Influence cases
 
-    // @ts-expect-error poor typings...
-    const element: HTMLElement = plot.el;
     const sizemin = 6;
-
+    const maxSize = 40;
     const influenceValues = influenceCases.reduce(
       (values, ic) => {
         const rawX = ic[featureX as string];
@@ -176,11 +170,6 @@ export function InfluenceWeights({
       }
     );
     const maxZ = Math.max(...influenceValues.z);
-    const minimumDimension = Math.min(
-      element.clientHeight,
-      element.clientWidth
-    );
-    const maxSize = minimumDimension * 0.1;
     // A smaller sizeRef yields a bigger circle: e.g.
     // for a data value of 10, sizeref=10 would yield a circle of size 1,
     // but sizeref=1 would yield a circle of size 10.
@@ -193,7 +182,6 @@ export function InfluenceWeights({
       name: "Influence case",
       x: influenceValues.x,
       y: influenceValues.y,
-      z: influenceValues.z,
       type: "scatter",
       mode: "markers",
       marker: {
@@ -271,11 +259,10 @@ export function InfluenceWeights({
     //   },
     // ];
     return data;
-  }, [plot, featureX, featureY, idFeatures, influenceCases, predictionCase]);
+  }, [featureX, featureY, idFeatures, influenceCases, predictionCase]);
 
   return (
     <Plot
-      ref={setPlot}
       {...plotDefaults}
       {...props}
       data={data}
