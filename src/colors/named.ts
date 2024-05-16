@@ -198,7 +198,7 @@ function buildColorWay(namedColor: NamedColor) {
 }
 
 function buildDiscreteColorWay(namedColors: NamedColor[]) {
-  const shades = ["700", "500", "900", "300"];
+  const shades = ["500", "700", "900", "300"];
   return shades.reduce((colorway, shade) => {
     return namedColors.reduce((colorway, color) => {
       // @ts-expect-error
