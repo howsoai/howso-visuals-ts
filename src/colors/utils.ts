@@ -58,7 +58,7 @@ export const getSemanticColors = ({
     return {
       primary: ChartColors.Blue[400],
       secondary: ChartColors.Gold[400],
-      divider: ChartColors.Gray[300],
+      divider: ChartColors.Gray[700],
       background: {
         default: "#222",
         paper: "#374151",
@@ -76,7 +76,7 @@ export const getSemanticColors = ({
   return {
     primary: ChartColors.Blue[600],
     secondary: ChartColors.Gold[600],
-    divider: ChartColors.Gray[700],
+    divider: ChartColors.Gray[300],
     background: {
       default: "#efefef",
       paper: "#fff",

@@ -2,42 +2,35 @@ import { useMemo, type CSSProperties, type ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { getColorScheme } from "../../../colors";
 import {
-  ScreenSizes,
   useLayoutDefaults,
   useSemanticColors,
-  UseLayoutCategoryAxisDefaultsParams,
+  type UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
+  type ScreenSizeHookProps,
 } from "../../../hooks";
 import type { Datum, Layout, PlotData } from "plotly.js";
 import { FeatureContributionsBaseVisualProps } from "../FeatureContributions.types";
 import { FormatCategoryTickTextParams } from "../../../utils";
 import { plotDefaults } from "../../BaseVisual";
 
-export interface FeatureContributionsVerticalBarChartProps
-  extends FeatureContributionsBaseVisualProps {
-  className?: string;
-  /**
-   * Provides the bar's fill color if provided.
-   * Default: Scheme and print aware semantic primary.
-   */
-  color?: string;
-  formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-  /**
-   * The number of bars to show.
-   * Default: 10
-   * If 0, all features will be displayed.
-   **/
-  limit?: number;
-  /**
-   * An optional set of redefined screen sizes to use in breakpoint logic.
-   * Labels will be wrapped to a secondary line based on screen size:
-   *   sm: <= 10
-   *   md: <= 20
-   *   lg: <= 25
-   **/
-  screenSizes?: ScreenSizes;
-  style?: CSSProperties;
-}
+export type FeatureContributionsVerticalBarChartProps =
+  FeatureContributionsBaseVisualProps &
+    ScreenSizeHookProps & {
+      className?: string;
+      /**
+       * Provides the bar's fill color if provided.
+       * Default: Scheme and print aware semantic primary.
+       */
+      color?: string;
+      formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
+      /**
+       * The number of bars to show.
+       * Default: 10
+       * If 0, all features will be displayed.
+       **/
+      limit?: number;
+      style?: CSSProperties;
+    };
 
 /**
  * Displays feature contributions.

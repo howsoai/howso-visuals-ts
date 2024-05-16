@@ -16,13 +16,12 @@ export type UseLayoutCategoryAxisDefaultsParams = Omit<
  * Provides tick properties and category label formatting.
  * This hook is relatively expensive, ensure it's arguments are memoized.
  */
-export const useLayoutCategoryAxisDefaults = ({
-  screenSizes,
-  ...params
-}: UseLayoutCategoryAxisDefaultsParams): Partial<LayoutAxis> => {
-  const isSmUp = useIsSmUp(screenSizes);
-  const isMdUp = useIsMdUp(screenSizes);
-  const isLgUp = useIsLgUp(screenSizes);
+export const useLayoutCategoryAxisDefaults = (
+  params: UseLayoutCategoryAxisDefaultsParams | undefined
+): Partial<LayoutAxis> => {
+  const isSmUp = useIsSmUp(params?.screenSizes);
+  const isMdUp = useIsMdUp(params?.screenSizes);
+  const isLgUp = useIsLgUp(params?.screenSizes);
 
   const layoutDefaults = useMemo(
     () => getLayoutCategoryAxisDefaults({ ...params, isSmUp, isMdUp, isLgUp }),
@@ -33,7 +32,7 @@ export const useLayoutCategoryAxisDefaults = ({
 };
 
 export type GetLayoutCategoryAxisDefaultsParams = {
-  categories: string[];
+  categories?: string[];
   formatParams?: FormatCategoryTickTextParams;
   isSmUp: boolean;
   isMdUp: boolean;
@@ -47,6 +46,10 @@ export const getLayoutCategoryAxisDefaults = ({
   isMdUp,
   isLgUp,
 }: GetLayoutCategoryAxisDefaultsParams): Partial<LayoutAxis> => {
+  if (!categories) {
+    return {};
+  }
+
   const getWrap = () => {
     switch (true) {
       case isLgUp:
