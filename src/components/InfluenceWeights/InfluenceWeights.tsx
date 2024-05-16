@@ -135,54 +135,7 @@ export function InfluenceWeights({
 
   // Create data
   const data = useMemo((): Data[] => {
-    // Naive implementation
     const data: Data[] = [];
-
-    // Split data into series
-    // const { categorizedSeries, x, y } = cases.reduce<{
-    //   // Series keyed by action value
-    //   categorizedSeries: Record<string | number, ApexDataPoint[]>;
-    //   // All x/y/z values
-    //   x: number[];
-    //   y: number[];
-    // }>(
-    //   (accumulator, current) => {
-    //     const xValue = toRepresentation(
-    //       xFeature,
-    //       current[xFeature] as T[FeatureName<T>]
-    //     );
-    //     const yValue = toRepresentation(
-    //       yFeature,
-    //       current[yFeature] as T[FeatureName<T>]
-    //     );
-
-    //     if (!isNA(xValue) && !isNA(yValue)) {
-    //       const weight = roundTo(current[".influence_weight"] * 100, 3);
-
-    //       accumulator.x.push(xValue);
-    //       accumulator.y.push(yValue);
-
-    //       const point: ApexDataPoint = {
-    //         x: xValue,
-    //         y: yValue,
-    //         z: Math.PI * Math.pow(weight, 2),
-    //         meta: { orig: current },
-    //       };
-
-    //       const actionFeature = dataset.actionFeatures[0];
-    //       const actionValue =
-    //         dataset.displayValue(actionFeature, current[actionFeature]) ??
-    //         String(current[actionFeature]);
-    //       if (!(actionValue in accumulator.categorizedSeries)) {
-    //         accumulator.categorizedSeries[actionValue] = [];
-    //       }
-    //       accumulator.categorizedSeries[actionValue].push(point);
-    //     }
-    //     return accumulator;
-    //   },
-    //   { categorizedSeries: {}, x: [], y: [] }
-    // );
-    // Influence cases
 
     const sizemin = 6;
     const maxSize = 40;
@@ -246,24 +199,6 @@ export function InfluenceWeights({
       data.push(influenceData)
     );
 
-    // const predicted: ApexDataPoint[] = [];
-    // if (isNA(predictionCase[xFeature]) || isNA(predictionCase[yFeature])) {
-    //   // Always include at least one point, but use NaN
-    //   predicted.push({ x: NaN, y: NaN, z: 1, meta: { orig: predictionCase } });
-    // } else {
-    //   const xValue = toRepresentation(xFeature, predictionCase[xFeature]);
-    //   const yValue = toRepresentation(yFeature, predictionCase[yFeature]);
-    //   predicted.push({
-    //     x: xValue,
-    //     y: yValue,
-    //     z: 1,
-    //     meta: { orig: predictionCase },
-    //   });
-    //   // Include test case in full value set
-    //   x.push(xValue);
-    //   y.push(yValue);
-    // }
-
     if (predictionCase) {
       const predictedData: Data = {
         name: "Predicted value",
@@ -283,33 +218,6 @@ export function InfluenceWeights({
       data.push(predictedData);
     }
 
-    // Build series objects
-    // let paletteIndex = 1; // 0 is reserved for predicted case
-    // for (const [key, values] of Object.entries(categorizedSeries)) {
-    //   series.push({
-    //     name: capitalizeFirst(key),
-    //     data: values,
-    //     color: chartPalette[paletteIndex],
-    //   });
-    //   paletteIndex++;
-    //   if (paletteIndex >= chartPalette.length) paletteIndex = 1;
-    // }
-    // series.push({
-    //   name: "Predicted",
-    //   data: predicted,
-    //   color: chartPalette[0],
-    // });
-
-    // const max = 200;
-    // return [
-    //   {
-    //     x: features,
-    //     y: features,
-    //     zmin: min,
-    //     zmax: max,
-    //     type: "scatter",
-    //   },
-    // ];
     return data;
   }, [
     semanticColors,
