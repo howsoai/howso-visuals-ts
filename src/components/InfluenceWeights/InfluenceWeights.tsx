@@ -239,17 +239,3 @@ export function InfluenceWeights({
     />
   );
 }
-
-// Convert value to numeric representation
-// const toRepresentation = (
-//   feature: FeatureName<T>,
-//   v: T[FeatureName<T>]
-// ): number => {
-//   if (dataset.columns[feature].type === "continuous") {
-//     return v as number;
-//   } else {
-//     const index = dataset.toAllowedIndex(feature, v);
-//     if (index === -1) return NaN;
-//     return index;
-//   }
-// };
