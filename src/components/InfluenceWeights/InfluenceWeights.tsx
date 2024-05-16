@@ -273,7 +273,7 @@ export function InfluenceWeights({
         mode: "markers",
         marker: {
           color: semanticColors.primary,
-          size: maxSize,
+          size: maxSize / 2,
           sizeref,
           sizemin,
           sizemode: "area",
