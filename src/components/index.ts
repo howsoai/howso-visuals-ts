@@ -4,4 +4,4 @@ export * from "./DesirabilityGauge";
 export * from "./FeatureContributions";
 export * from "./FeatureCorrelations";
 export * from "./InfluentialCases";
-export * from "./UMAP";
+export * from "./UMAPVisual";

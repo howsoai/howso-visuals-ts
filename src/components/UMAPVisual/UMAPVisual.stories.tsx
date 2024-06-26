@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { UMAP, UMAPProps } from "./UMAP";
+import { UMAPVisual, UMAPVisualProps } from "./UMAPVisual";
 import { isDarkBackground } from "../../../.storybook/utils";
+// import { useEffect, useState } from "react";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof UMAP> = {
-  component: UMAP,
+const meta: Meta<typeof UMAPVisual> = {
+  component: UMAPVisual,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/7.0/react/writing-docs/docs-page
-  tags: ["autodocs"],
+  // tags: ["autodocs"], // This would be a really terrible idea given the load of each
   parameters: {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
     layout: "centered",
@@ -14,8 +15,6 @@ const meta: Meta<typeof UMAP> = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
-    data: getData(),
-    seed: 42,
     style: {
       height: "90vh",
       width: "90vw",
@@ -23,19 +22,68 @@ const meta: Meta<typeof UMAP> = {
     },
   },
   render: (args, context) => {
-    return <UMAP {...args} isDark={isDarkBackground(context)} />;
+    return <UMAPVisual {...args} isDark={isDarkBackground(context)} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof UMAP>;
+type Story = StoryObj<typeof UMAPVisual>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    data: getDefaultColorData(),
+  },
+};
+
+export const StepModulus: Story = {
+  args: {
+    data: getDefaultColorData(),
+    stepModulus: 5,
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+  },
+};
+
+export const NoData: Story = {
+  args: {
+    isLoading: false,
+    data: undefined,
+  },
+};
+
+/**
+ * A visualization matching the output of our Lifecycle recipe.
+ * @see https://github.com/howsoai/howso-synthesizer-recipes/blob/main/4_howso_life_cycle.ipynb
+ */
+// export const Banks: Story = {
+//   args: {
+//     data: getDefaultColorData(),
+//   },
+//   render: (args) => {
+//     const [data, setData] = useState<UMAPVisualProps["data"] | undefined>();
+//     useEffect(() => {
+//       const results: unknown[] = [];
+//       fs.createReadStream("@/data/banks.csv")
+//         .pipe(csvParser())
+//         .on("data", (data) => results.push(data))
+//         .on("end", () => {
+//           console.log(results);
+//           // setData(results);
+//           // The data must be remapped to a Vector array
+//         });
+//     }, []);
+//     return <UMAPVisual {...args} isLoading={!data} data={data} />;
+//   },
+// };
 
 /**
  * Returns random colors in the 4-dimensional space of (rgba)
  */
-function getData(): UMAPProps["data"] {
+function getDefaultColorData(): UMAPVisualProps["data"] {
   return [
     [
       0.5518630221410807, 0.5649366755906977, 0.5267967707577288,
