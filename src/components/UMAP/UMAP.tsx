@@ -94,21 +94,6 @@ const PointCanvas: FC<PointCanvasProps> = ({ data, positions }) => {
       .nice()
       .range([margin, canvas.height - margin]);
 
-    console.info(
-      "domainX",
-      domainX,
-      "domainY",
-      domainY,
-      //   "scaleX",
-      //   scaleX,
-      //   "scaleY",
-      //   scaleY,
-      "height",
-      canvas.height,
-      "width",
-      canvas.width
-    );
-
     const path = geoPath().context(context);
 
     data.forEach((datum, i) => {
