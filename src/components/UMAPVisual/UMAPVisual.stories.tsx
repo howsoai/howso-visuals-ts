@@ -16,8 +16,8 @@ const meta: Meta<typeof UMAPVisual> = {
   argTypes: {},
   args: {
     style: {
-      height: "90vh",
-      width: "90vw",
+      height: "100vh",
+      width: "100vw",
       // overflow: "hidden",
     },
   },

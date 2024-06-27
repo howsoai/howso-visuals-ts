@@ -1,0 +1,14 @@
+.placeholder {
+  animation: 1s infinite saturation;
+  opacity: 0.6;
+}
+
+@keyframes saturation {
+  from {
+    filter: saturate(0);
+  }
+
+  to {
+    filter: saturate(0.7);
+  }
+}

@@ -1,15 +1,27 @@
-import { CSSProperties, FC, useEffect, useMemo, useState } from "react";
+import {
+  CSSProperties,
+  FC,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { BaseVisualProps } from "../BaseVisual";
 import { useScreenDimensions } from "@/hooks";
 import { UMAP } from "umap-js";
 import type { UMAPParameters, Vectors } from "umap-js/dist/umap";
 import { extent, scaleLinear, geoPath } from "d3";
+import Placeholder from "./assets/placeholder.png";
+import Styles from "./UMAPVisual.module.css";
 
 export type UMAPVisualProps = BaseVisualProps & {
   className?: string;
   data: Vectors | undefined;
+  loadingContent?: ReactNode;
+  noDataContent?: ReactNode;
   /** Any changes to this prop will cause a new instance. Be sure you memoize these. */
   params: UMAPParameters;
+  renderingContent?: ReactNode;
   /** If provided, each step in umap calculations will be compared, redrawing canvas when matching. Suggestion: 5 */
   stepModulus?: number;
   style?: CSSProperties;
@@ -33,7 +45,10 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
   isDark,
   isLoading,
   isPrint,
+  loadingContent: LoadingContent = <Image />,
+  noDataContent: NoDataContent = <p>No data</p>,
   params,
+  renderingContent: RenderingContent = <Image />,
   stepModulus,
   style,
 }) => {
@@ -72,15 +87,15 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
   }, [setPositions, instance, stepModulus, isLoading, data]);
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading>{LoadingContent}</Loading>;
   }
 
   if ((data?.length || 0) && !positions.length) {
-    return <Rendering />;
+    return <Rendering>{RenderingContent}</Rendering>;
   }
 
   if (!data?.length) {
-    return <NoData />;
+    return <NoData>{NoDataContent}</NoData>;
   }
 
   return (
@@ -90,29 +105,35 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
   );
 };
 
-type LoadingProps = Pick<UMAPVisualProps, "className" | "style">;
-const Loading: FC<LoadingProps> = ({ className, style }) => {
+type LoadingProps = Pick<UMAPVisualProps, "className" | "style"> & {
+  children: ReactNode;
+};
+const Loading: FC<LoadingProps> = ({ children, className, style }) => {
   return (
     <div className={className} style={style}>
-      <p>Loading...</p>
+      {children}
     </div>
   );
 };
 
-type RenderingProps = Pick<UMAPVisualProps, "className" | "style">;
-const Rendering: FC<RenderingProps> = ({ className, style }) => {
+type RenderingProps = Pick<UMAPVisualProps, "className" | "style"> & {
+  children: ReactNode;
+};
+const Rendering: FC<RenderingProps> = ({ children, className, style }) => {
   return (
     <div className={className} style={style}>
-      <p>Rendering...</p>
+      {children}
     </div>
   );
 };
 
-type NoDataProps = Pick<UMAPVisualProps, "className" | "style">;
-const NoData: FC<NoDataProps> = ({ className, style }) => {
+type NoDataProps = Pick<UMAPVisualProps, "className" | "style"> & {
+  children: ReactNode;
+};
+const NoData: FC<NoDataProps> = ({ children, className, style }) => {
   return (
     <div className={className} style={style}>
-      <p>No data</p>
+      {children}
     </div>
   );
 };
@@ -178,3 +199,7 @@ const PointCanvas: FC<PointCanvasProps> = ({ data, positions }) => {
 
   return <canvas ref={setCanvas} />;
 };
+
+const Image: FC = () => (
+  <img className={Styles.placeholder} src={Placeholder} />
+);
