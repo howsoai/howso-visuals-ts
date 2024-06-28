@@ -201,5 +201,5 @@ const PointCanvas: FC<PointCanvasProps> = ({ data, positions }) => {
 };
 
 const Image: FC = () => (
-  <img className={Styles.placeholder} src={Placeholder} />
+  <img className={Styles.placeholder} src={Placeholder} alt="" />
 );
