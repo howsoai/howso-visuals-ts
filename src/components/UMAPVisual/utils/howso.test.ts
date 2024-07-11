@@ -1,4 +1,6 @@
+import { UMAP } from "umap-js";
 import { getUMAPKNNParamsFromHowsoTraineeDistances } from "./howso";
+import { irisData, irisDistances } from "@/data";
 
 describe("UMAPVisual/utils", () => {
   describe("getUMAPKNNParamsFromHowsoTraineeDistances", () => {
@@ -23,5 +25,22 @@ describe("UMAPVisual/utils", () => {
       expect(knnIndices.length).toBe(2);
       expect(knnIndices[0].length).toBe(3);
     });
+  });
+
+  describe("UMAP fit data", () => {
+    const { knnDistances, knnIndices } =
+      getUMAPKNNParamsFromHowsoTraineeDistances(irisDistances);
+
+    const umap = new UMAP({});
+
+    if (knnIndices?.length && knnDistances?.length) {
+      console.info("Setting knnIndices and knnDistances");
+      umap.setPrecomputedKNN(knnIndices, knnDistances);
+    }
+
+    // @ts-expect-error We're safe to ignore Vector shape as we called setPrecomputedKNN earlier
+    const positions = umap.fit(irisData);
+    console.info(positions);
+    expect(positions).toBeFalsy();
   });
 });
