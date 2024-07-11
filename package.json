@@ -90,7 +90,7 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.0.3",
-    "typescript": "^5.4.2",
+    "typescript": "^5.5.2",
     "vite": "^5.1.6",
     "vite-plugin-eslint": "^1.8.1"
   },
@@ -105,4 +105,4 @@
     "tinycolor2": "^1.6.0",
     "umap-js": "^1.4.0"
   }
-}
+} 
