@@ -10,22 +10,72 @@ import { BaseVisualProps } from "../BaseVisual";
 import { useScreenDimensions } from "@/hooks";
 import { UMAP } from "umap-js";
 import type { UMAPParameters, Vectors } from "umap-js/dist/umap";
-import { extent, scaleLinear, geoPath } from "d3";
+import { extent, scaleLinear } from "d3";
 import Placeholder from "./assets/placeholder.png";
 import Styles from "./UMAPVisual.module.css";
 
-export type UMAPVisualProps = BaseVisualProps & {
+type UMAPVisualRenderProps<T> = {
+  context: CanvasRenderingContext2D;
+  /** Canvas scaled position */
+  coordinates: [number, number];
+  datum: T;
+  index: number;
+  /** UMAP calculated position, not scaled to the rendering canvas */
+  position: [number, number];
+};
+/**
+ * A sample function drawing rgba color data onto the canvas using positions:
+ *    context.beginPath();
+ *    const position = positions[i];
+ *    const coordinates = [scaleX(position[0]), scaleY(position[1])];
+ *    path({ type: "Point", coordinates });
+ *    context.fillStyle = `rgba(${[
+ *      datum[0] * 255,
+ *      datum[1] * 255,
+ *      datum[2] * 255,
+ *      0.5 + 0.5 * datum[3],
+ *    ]})`;
+ *    context.fill();
+ */
+type UMAPVisualRender<T> = (context: UMAPVisualRenderProps<T>) => void;
+type UMAPVisualBaseProps<T> = BaseVisualProps & {
   className?: string;
-  data: Vectors | undefined;
   loadingContent?: ReactNode;
   noDataContent?: ReactNode;
-  /** Any changes to this prop will cause a new instance. Be sure you memoize these. */
   params: UMAPParameters;
   renderingContent?: ReactNode;
-  /** If provided, each step in umap calculations will be compared, redrawing canvas when matching. Suggestion: 5 */
-  stepModulus?: number;
+  /** A function called for each data point to draw the element onto the canvas */
+  render: UMAPVisualRender<T>;
   style?: CSSProperties;
 };
+export type UMAPVisualVectorsProps<T> = UMAPVisualBaseProps<T> & {
+  /**
+   * The actual data being displayed.
+   * Vector values will be used to compute nearest neighbors.
+   **/
+  data: Vectors | undefined;
+  /** If provided, each step in umap calculations will be compared, redrawing canvas when matching. Suggestion: 5 */
+  stepModulus?: number;
+};
+/**
+ * Typically used with systems specialized in nearest neighbor algorithms.
+ * Howso Trainees may be used with this example Python code:
+ *
+ * distances = trainee.get_distances(features=context_features)["distances"]
+ * hyperparameter_map = trainee.get_params(context_features=context_features)["hyperparameter_map"]
+ * k = hyperparameter_map["k"]
+ * min_dist = distances.min(axis=None) / 2
+ */
+export type UMAPVisualKNNProps<T> = UMAPVisualBaseProps<T> & {
+  /** The actual data being displayed. **/
+  data: T[] | undefined;
+  knnIndices: Vectors | undefined;
+  knnDistances: Vectors | undefined;
+};
+
+export type UMAPVisualProps<T> =
+  | UMAPVisualVectorsProps<T>
+  | UMAPVisualKNNProps<T>;
 /**
  * Calculates the 2d positions of data using UMap and draws them to a 2D Canvas.
  * Canvas dimensions are 100% by the container div targeted by className and style parameters.
@@ -39,7 +89,7 @@ export type UMAPVisualProps = BaseVisualProps & {
  *
  * TODO animated using epochs?
  **/
-export const UMAPVisual: FC<UMAPVisualProps> = ({
+export const UMAPVisual = <T,>({
   className,
   data,
   isDark,
@@ -49,24 +99,35 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
   noDataContent: NoDataContent = <p>No data</p>,
   params,
   renderingContent: RenderingContent = <Image />,
-  stepModulus,
   style,
-}) => {
+  render,
+  ...props
+}: UMAPVisualProps<T>) => {
   //   const colorScheme = getColorScheme({ isDark, isPrint });
   const instance = useMemo(() => new UMAP(params), [params]);
   const [positions, setPositions] = useState<PointCanvasProps["positions"]>([]);
+  const knnIndices = "knnIndices" in props ? props.knnIndices : undefined;
+  const knnDistances = "knnDistances" in props ? props.knnDistances : undefined;
+  const stepModulus = "stepModulus" in props ? props.stepModulus : undefined;
+
   useEffect(() => {
-    if (isLoading || !data) {
+    if (isLoading || !data?.length) {
       return;
+    }
+
+    if (knnIndices?.length && knnDistances?.length) {
+      instance.setPrecomputedKNN(knnIndices, knnDistances);
     }
 
     // Single static display
     if (!stepModulus) {
+      // @ts-expect-error
       setPositions(instance.fit(data));
-      return;
     }
 
     // Animating display
+    // TODO fitAsync()?
+    // @ts-expect-error
     const nEpochs = instance.initializeFit(data!);
     let i = 0;
     const draw = () =>
@@ -78,13 +139,21 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
 
         i++;
         instance.step();
-        if (i % stepModulus === 0 || i === nEpochs) {
+        if (i % stepModulus! === 0 || i === nEpochs) {
           setPositions([...instance.getEmbedding()]);
         }
         draw();
       });
     draw();
-  }, [setPositions, instance, stepModulus, isLoading, data]);
+  }, [
+    setPositions,
+    instance,
+    stepModulus,
+    isLoading,
+    data,
+    knnIndices,
+    knnDistances,
+  ]);
 
   if (isLoading) {
     return <Loading>{LoadingContent}</Loading>;
@@ -100,12 +169,12 @@ export const UMAPVisual: FC<UMAPVisualProps> = ({
 
   return (
     <div className={className} style={style}>
-      <PointCanvas data={data} positions={positions} />
+      <PointCanvas data={data} positions={positions} render={render} />
     </div>
   );
 };
 
-type LoadingProps = Pick<UMAPVisualProps, "className" | "style"> & {
+type LoadingProps = Pick<UMAPVisualProps<unknown>, "className" | "style"> & {
   children: ReactNode;
 };
 const Loading: FC<LoadingProps> = ({ children, className, style }) => {
@@ -116,7 +185,7 @@ const Loading: FC<LoadingProps> = ({ children, className, style }) => {
   );
 };
 
-type RenderingProps = Pick<UMAPVisualProps, "className" | "style"> & {
+type RenderingProps = Pick<UMAPVisualProps<unknown>, "className" | "style"> & {
   children: ReactNode;
 };
 const Rendering: FC<RenderingProps> = ({ children, className, style }) => {
@@ -127,7 +196,7 @@ const Rendering: FC<RenderingProps> = ({ children, className, style }) => {
   );
 };
 
-type NoDataProps = Pick<UMAPVisualProps, "className" | "style"> & {
+type NoDataProps = Pick<UMAPVisualProps<unknown>, "className" | "style"> & {
   children: ReactNode;
 };
 const NoData: FC<NoDataProps> = ({ children, className, style }) => {
@@ -139,10 +208,11 @@ const NoData: FC<NoDataProps> = ({ children, className, style }) => {
 };
 
 type PointCanvasProps = {
-  data: Vectors;
+  data: any[];
   positions: number[][];
+  render: UMAPVisualRender<any>;
 };
-const PointCanvas: FC<PointCanvasProps> = ({ data, positions }) => {
+const PointCanvas: FC<PointCanvasProps> = ({ data, positions, render }) => {
   const dimensions = useScreenDimensions();
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -180,22 +250,21 @@ const PointCanvas: FC<PointCanvasProps> = ({ data, positions }) => {
       .nice()
       .range([margin, canvas.height - margin]);
 
-    const path = geoPath().context(context);
-
-    data.forEach((datum, i) => {
-      context.beginPath();
-      const position = positions[i];
-      const coordinates = [scaleX(position[0]), scaleY(position[1])];
-      path({ type: "Point", coordinates });
-      context.fillStyle = `rgba(${[
-        datum[0] * 255,
-        datum[1] * 255,
-        datum[2] * 255,
-        0.5 + 0.5 * datum[3],
-      ]})`;
-      context.fill();
+    data.forEach((datum, index) => {
+      const position = positions[index] as [number, number];
+      const coordinates = [scaleX(position[0]), scaleY(position[1])] as [
+        number,
+        number
+      ];
+      render({
+        context,
+        coordinates,
+        datum,
+        index,
+        position,
+      });
     });
-  }, [canvas, dimensions.deferred, data, positions]);
+  }, [canvas, dimensions.deferred, data, positions, render]);
 
   return <canvas ref={setCanvas} />;
 };
