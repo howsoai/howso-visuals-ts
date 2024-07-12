@@ -24,18 +24,18 @@ type UMAPVisualRenderProps<T> = {
   position: [number, number];
 };
 /**
- * A sample function drawing rgba color data onto the canvas using positions:
- *    context.beginPath();
- *    const position = positions[i];
- *    const coordinates = [scaleX(position[0]), scaleY(position[1])];
- *    path({ type: "Point", coordinates });
- *    context.fillStyle = `rgba(${[
- *      datum[0] * 255,
- *      datum[1] * 255,
- *      datum[2] * 255,
- *      0.5 + 0.5 * datum[3],
- *    ]})`;
- *    context.fill();
+ * A sample render method:
+ * const renderer: UMAPVisualProps<Iris>["render"] = ({
+ *   context,
+ *   coordinates,
+ *   datum,
+ * }) => {
+ *   const path = geoPath().context(context);
+ *   context.beginPath();
+ *   path({ type: "Point", coordinates });
+ *   context.fillStyle = DiscreteColorway[datum.target]; // Assuming .target is an integer smaller than 8
+ *   context.fill();
+ * };
  */
 type UMAPVisualRender<T> = (context: UMAPVisualRenderProps<T>) => void;
 type UMAPVisualBaseProps<T> = BaseVisualProps & {
