@@ -1,6 +1,8 @@
+import { irisData, irisDistances } from "@/data";
+import { UMAP } from "umap-js";
 import { getUMAPKNNParamsFromHowsoTraineeDistances } from "./howso";
 
-describe("UMAPVisual/utils", () => {
+describe("UMAP2D/utils", () => {
   describe("getUMAPKNNParamsFromHowsoTraineeDistances", () => {
     it("should return parameters for knn initialization", () => {
       const distances = {
@@ -22,6 +24,17 @@ describe("UMAPVisual/utils", () => {
       expect(knnIndices.length).toBe(2);
       expect(knnDistances[0]).toStrictEqual([0.8, 5, 12]);
       expect(knnIndices[0]).toStrictEqual([0, 2, 1]);
+    });
+
+    it("should return UMAP based positions based on iris data", () => {
+      const { knnDistances, knnIndices } =
+        getUMAPKNNParamsFromHowsoTraineeDistances(irisDistances);
+
+      const umap = new UMAP({ nNeighbors: 21, minDist: 0.4 });
+      umap.setPrecomputedKNN(knnIndices, knnDistances);
+      // @ts-expect-error We already setup the precomputed details, it's fine to put in raw data
+      const positions = umap.fit(irisData);
+      expect(positions.length).toBe(irisData.length);
     });
   });
 });

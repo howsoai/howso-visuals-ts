@@ -1,11 +1,9 @@
-import { UMAPVisualKNNProps } from "../UMAPVisual";
-
 /** Returns the indices and distances from a Howso Trainee in asc order */
 export const getUMAPKNNParamsFromHowsoTraineeDistances = (
   distances: Record<string, Record<string, number>>
 ): {
-  knnIndices: NonNullable<UMAPVisualKNNProps<unknown>["knnIndices"]>;
-  knnDistances: NonNullable<UMAPVisualKNNProps<unknown>["knnDistances"]>;
+  knnIndices: number[][];
+  knnDistances: number[][];
 } => {
   if (!distances) {
     throw new Error("distances is undefined");
