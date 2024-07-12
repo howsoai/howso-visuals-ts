@@ -123,6 +123,7 @@ export const UMAPVisual = <T,>({
     if (!stepModulus) {
       // @ts-expect-error
       setPositions(instance.fit(data));
+      return;
     }
 
     // Animating display

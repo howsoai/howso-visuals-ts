@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { UMAPVisual, UMAPVisualProps } from "./UMAPVisual";
 import { isDarkBackground } from "../../../.storybook/utils";
-import irisData from "@/data/iris.json";
-import irisDistances from "./data/iris-distances.json";
+import { Iris, irisData, irisDistances } from "@/data/iris";
 import colorsVectors from "./data/color-vectors.json";
 import { getUMAPKNNParamsFromHowsoTraineeDistances } from "./utils";
 import { geoPath } from "d3";
+import { DiscreteColorway } from "@/colors";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof UMAPVisual> = {
@@ -65,14 +65,6 @@ export const VectorsStepModulus: ColorStory = {
   },
 };
 
-type Iris = {
-  "sepal-length": number;
-  "sepal-width": number;
-  "petal-length": number;
-  "petal-width": number;
-  target: number;
-};
-
 const irisRenderer: UMAPVisualProps<Iris>["render"] = ({
   context,
   coordinates,
@@ -81,13 +73,7 @@ const irisRenderer: UMAPVisualProps<Iris>["render"] = ({
   const path = geoPath().context(context);
   context.beginPath();
   path({ type: "Point", coordinates });
-  context.fillStyle = `rgba(${[
-    (datum["sepal-length"] / 12) * 255,
-    (datum["sepal-width"] / 5) * 255,
-    (datum["petal-length"] / 6) * 255,
-    // (datum["petal-width"] / 6) * 1,
-    1,
-  ]})`;
+  context.fillStyle = DiscreteColorway[datum.target];
   context.fill();
 };
 

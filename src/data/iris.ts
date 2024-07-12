@@ -1059,7 +1059,11 @@ export const irisData: Iris[] = [
   },
 ];
 
-export const irisDistances: Record<string, Record<string, number>> = {
+type Index = string;
+type Distance = number;
+// A dict containing a matrix of computed distances and the list of
+// corresponding case indices.
+export const irisDistances: Record<Index, Record<Index, Distance>> = {
   "0": {
     "0": 0.7947714972,
     "1": 1.4831058366,
