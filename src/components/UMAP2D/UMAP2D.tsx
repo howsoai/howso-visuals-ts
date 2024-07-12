@@ -2,8 +2,6 @@ import { CSSProperties, FC, ReactNode, useEffect, useState } from "react";
 import { BaseVisualProps } from "../BaseVisual";
 import { useScreenDimensions } from "@/hooks";
 import { extent, scaleLinear } from "d3";
-import Placeholder from "./assets/placeholder.png";
-import Styles from "./UMAP2D.module.css";
 
 export type UMAP2DProps<T> = BaseVisualProps &
   UMAP2DCanvasProps<T> & {
@@ -26,10 +24,10 @@ export const UMAP2D = <T,>({
   isDark,
   isLoading,
   isPrint,
-  loadingContent: LoadingContent = <Image />,
+  loadingContent: LoadingContent = <p>No data</p>,
   noDataContent: NoDataContent = <p>No data</p>,
   positions,
-  renderingContent: RenderingContent = <Image />,
+  renderingContent: RenderingContent = <p>No data</p>,
   style,
   render,
 }: UMAP2DProps<T>) => {
@@ -86,10 +84,6 @@ const NoData: FC<NoDataProps> = ({ children, className, style }) => {
     </div>
   );
 };
-
-const Image: FC = () => (
-  <img className={Styles.placeholder} src={Placeholder} alt="" />
-);
 
 export type UMAP2DCanvasRendererProps<T> = {
   context: CanvasRenderingContext2D;
