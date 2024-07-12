@@ -117,7 +117,7 @@ export type UMAP2DCanvasProps<T> = {
   positions: [number, number][];
   render: UMAP2DCanvasRender<T>;
 };
-export const UMAP2DCanvas = <T,>({
+const UMAP2DCanvas = <T,>({
   data,
   positions,
   render,
