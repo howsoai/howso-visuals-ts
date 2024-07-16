@@ -1,0 +1,27 @@
+.container {
+  display: grid;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+  grid-template-columns: repeat(1, 1fr);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.item {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+}
+
+.visual {
+  justify-self: center;
+}
+
+.label {
+  justify-self: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
