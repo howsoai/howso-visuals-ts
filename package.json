@@ -101,6 +101,7 @@
     ]
   },
   "dependencies": {
+    "classnames": "^2.5.1",
     "d3": "^7.9.0",
     "d3-array": "^1.2.4",
     "tinycolor2": "^1.6.0"

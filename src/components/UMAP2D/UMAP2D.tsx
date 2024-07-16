@@ -2,15 +2,26 @@ import { CSSProperties, FC, ReactNode, useEffect, useState } from "react";
 import { BaseVisualProps } from "../BaseVisual";
 import { useScreenDimensions } from "@/hooks";
 import { extent, scaleLinear } from "d3";
+import { VisualWithLegend } from "../VisualWithLegend";
+import Styles from "./UMAP2D.module.css";
+import classNames from "classnames";
 
-export type UMAP2DProps<T> = BaseVisualProps &
-  UMAP2DCanvasProps<T> & {
-    className?: string;
-    loadingContent?: ReactNode;
-    noDataContent?: ReactNode;
-    renderingContent?: ReactNode;
-    style?: CSSProperties;
-  };
+export type UMAP2DProps<T> = BaseVisualProps & {
+  className?: string;
+  data: T[] | undefined;
+  /** Content to display in the loading state */
+  loading?: ReactNode;
+  /**
+   * Content to display as a legend alongside the visualization.
+   * @see Legend
+   **/
+  legend: ReactNode;
+  /** Content to display when the data is not loading and has no data */
+  noData?: ReactNode;
+  positions: [number, number][] | undefined;
+  render: UMAP2DCanvasRender<T>;
+  style?: CSSProperties;
+};
 /**
  * Canvas dimensions are 100% the container div targeted by className and style parameters.
  *
@@ -24,31 +35,36 @@ export const UMAP2D = <T,>({
   isDark,
   isLoading,
   isPrint,
-  loadingContent: LoadingContent = <p>No data</p>,
-  noDataContent: NoDataContent = <p>No data</p>,
+  legend,
+  loading: LoadingContent = <p>No data</p>,
+  legend: LegendContent,
+  noData: NoDataContent = <p>No data</p>,
   positions,
-  renderingContent: RenderingContent = <p>No data</p>,
   style,
   render,
 }: UMAP2DProps<T>) => {
   //   const colorScheme = getColorScheme({ isDark, isPrint });
 
   if (isLoading) {
-    return <Loading>{LoadingContent}</Loading>;
+    return (
+      <VisualWithLegend className={className} style={style} legend={legend}>
+        <Loading>{LoadingContent}</Loading>
+      </VisualWithLegend>
+    );
   }
 
-  if ((data?.length || 0) && !positions.length) {
-    return <Rendering>{RenderingContent}</Rendering>;
-  }
-
-  if (!data?.length) {
-    return <NoData>{NoDataContent}</NoData>;
+  if (!data?.length || !positions?.length) {
+    return (
+      <VisualWithLegend className={className} style={style} legend={legend}>
+        <NoData>{NoDataContent}</NoData>
+      </VisualWithLegend>
+    );
   }
 
   return (
-    <div className={className} style={style}>
+    <VisualWithLegend className={className} style={style} legend={legend}>
       <UMAP2DCanvas<T> data={data} positions={positions} render={render} />
-    </div>
+    </VisualWithLegend>
   );
 };
 
@@ -57,18 +73,7 @@ type LoadingProps = Pick<UMAP2DProps<unknown>, "className" | "style"> & {
 };
 const Loading: FC<LoadingProps> = ({ children, className, style }) => {
   return (
-    <div className={className} style={style}>
-      {children}
-    </div>
-  );
-};
-
-type RenderingProps = Pick<UMAP2DProps<unknown>, "className" | "style"> & {
-  children: ReactNode;
-};
-const Rendering: FC<RenderingProps> = ({ children, className, style }) => {
-  return (
-    <div className={className} style={style}>
+    <div className={classNames(Styles.loading, className)} style={style}>
       {children}
     </div>
   );
@@ -79,7 +84,7 @@ type NoDataProps = Pick<UMAP2DProps<unknown>, "className" | "style"> & {
 };
 const NoData: FC<NoDataProps> = ({ children, className, style }) => {
   return (
-    <div className={className} style={style}>
+    <div className={classNames(Styles.noData, className)} style={style}>
       {children}
     </div>
   );
@@ -112,7 +117,7 @@ export type UMAP2DCanvasRender<T> = (
   context: UMAP2DCanvasRendererProps<T>
 ) => void;
 
-export type UMAP2DCanvasProps<T> = {
+type UMAP2DCanvasProps<T> = {
   data: T[];
   positions: [number, number][];
   render: UMAP2DCanvasRender<T>;
@@ -126,15 +131,7 @@ const UMAP2DCanvas = <T,>({
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const height = canvas?.parentElement?.clientHeight;
-    const width = canvas?.parentElement?.clientWidth;
-    if (
-      !canvas ||
-      !dimensions.deferred.height ||
-      !dimensions.deferred.width ||
-      !height ||
-      !width
-    ) {
+    if (!canvas || !dimensions.deferred.height || !dimensions.deferred.width) {
       return;
     }
 
@@ -142,35 +139,43 @@ const UMAP2DCanvas = <T,>({
     if (!context) {
       throw new Error("canvas 2d context unavailable");
     }
+    canvas.height = 0;
+    canvas.width = 0;
     context.reset();
-    canvas.height = height;
-    canvas.width = width;
-    const margin = 10;
 
-    const domainX = extent(positions.map((d) => d[0])) as [number, number];
-    const domainY = extent(positions.map((d) => d[1])) as [number, number];
+    requestAnimationFrame(() => {
+      const height = canvas!.parentElement!.clientHeight;
+      const width = canvas!.parentElement!.clientWidth;
 
-    const scaleX = scaleLinear()
-      .domain(domainX)
-      .nice()
-      .range([margin, canvas.width - margin]);
-    const scaleY = scaleLinear()
-      .domain(domainY)
-      .nice()
-      .range([margin, canvas.height - margin]);
+      canvas.height = height;
+      canvas.width = width;
+      const margin = 10;
 
-    data.forEach((datum, index) => {
-      const position = positions[index] as [number, number];
-      const coordinates = [scaleX(position[0]), scaleY(position[1])] as [
-        number,
-        number
-      ];
-      render({
-        context,
-        coordinates,
-        datum,
-        index,
-        position,
+      const domainX = extent(positions.map((d) => d[0])) as [number, number];
+      const domainY = extent(positions.map((d) => d[1])) as [number, number];
+
+      const scaleX = scaleLinear()
+        .domain(domainX)
+        .nice()
+        .range([margin, canvas.width - margin]);
+      const scaleY = scaleLinear()
+        .domain(domainY)
+        .nice()
+        .range([margin, canvas.height - margin]);
+
+      data.forEach((datum, index) => {
+        const position = positions[index] as [number, number];
+        const coordinates = [scaleX(position[0]), scaleY(position[1])] as [
+          number,
+          number
+        ];
+        render({
+          context,
+          coordinates,
+          datum,
+          index,
+          position,
+        });
       });
     });
   }, [canvas, dimensions.deferred, data, positions, render]);
