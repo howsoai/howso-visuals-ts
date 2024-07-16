@@ -1,0 +1,48 @@
+.root {
+  container-type: inline-size;
+  display: flex;
+}
+
+.container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.visual {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.legend {
+}
+
+@container (max-width: 65rem) {
+  .legend {
+    & > div {
+      gap: 1rem;
+      display: flex;
+      flex-direction: row;
+
+      & > div {
+        gap: 0.33rem;
+        display: flex;
+        flex-direction: row;
+        max-width: 25ch;
+      }
+    }
+  }
+}
+
+@container (min-width: 65rem) {
+  .container {
+    flex-direction: row;
+  }
+
+  .legend {
+    max-width: 25ch;
+  }
+}

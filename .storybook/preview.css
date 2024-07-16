@@ -10,6 +10,10 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+.sb-show-main.sb-main-centered #storybook-root {
+  padding: 0;
+}
+
 @supports (font-variation-settings: normal) {
   :body {
     font-family: "Inter var", system-ui, sans-serif;
