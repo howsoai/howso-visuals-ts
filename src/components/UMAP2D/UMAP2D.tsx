@@ -1,10 +1,8 @@
-import { CSSProperties, FC, ReactNode, useEffect, useState } from "react";
-import { BaseVisualProps } from "../BaseVisual";
+import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
+import { type BaseVisualProps } from "../BaseVisual";
 import { useScreenDimensions } from "@/hooks";
 import { extent, scaleLinear } from "d3";
 import { VisualWithLegend } from "../VisualWithLegend";
-import Styles from "./UMAP2D.module.css";
-import classNames from "classnames";
 
 export type UMAP2DProps<T> = BaseVisualProps & {
   className?: string;
@@ -32,12 +30,9 @@ export type UMAP2DProps<T> = BaseVisualProps & {
 export const UMAP2D = <T,>({
   className,
   data,
-  isDark,
   isLoading,
-  isPrint,
   legend,
   loading: LoadingContent = <p>Loading</p>,
-  legend: LegendContent,
   noData: NoDataContent = <p>No data</p>,
   positions,
   style,
