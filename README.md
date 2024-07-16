@@ -23,6 +23,12 @@ Standard package installation makes imports available:
 npm i @howso/howso-visuals
 ```
 
+Import the styles and fonts must be installed in your application directly.
+
+```ts
+import "@howso/howso-visuals/lib/styles.css";
+```
+
 ## Contributing
 
 Development is done through [Storybook](https://storybook.js.org/).

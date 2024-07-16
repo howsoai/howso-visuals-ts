@@ -36,7 +36,7 @@ export const UMAP2D = <T,>({
   isLoading,
   isPrint,
   legend,
-  loading: LoadingContent = <p>No data</p>,
+  loading: LoadingContent = <p>Loading</p>,
   legend: LegendContent,
   noData: NoDataContent = <p>No data</p>,
   positions,
@@ -48,7 +48,7 @@ export const UMAP2D = <T,>({
   if (isLoading) {
     return (
       <VisualWithLegend className={className} style={style} legend={legend}>
-        <Loading>{LoadingContent}</Loading>
+        {LoadingContent}
       </VisualWithLegend>
     );
   }
@@ -56,7 +56,7 @@ export const UMAP2D = <T,>({
   if (!data?.length || !positions?.length) {
     return (
       <VisualWithLegend className={className} style={style} legend={legend}>
-        <NoData>{NoDataContent}</NoData>
+        {NoDataContent}
       </VisualWithLegend>
     );
   }
@@ -65,28 +65,6 @@ export const UMAP2D = <T,>({
     <VisualWithLegend className={className} style={style} legend={legend}>
       <UMAP2DCanvas<T> data={data} positions={positions} render={render} />
     </VisualWithLegend>
-  );
-};
-
-type LoadingProps = Pick<UMAP2DProps<unknown>, "className" | "style"> & {
-  children: ReactNode;
-};
-const Loading: FC<LoadingProps> = ({ children, className, style }) => {
-  return (
-    <div className={classNames(Styles.loading, className)} style={style}>
-      {children}
-    </div>
-  );
-};
-
-type NoDataProps = Pick<UMAP2DProps<unknown>, "className" | "style"> & {
-  children: ReactNode;
-};
-const NoData: FC<NoDataProps> = ({ children, className, style }) => {
-  return (
-    <div className={classNames(Styles.noData, className)} style={style}>
-      {children}
-    </div>
   );
 };
 

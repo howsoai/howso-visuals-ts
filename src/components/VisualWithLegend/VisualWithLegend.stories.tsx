@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { VisualWithLegend } from "./VisualWithLegend";
 import { Legend } from "../Legend";
+import { Divergent1Colorway } from "@/colors";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof VisualWithLegend> = {
@@ -14,7 +15,9 @@ const meta: Meta<typeof VisualWithLegend> = {
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
-    children: <div style={{ background: "teal", height: "12rem" }} />,
+    children: (
+      <div style={{ background: "teal", height: "12rem", width: "100%" }} />
+    ),
   },
 };
 export default meta;
@@ -27,15 +30,19 @@ export const Default: Story = {
       <Legend
         items={[
           {
-            visual: <Legend.Line style={{ backgroundColor: "red" }} />,
+            visual: (
+              <Legend.Line style={{ backgroundColor: Divergent1Colorway[0] }} />
+            ),
             label: "Item 1",
           },
-          {
+          ...[1, 2, 3, 4, 5].map((index) => ({
             visual: (
-              <Legend.Circle style={{ backgroundColor: "rgb(0, 255, 0)" }} />
+              <Legend.Circle
+                style={{ backgroundColor: Divergent1Colorway[index] }}
+              />
             ),
-            label: "Item 2",
-          },
+            label: `Item ${index}`,
+          })),
         ]}
       />
     ),

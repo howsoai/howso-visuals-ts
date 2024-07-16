@@ -12,19 +12,37 @@
 
 .visual {
   flex-grow: 1;
-  /* display: flex; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .legend {
 }
 
-/* If the container is larger than 65rem */
+@container (max-width: 65rem) {
+  .legend {
+    & > div {
+      gap: 1rem;
+      display: flex;
+      flex-direction: row;
+
+      & > div {
+        gap: 0.33rem;
+        display: flex;
+        flex-direction: row;
+        max-width: 25ch;
+      }
+    }
+  }
+}
+
 @container (min-width: 65rem) {
   .container {
     flex-direction: row;
   }
 
   .legend {
-    max-width: calc(100% - 65rem);
+    max-width: 25ch;
   }
 }
