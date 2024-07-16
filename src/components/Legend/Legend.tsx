@@ -1,7 +1,8 @@
-import { FC, ReactNode } from "react";
+import type { ComponentProps, FC, ReactNode } from "react";
 import { BaseVisualProps } from "../BaseVisual";
 import { getColorScheme } from "@/colors";
 import Styles from "./Legend.module.css";
+import classNames from "classnames";
 
 type LegendItem = {
   label: ReactNode;
@@ -11,7 +12,11 @@ export type LegendProps = Pick<BaseVisualProps, "isDark" | "isPrint"> & {
   items: LegendItem[];
 };
 /** An HTML based legend for use in visualizations that are not handled by Plotly */
-export const Legend: FC<LegendProps> = ({ items, isDark, isPrint }) => {
+export const LegendComponent: FC<LegendProps> = ({
+  items,
+  isDark,
+  isPrint,
+}) => {
   const colorScheme = getColorScheme({ isDark, isPrint });
 
   return (
@@ -25,3 +30,16 @@ export const Legend: FC<LegendProps> = ({ items, isDark, isPrint }) => {
     </div>
   );
 };
+
+const Circle: FC<ComponentProps<"div">> = (props) => (
+  <div {...props} className={classNames(Styles.circle, props.className)} />
+);
+
+const Line: FC<ComponentProps<"div">> = (props) => (
+  <div {...props} className={classNames(Styles.line, props.className)} />
+);
+
+export const Legend = Object.assign(LegendComponent, {
+  Circle,
+  Line,
+});

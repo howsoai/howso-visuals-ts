@@ -2,7 +2,7 @@
   display: grid;
   column-gap: 0.5rem;
   row-gap: 0.25rem;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: max-content 1fr;
   max-width: 100%;
   overflow: hidden;
 }
@@ -23,5 +23,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
+}
+
+.circle {
+  background-color: currentcolor;
+  border-radius: 50%;
+  height: 0.75lh;
+  width: 0.75lh;
+}
+
+.line {
+  background-color: currentcolor;
+  height: 2px;
+  width: 1.5rem;
 }

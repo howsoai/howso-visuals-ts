@@ -25,33 +25,6 @@ export default meta;
 
 type Story = StoryObj<typeof Legend>;
 
-type CircleProps = {
-  backgroundColor: string;
-};
-const Circle: FC<CircleProps> = ({ backgroundColor }) => (
-  <div
-    style={{
-      borderRadius: "50%",
-      height: ".75lh",
-      width: ".75lh",
-      backgroundColor,
-    }}
-  />
-);
-
-type RectangleProps = {
-  backgroundColor: string;
-};
-const Rectangle: FC<RectangleProps> = ({ backgroundColor }) => (
-  <div
-    style={{
-      height: ".1lh",
-      width: "3rem",
-      backgroundColor,
-    }}
-  />
-);
-
 const FingerPrintIcon: FC = () => (
   <img
     src={fingerPrintIcon}
@@ -63,9 +36,12 @@ const FingerPrintIcon: FC = () => (
 export const Default: Story = {
   args: {
     items: [
-      { visual: <Rectangle backgroundColor="red" />, label: "Item 1" },
       {
-        visual: <Circle backgroundColor="rgb(0, 255, 0)" />,
+        visual: <Legend.Line style={{ backgroundColor: "red" }} />,
+        label: "Item 1",
+      },
+      {
+        visual: <Legend.Circle style={{ backgroundColor: "rgb(0, 255, 0)" }} />,
         label:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus tempora, doloremque veritatis eligendi, ipsam possimus voluptate nulla dignissimos consectetur rerum",
       },
