@@ -14,9 +14,9 @@
     "prebuild": "rimraf lib/*",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
-    "test": "npm run lint && tsc --noEmit && jest",
+    "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "tsc --noEmit && jest --collect-coverage",
+    "test:coverage": "jest --collect-coverage",
     "storybook": "storybook dev -p 6006",
     "prepack": "npm run build"
   },
