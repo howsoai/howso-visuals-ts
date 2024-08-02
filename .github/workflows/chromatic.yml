@@ -24,5 +24,6 @@ jobs:
           # ⚠️ Make sure to configure a `CHROMATIC_PROJECT_TOKEN` repository secret
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           autoAcceptChanges: "main" # 👈 Option to accept all changes on main
+          exitOnceUploaded: true
           skip: "@(renovate/**|dependabot/**)" # 👈 Option to skip Chromatic for certain branches
           zip: true
