@@ -1,0 +1,39 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "cSpell.words": [
+    "automargin",
+    "autotick",
+    "barcornerradius",
+    "bgcolor",
+    "cmax",
+    "cmin",
+    "coloraxis",
+    "colorbar",
+    "colorscale",
+    "epanechnikov",
+    "gridcolor",
+    "hoverformat",
+    "hoverinfo",
+    "hoverongaps",
+    "hovertemplate",
+    "hovertext",
+    "labelalias",
+    "Plotly",
+    "tickangle",
+    "tickcolor",
+    "tickmode",
+    "ticksvals",
+    "ticktext",
+    "tickvals",
+    "tinycolor",
+    "UMAP",
+    "xaxis",
+    "xgap",
+    "yaxis",
+    "ygap",
+    "zmax",
+    "zmin"
+  ]
+}
