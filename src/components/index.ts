@@ -5,5 +5,6 @@ export * from "./FeatureContributions";
 export * from "./FeatureCorrelations";
 export * from "./InfluentialCases";
 export * from "./Legend";
+export * from "./SimilarityConviction";
 export * from "./UMAP2D";
 export * from "./VisualWithLegend";
