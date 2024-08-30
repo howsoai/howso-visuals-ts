@@ -1,17 +1,17 @@
+import type { Config, Datum, Layout, PlotData } from "plotly.js";
 import { useMemo, type CSSProperties, type ReactNode } from "react";
 import Plot from "react-plotly.js";
 import { getColorScheme } from "../../../colors";
 import {
+  useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
   useSemanticColors,
-  type UseLayoutCategoryAxisDefaultsParams,
-  useLayoutCategoryAxisDefaults,
   type ScreenSizeHookProps,
+  type UseLayoutCategoryAxisDefaultsParams,
 } from "../../../hooks";
-import type { Datum, Layout, PlotData } from "plotly.js";
-import { FeatureContributionsBaseVisualProps } from "../FeatureContributions.types";
 import { FormatCategoryTickTextParams } from "../../../utils";
 import { plotDefaults } from "../../BaseVisual";
+import { FeatureContributionsBaseVisualProps } from "../FeatureContributions.types";
 
 export type FeatureContributionsVerticalBarChartProps =
   FeatureContributionsBaseVisualProps &
@@ -101,6 +101,10 @@ export function FeatureContributionsVerticalBarChart({
         title: { text: "Contribution" },
         tickcolor: "transparent",
       },
+      margin: {
+        pad: 0,
+        t: 0,
+      },
       // @ts-expect-error https://plotly.com/javascript/reference/layout/#layout-barcornerradius
       barcornerradius: 4,
       ...layoutProp,
@@ -135,9 +139,9 @@ export function FeatureContributionsVerticalBarChart({
 
   // Create the config
   const config = useMemo(
-    () => ({
+    (): Partial<Config> => ({
       ...plotDefaults.config,
-      displayModeBar: true,
+      displayModeBar: "hover",
     }),
     []
   );
