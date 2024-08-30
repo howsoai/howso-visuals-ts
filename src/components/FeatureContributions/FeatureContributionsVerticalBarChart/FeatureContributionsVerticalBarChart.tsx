@@ -91,14 +91,14 @@ export function FeatureContributionsVerticalBarChart({
       xaxis: {
         ...layoutDefaults.xaxis,
         ...categoryAxisDefaults,
-        title: { text: "Feature" },
+        title: { text: "Feature", standoff: 5 },
         tickcolor: "transparent",
         gridcolor: "transparent",
         automargin: true,
       },
       yaxis: {
         ...layoutDefaults.yaxis,
-        title: { text: "Contribution" },
+        title: { text: "Contribution", standoff: 5 },
         tickcolor: "transparent",
       },
       margin: {
