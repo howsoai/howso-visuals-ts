@@ -1,5 +1,5 @@
-import { irisData, irisDistances } from "@/data";
 import { UMAP } from "umap-js";
+import { irisData, irisDistances } from "../../../data";
 import { getUMAPKNNParamsFromHowsoTraineeDistances } from "./howso";
 
 describe("UMAP2D/utils", () => {
