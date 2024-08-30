@@ -145,7 +145,7 @@ export function FeatureContributionsVerticalBarChart({
         hovertext: x.map((datum) => (datum || "").toString()),
       },
     ];
-  }, [name, isLoading, sortedData, color]);
+  }, [semanticColors.divider, name, isLoading, sortedData, color]);
 
   // Create the config
   const config = useMemo(
