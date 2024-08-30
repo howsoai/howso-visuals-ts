@@ -85,7 +85,7 @@
     "lint-staged": "^11.2.3",
     "lodash": "^4.17.21",
     "plotly.js": "^2.31.0",
-    "plotly.js-strict-dist": "^2.29.1",
+    "plotly.js-strict-dist": "^2.35.0",
     "prettier": "^2.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
