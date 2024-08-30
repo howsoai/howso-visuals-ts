@@ -1,7 +1,7 @@
-import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
-import { type BaseVisualProps } from "../BaseVisual";
-import { useScreenDimensions } from "@/hooks";
 import { extent, scaleLinear } from "d3";
+import { type CSSProperties, type ReactNode, useEffect, useState } from "react";
+import { useScreenDimensions } from "../../hooks";
+import { type BaseVisualProps } from "../BaseVisual";
 import { VisualWithLegend } from "../VisualWithLegend";
 
 export type UMAP2DProps<T> = BaseVisualProps & {

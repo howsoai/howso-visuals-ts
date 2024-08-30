@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { UMAP2D, UMAP2DProps } from "./UMAP2D";
-import { isDarkBackground } from "../../../.storybook/utils";
-import { Iris, irisData, irisPositions } from "@/data/iris";
 import { geoPath } from "d3";
-import { DiscreteColorway } from "@/colors";
+import { isDarkBackground } from "../../../.storybook/utils";
+import { DiscreteColorway } from "../../colors";
+import { Iris, irisData, irisPositions } from "../../data";
 import { Legend } from "../Legend";
+import { UMAP2D, type UMAP2DProps } from "./UMAP2D";
 
 const irisRenderer: UMAP2DProps<Iris>["render"] = ({
   context,

@@ -10,7 +10,6 @@ const config: Config = {
   coverageReporters: ["text", "cobertura"],
   moduleFileExtensions: ["js", "ts", "tsx", "json"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
     "^d3$": "<rootDir>/node_modules/d3/dist/d3.min.js",
   },
   transform: {

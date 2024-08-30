@@ -1,0 +1,7 @@
+:global {
+  /* Provide an additional protection for svgs missing in Plotly but required mixing into common resets like Tailwind */
+  .js-plotly-plot .plotly .modebar-group svg {
+    display: inline;
+    vertical-align: unset;
+  }
+}

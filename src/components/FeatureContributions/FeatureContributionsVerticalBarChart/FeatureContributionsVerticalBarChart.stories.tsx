@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { FeatureContributionsVerticalBarChart } from "./FeatureContributionsVerticalBarChart";
-import { Pink } from "../../../colors";
 import { isDarkBackground } from "../../../../.storybook/utils";
+import { Pink } from "../../../colors";
+import { FeatureContributionsVerticalBarChart } from "./FeatureContributionsVerticalBarChart";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof FeatureContributionsVerticalBarChart> = {
@@ -105,6 +105,12 @@ type Story = StoryObj<typeof FeatureContributionsVerticalBarChart>;
 export const Default: Story = {
   // More on args: https://storybook.js.org/docs/react/writing-stories/args
   args: {},
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+  },
 };
 
 export const DefinedColor: Story = {
