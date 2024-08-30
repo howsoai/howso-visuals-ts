@@ -45,25 +45,35 @@ export function FeatureContributionsVerticalBarChart({
   layout: layoutProp,
   limit = 10,
   isDark,
+  isLoading,
   isPrint,
   name = "Feature contributions",
   screenSizes,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
   // Create sorted data
+  type SortedFeature = { feature: string; value: number };
   const sortedData = useMemo(() => {
-    const sortedData = Object.entries(features).reduce(
-      (data, [feature, value]) => {
-        data.push({ feature, value });
-        return data;
-      },
-      [] as { feature: string; value: number }[]
-    );
+    const entries = Object.entries(features);
+    // Are we loading?
+    if (isLoading) {
+      const _limit = limit || 10;
+      return new Array(_limit).fill(0).map((_, index) => ({
+        feature: index.toString(),
+        value: (_limit - index) / _limit,
+      }));
+    }
+
+    // Actual data
+    const sortedData = entries.reduce((data, [feature, value]) => {
+      data.push({ feature, value });
+      return data;
+    }, [] as SortedFeature[]);
     sortedData.sort((a, b) => b.value - a.value);
 
     const sliceLimit = limit === 0 ? undefined : limit;
     return sortedData.slice(0, sliceLimit);
-  }, [limit, features]);
+  }, [limit, features, isLoading]);
 
   // Create layout defaults
   const colorScheme = getColorScheme({ isDark, isPrint });
@@ -128,14 +138,14 @@ export function FeatureContributionsVerticalBarChart({
         y,
         type: "bar",
         name,
-        marker: { color },
+        marker: { color: isLoading ? semanticColors.divider : color },
         hovertemplate:
           "<b>%{hovertext}</b><br />%{yaxis.title.text}: %{y:.4~f}<extra></extra>",
         hoverinfo: "y+text",
         hovertext: x.map((datum) => (datum || "").toString()),
       },
     ];
-  }, [name, sortedData, color]);
+  }, [name, isLoading, sortedData, color]);
 
   // Create the config
   const config = useMemo(
