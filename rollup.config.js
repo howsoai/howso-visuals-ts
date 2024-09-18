@@ -31,7 +31,7 @@ export default {
   ],
   output: [
     {
-      file: "lib/index.cjs.js",
+      file: "lib/index.cjs",
       format: "cjs",
     },
     {

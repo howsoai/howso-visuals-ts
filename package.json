@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Provides visual components charting and graphics",
   "type": "module",
-  "main": "lib/index.cjs.js",
+  "main": "lib/index.cjs",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
   "scripts": {
