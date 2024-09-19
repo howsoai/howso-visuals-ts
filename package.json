@@ -20,9 +20,6 @@
     "storybook": "storybook dev -p 6006",
     "prepack": "npm run build"
   },
-  "publishConfig": {
-    "registry": "https://dpbuild.jfrog.io/artifactory/api/npm/npm-edge/"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/howsoai/howso-visuals-ts"
