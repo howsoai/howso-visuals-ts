@@ -3,8 +3,8 @@ import type { Preview } from "@storybook/react";
 // import "@fontsource/inter";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/700.css";
-import "./preview.css";
 import { darkBackground, lightBackground } from "./constants";
+import "./preview.css";
 
 const preview: Preview = {
   parameters: {
@@ -21,7 +21,9 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    // viewport: { defaultViewport: "responsive" },
+    initialGlobals: {
+      viewport: { value: undefined },
+    },
   },
 };
 export default preview;
