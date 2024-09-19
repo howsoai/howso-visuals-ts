@@ -28,13 +28,12 @@ jobs:
     uses: howsoai/.github/.github/workflows/npm-test.yml@main
     secrets: inherit
 
-
   release:
     needs:
       - metadata
       - npm-test
     if: inputs.build-type == 'release'
-    uses: howsoai/.github/.github/workflows/npm-release.yml@main
+    uses: howsoai/.github/.github/workflows/npm-release-open-source.yml@main
     secrets: inherit
     with:
       version: ${{ needs.metadata.outputs.version }}
