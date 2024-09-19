@@ -1,3 +1,4 @@
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import autoprefixer from 'autoprefixer';
 import postcss from 'rollup-plugin-postcss';
@@ -21,7 +22,7 @@ export default {
       minimize: true,
       modules: true,
     }),
-    // terser(), // minifies generated bundles
+    terser(), // minifies generated bundles
   ],
   external: [
     "react/jsx-runtime",
