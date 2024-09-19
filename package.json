@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/howsoai/howso-visuals-ts"
+    "url": "git+https://github.com/howsoai/howso-visuals-ts.git"
   },
   "contributors": [
     "Lance Gliser <lance.gliser@howso.com>"
