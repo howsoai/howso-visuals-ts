@@ -1,14 +1,13 @@
+import { extent, range } from "d3-array";
+import type { Data, Layout, ScatterMarkerLine } from "plotly.js";
 import { CSSProperties, ReactNode, useMemo } from "react";
-import { getColorScheme, ChartColors, NamedColor } from "../../colors";
+import Plot from "react-plotly.js";
+import { ChartColors, NamedColor, getColorScheme } from "../../colors";
 import {
   getCaseLabel,
   useLayoutDefaults,
   useSemanticColors,
 } from "../../hooks";
-import { BaseVisualProps, plotDefaults } from "../BaseVisual";
-import { Layout, Data, ScatterMarkerLine } from "plotly.js";
-import Plot from "react-plotly.js";
-import { extent, range } from "d3-array";
 import { Case, IdFeaturesProps } from "../../types";
 import {
   KERNELS,
@@ -18,6 +17,7 @@ import {
   safeMax,
   safeMin,
 } from "../../utils";
+import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 
 export type InfluentialCasesProps = BaseVisualProps &
   IdFeaturesProps & {

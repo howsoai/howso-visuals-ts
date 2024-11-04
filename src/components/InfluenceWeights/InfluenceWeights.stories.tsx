@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { InfluenceWeights } from "./InfluenceWeights";
+import type { ScatterData } from "plotly.js";
 import { isDarkBackground } from "../../../.storybook/utils";
-import { ScatterData } from "plotly.js";
 import { ChartColors, DiscreteColorway } from "../../colors";
+import { InfluenceWeights } from "./InfluenceWeights";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof InfluenceWeights> = {

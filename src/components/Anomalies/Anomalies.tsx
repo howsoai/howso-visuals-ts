@@ -1,10 +1,6 @@
+import type { Annotations, ColorScale, Data, Layout } from "plotly.js";
 import { CSSProperties, ReactNode, useMemo } from "react";
-import type { Layout, Data, ColorScale, Annotations } from "plotly.js";
 import Plot from "react-plotly.js";
-import { colorbarDefaults } from "../../plotly/colorbar";
-import { BaseVisualProps, plotDefaults } from "../BaseVisual";
-import { FormatCategoryTickTextParams } from "../../utils";
-import { type ScreenSizeHookProps } from "../../hooks";
 import {
   Divergent1Colorway,
   getColorFromScale,
@@ -12,10 +8,14 @@ import {
   getContrastingTextColor,
 } from "../../colors";
 import {
+  type ScreenSizeHookProps,
   type UseLayoutCategoryAxisDefaultsParams,
   useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
 } from "../../hooks";
+import { colorbarDefaults } from "../../plotly/colorbar";
+import { FormatCategoryTickTextParams } from "../../utils";
+import { BaseVisualProps, plotDefaults } from "../BaseVisual";
 
 export type AnomaliesProps = BaseVisualProps &
   ScreenSizeHookProps & {

@@ -1,4 +1,4 @@
-import { ColorBar } from "plotly.js";
+import type { ColorBar } from "plotly.js";
 
 export const colorbarDefaults: Partial<ColorBar> = {
   borderwidth: 0,
