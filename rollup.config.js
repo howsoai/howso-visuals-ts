@@ -26,7 +26,6 @@ export default {
       minimize: true,
       modules: true,
     }),
-    // terser(), // minifies generated bundles
   ],
   external: [
     "react/jsx-runtime",
