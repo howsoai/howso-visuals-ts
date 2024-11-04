@@ -1,5 +1,6 @@
+import type { Annotations, ColorScale, Data, Datum, Layout } from "plotly.js";
 import { type CSSProperties, type ReactNode, useMemo } from "react";
-import Plot from "react-plotly.js";
+import { FormatCategoryTickTextParams } from "../..";
 import {
   Divergent1Colorway,
   getColorFromScale,
@@ -13,10 +14,13 @@ import {
   useLayoutCategoryAxisDefaults,
   useLayoutDefaults,
 } from "../../hooks";
-import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
-import type { Annotations, ColorScale, Data, Datum, Layout } from "plotly.js";
-import { FormatCategoryTickTextParams } from "../..";
 import { colorbarDefaults } from "../../plotly/colorbar";
+import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 export type FeatureCorrelationsProps = BaseVisualProps &
   ScreenSizeHookProps & {

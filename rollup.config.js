@@ -1,8 +1,10 @@
-import terser from "@rollup/plugin-terser";
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from "@rollup/plugin-typescript";
 import autoprefixer from 'autoprefixer';
 import postcss from 'rollup-plugin-postcss';
 import pkg from "./package.json" with { type: "json" };
+
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -15,6 +17,8 @@ export default {
       noEmitOnError: true,
       tsconfig: "./tsconfig.build.json",
     }),
+    nodeResolve(),
+    commonjs(),
     postcss({
       plugins: [autoprefixer()],
       sourceMap: true,
@@ -22,7 +26,6 @@ export default {
       minimize: true,
       modules: true,
     }),
-    terser(), // minifies generated bundles
   ],
   external: [
     "react/jsx-runtime",

@@ -1,6 +1,5 @@
 import type { Config, Datum, Layout, PlotData } from "plotly.js";
 import { useMemo, type CSSProperties, type ReactNode } from "react";
-import Plot from "react-plotly.js";
 import { getColorScheme } from "../../../colors";
 import {
   useLayoutCategoryAxisDefaults,
@@ -12,6 +11,11 @@ import {
 import { FormatCategoryTickTextParams } from "../../../utils";
 import { plotDefaults } from "../../BaseVisual";
 import { FeatureContributionsBaseVisualProps } from "../FeatureContributions.types";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 export type FeatureContributionsVerticalBarChartProps =
   FeatureContributionsBaseVisualProps &
