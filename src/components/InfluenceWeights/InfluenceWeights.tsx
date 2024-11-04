@@ -1,19 +1,23 @@
+import type { Data, Layout, ScatterData } from "plotly.js";
 import { type CSSProperties, type ReactNode, useMemo } from "react";
-import Plot from "react-plotly.js";
+import { FormatCategoryTickTextParams, parseNA, roundTo } from "../..";
 import { getColorScheme } from "../../colors";
 import {
-  type ScreenSizeHookProps,
-  useLayoutDefaults,
   getCaseLabel,
   getDataMeta,
-  UseLayoutCategoryAxisDefaultsParams,
+  type ScreenSizeHookProps,
   useLayoutCategoryAxisDefaults,
+  UseLayoutCategoryAxisDefaultsParams,
+  useLayoutDefaults,
   useSemanticColors,
 } from "../../hooks";
-import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
-import type { Data, Layout, ScatterData } from "plotly.js";
-import { FormatCategoryTickTextParams, parseNA, roundTo } from "../..";
 import { Case, IdFeaturesProps } from "../../types";
+import { type BaseVisualProps, plotDefaults } from "../BaseVisual";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 type GetInfluenceDataGroups = (
   data: Partial<ScatterData>

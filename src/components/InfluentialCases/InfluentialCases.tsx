@@ -1,7 +1,6 @@
 import { extent, range } from "d3-array";
 import type { Data, Layout, ScatterMarkerLine } from "plotly.js";
 import { CSSProperties, ReactNode, useMemo } from "react";
-import Plot from "react-plotly.js";
 import { ChartColors, NamedColor, getColorScheme } from "../../colors";
 import {
   getCaseLabel,
@@ -18,6 +17,11 @@ import {
   safeMin,
 } from "../../utils";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 export type InfluentialCasesProps = BaseVisualProps &
   IdFeaturesProps & {

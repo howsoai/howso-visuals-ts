@@ -1,8 +1,12 @@
-import { useMemo, type CSSProperties, ReactNode } from "react";
-import Plot from "react-plotly.js";
+import { ReactNode, useMemo, type CSSProperties } from "react";
 import { getColorScheme } from "../../colors";
 import { useLayoutDefaults, useSemanticColors } from "../../hooks";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 export interface DesirabilityGaugeProps extends BaseVisualProps {
   value: number;

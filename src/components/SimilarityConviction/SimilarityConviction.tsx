@@ -1,6 +1,5 @@
 import type { Data, Layout } from "plotly.js";
 import { CSSProperties, ReactNode, useMemo } from "react";
-import Plot from "react-plotly.js";
 import { getColorScheme } from "../../colors";
 import {
   getCaseLabel,
@@ -10,6 +9,11 @@ import {
 import { IdFeaturesProps } from "../../types";
 import { parseNA } from "../../utils";
 import { BaseVisualProps, plotDefaults } from "../BaseVisual";
+// customizable method: use your own `Plotly` object as we're using a rebuild strict distribution
+import createPlotlyComponent from "react-plotly.js/factory";
+// @ts-expect-error
+import Plotly from "plotly.js-strict-dist";
+const Plot = createPlotlyComponent(Plotly);
 
 export type SimilarityConvictionCase = {
   similarity_conviction: number | null;
