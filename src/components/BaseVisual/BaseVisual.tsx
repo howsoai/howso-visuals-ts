@@ -1,4 +1,4 @@
-import { type Layout } from "plotly.js";
+import type { Layout } from "plotly.js";
 import { type PlotParams } from "react-plotly.js";
 
 export type BaseVisualProps = {

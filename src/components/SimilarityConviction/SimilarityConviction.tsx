@@ -1,4 +1,4 @@
-import { Data, Layout } from "plotly.js";
+import type { Data, Layout } from "plotly.js";
 import { CSSProperties, ReactNode, useMemo } from "react";
 import Plot from "react-plotly.js";
 import { getColorScheme } from "../../colors";
