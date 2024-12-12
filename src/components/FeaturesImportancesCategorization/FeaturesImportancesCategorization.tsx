@@ -148,7 +148,7 @@ export const FeaturesImportancesCategorization = ({
       },
       ...layoutProp,
     };
-  }, [layoutDefaults, semanticColors.divider, layoutProp]);
+  }, [layoutDefaults, semanticColors, layoutProp]);
 
   // Create data
   const plotlyData = useMemo((): ScatterData[] => {
