@@ -4,6 +4,7 @@ export * from "./DesirabilityGauge";
 export * from "./FeatureContributions";
 export * from "./FeatureCorrelations";
 export * from "./FeatureImportances";
+export * from "./FeaturesImportancesCategorization";
 export * from "./InfluentialCases";
 export * from "./Legend";
 export * from "./SimilarityConviction";

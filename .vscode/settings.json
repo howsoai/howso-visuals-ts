@@ -23,6 +23,10 @@
     "Importances",
     "labelalias",
     "Plotly",
+    "showarrow",
+    "showgrid",
+    "showlegend",
+    "showticklabels",
     "tickangle",
     "tickcolor",
     "tickmode",
@@ -35,6 +39,7 @@
     "xgap",
     "yaxis",
     "ygap",
+    "zeroline",
     "zmax",
     "zmin"
   ]
