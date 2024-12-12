@@ -123,10 +123,6 @@ export const FeatureImportances = ({
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
   );
-  //   const annotations = useMemo(
-  //     () => getAnnotations({ colorscale, colorScheme, features, props.data }),
-  //     [colorscale, colorScheme, features, props.data]
-  //   );
   const layout = useMemo((): Partial<Layout> => {
     return {
       ...layoutDefaults,
