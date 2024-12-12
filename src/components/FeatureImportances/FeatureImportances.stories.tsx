@@ -9,16 +9,32 @@ const meta: Meta<typeof FeatureImportances> = {
   tags: ["autodocs"],
   parameters: {
     // More on Story layout: https://storybook.js.org/docs/react/configure/story-layout
-    layout: "centered",
+    layout: "fullscreen",
   },
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
-    style: {
-      height: "90vh",
-      width: "90vw",
-      // overflow: "hidden",
-    },
+    features: [
+      "owns_house",
+      "customer_id",
+      "occupation_type",
+      "default_in_last_6months",
+      "credit_limit",
+      "migrant_worker",
+      "no_of_children",
+      "no_of_days_employed",
+      "owns_car",
+      "credit_limit_used_percent",
+      "credit_score",
+      "age",
+      "yearly_debt_payments",
+      "gender",
+      "net_yearly_income",
+      "total_family_members",
+      "name",
+      "prev_defaults",
+    ],
+    style: {},
   },
   render: (args, context) => {
     return <FeatureImportances {...args} isDark={isDarkBackground(context)} />;
@@ -154,7 +170,7 @@ export const MDA: Story = {
   },
 };
 
-export const loading: Story = {
+export const Loading: Story = {
   args: {
     metric: "feature_contributions",
     isLoading: true,

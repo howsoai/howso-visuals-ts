@@ -24,6 +24,8 @@ export type FeatureImportancesBaseProps = BaseVisualProps &
      */
     color?: string;
     className?: string;
+    /** A list of features, if known ahead of data being loaded to pre-create the category axis. */
+    features?: string[];
     formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
     /**
      * The number of bars to show.
@@ -54,6 +56,7 @@ export type FeatureImportancesMDAProps = FeatureImportancesBaseProps & {
  */
 export const FeatureImportances = ({
   color: colorProp,
+  features: featuresProps,
   formatParams,
   isDark,
   isPrint,
@@ -72,7 +75,10 @@ export const FeatureImportances = ({
     : metric === "feature_contributions"
     ? "Feature contributions"
     : "Feature MDA";
-  const features = useMemo(() => Object.keys(props.data || {}), [props.data]);
+  const features = useMemo(
+    () => featuresProps || Object.keys(props.data || {}),
+    [featuresProps, props.data]
+  );
 
   // Create sorted data
   type SortedFeature = { feature: string; value: number };
@@ -104,7 +110,7 @@ export const FeatureImportances = ({
 
     const sliceLimit = limit === 0 ? undefined : limit;
     return sortedData.slice(0, sliceLimit);
-  }, [limit, features, isLoading, metric, props.data]);
+  }, [limit, isLoading, metric, props.data]);
 
   const colorScheme = getColorScheme({ isDark, isPrint });
   const semanticColors = useSemanticColors({ colorScheme });
@@ -114,11 +120,11 @@ export const FeatureImportances = ({
   const layoutDefaults = useLayoutDefaults({ colorScheme });
   const useLayoutCategoryAxisArgs = useMemo(
     (): UseLayoutCategoryAxisDefaultsParams => ({
-      categories: sortedData.map(({ feature }) => feature),
+      categories: features,
       formatParams,
       screenSizes,
     }),
-    [features, formatParams, screenSizes, sortedData]
+    [features, formatParams, screenSizes]
   );
   const categoryAxisDefaults = useLayoutCategoryAxisDefaults(
     useLayoutCategoryAxisArgs
