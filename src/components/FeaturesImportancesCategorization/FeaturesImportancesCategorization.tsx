@@ -156,7 +156,6 @@ export const FeaturesImportancesCategorization = ({
       type: "scatter",
       mode: "markers",
       marker: { size: 15 },
-      textposition: "top center",
     } as ScatterData;
 
     // Provide loading data

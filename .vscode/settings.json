@@ -39,6 +39,7 @@
     "xgap",
     "yaxis",
     "ygap",
+    "yref",
     "zeroline",
     "zmax",
     "zmin"
