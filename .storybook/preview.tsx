@@ -25,5 +25,7 @@ const preview: Preview = {
       viewport: { value: undefined },
     },
   },
+
+  tags: ["autodocs"]
 };
 export default preview;
