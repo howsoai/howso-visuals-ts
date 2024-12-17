@@ -8,7 +8,6 @@ const config: StorybookConfig = {
     "@storybook/addon-interactions",
     "@storybook/addon-a11y",
     "@chromatic-com/storybook",
-    "@storybook/addon-mdx-gfm"
   ],
 
   framework: {
@@ -28,7 +27,7 @@ const config: StorybookConfig = {
   refs: {},
 
   typescript: {
-    reactDocgen: "react-docgen-typescript"
-  }
+    reactDocgen: "react-docgen-typescript",
+  },
 };
 export default config;
