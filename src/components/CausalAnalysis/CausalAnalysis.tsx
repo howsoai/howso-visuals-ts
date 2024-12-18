@@ -19,11 +19,10 @@ export type CausalAnalysisProps = BaseVisualProps &
     className?: string;
     /** Data is designed to work with the return shape of HowsoInsights.get_causal_analysis()'s CausalResults */
     data?: {
-      Source: Record<string, string>;
-      Destination: Record<string, string>;
-      Delta: Record<string, number>;
+      Source: Record<number, string>;
+      Destination: Record<number, string>;
+      Delta: Record<number, number>;
     };
-    features: string[];
     formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
     metric: "feature_contributions" | "MDA";
     style?: CSSProperties;
@@ -38,9 +37,9 @@ export type CausalAnalysisProps = BaseVisualProps &
  */
 export function CausalAnalysis({
   data,
-  features,
   formatParams,
   isDark,
+  isLoading,
   isPrint,
   layout: layoutProp,
   metric,
@@ -78,14 +77,49 @@ export function CausalAnalysis({
           showarrow: false,
           xref: "paper",
           yref: "paper",
-          font: { size: 12, color: semanticColors.divider },
+          font: { size: 12, color: semanticColors.text.secondary },
         },
       ],
     };
-  }, [layoutDefaults, semanticColors.divider, name, layoutProp]);
+  }, [layoutDefaults, semanticColors.text.secondary, name, layoutProp]);
 
   // Create data
   const sankeyData = useMemo((): Partial<SankeyData>[] => {
+    const dataDefaults: Partial<SankeyData> = {
+      type: "sankey",
+      orientation: "h",
+      node: {
+        pad: 15,
+        thickness: 20,
+      },
+    };
+    if (isLoading) {
+      return [
+        {
+          ...dataDefaults,
+          node: {
+            ...dataDefaults.node,
+            pad: 50,
+            label: ["", "", "", "", "", ""],
+            color: [
+              semanticColors.text.secondary,
+              semanticColors.text.secondary,
+              semanticColors.text.secondary,
+              semanticColors.text.secondary,
+              semanticColors.text.secondary,
+              semanticColors.text.secondary,
+            ],
+          },
+
+          link: {
+            source: [0, 1, 0, 2, 3, 3],
+            target: [2, 3, 3, 4, 4, 5],
+            value: [8, 4, 2, 8, 4, 2],
+          },
+        },
+      ];
+    }
+
     const allNodes: string[] = Array.from(
       new Set([
         ...Object.values(data?.Source || []),
@@ -105,15 +139,9 @@ export function CausalAnalysis({
 
     const sankeyData: Partial<SankeyData>[] = [
       {
-        type: "sankey",
-        orientation: "h",
+        ...dataDefaults,
         node: {
-          pad: 15,
-          thickness: 30,
-          line: {
-            color: "black",
-            width: 0.5,
-          },
+          ...dataDefaults.node,
           label: allNodes,
           color: new Array(allNodes.length).fill(semanticColors.primary),
         },
@@ -126,9 +154,8 @@ export function CausalAnalysis({
       },
     ];
     return sankeyData;
-  }, [semanticColors.primary, data]);
+  }, [semanticColors.primary, semanticColors.text.secondary, isLoading, data]);
 
-  console.info("layout", layout);
   return (
     <Plot
       {...plotDefaults}

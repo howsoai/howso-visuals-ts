@@ -16,7 +16,6 @@ export const useSankeyLayoutDefaults = (
   const layoutDefaults = useMemo(() => {
     const defaults = getLayoutDefaults(params);
     // paper_bgcolor affects lines between nodes
-    delete defaults.paper_bgcolor;
     delete defaults.xaxis;
     delete defaults.yaxis;
     return defaults;
