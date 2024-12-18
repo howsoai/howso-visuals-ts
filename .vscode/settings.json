@@ -23,6 +23,7 @@
     "Importances",
     "labelalias",
     "Plotly",
+    "sankey",
     "showarrow",
     "showgrid",
     "showlegend",

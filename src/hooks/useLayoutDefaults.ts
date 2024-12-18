@@ -10,6 +10,21 @@ export const useLayoutDefaults = (
   return layoutDefaults;
 };
 
+export const useSankeyLayoutDefaults = (
+  params: UseLayoutDefaultsParams
+): Partial<Layout> => {
+  const layoutDefaults = useMemo(() => {
+    const defaults = getLayoutDefaults(params);
+    // paper_bgcolor affects lines between nodes
+    delete defaults.paper_bgcolor;
+    delete defaults.xaxis;
+    delete defaults.yaxis;
+    return defaults;
+  }, [params]);
+
+  return layoutDefaults;
+};
+
 export type UseLayoutDefaultsParams = {
   colorScheme: "light" | "dark";
 };

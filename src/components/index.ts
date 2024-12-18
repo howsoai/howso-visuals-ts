@@ -1,5 +1,6 @@
 export * from "./Anomalies";
 export * from "./BaseVisual";
+export * from "./CausalAnalysis";
 export * from "./DesirabilityGauge";
 export * from "./FeatureContributions";
 export * from "./FeatureCorrelations";
