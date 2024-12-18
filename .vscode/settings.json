@@ -20,8 +20,14 @@
     "hoverongaps",
     "hovertemplate",
     "hovertext",
+    "Importances",
     "labelalias",
     "Plotly",
+    "sankey",
+    "showarrow",
+    "showgrid",
+    "showlegend",
+    "showticklabels",
     "tickangle",
     "tickcolor",
     "tickmode",
@@ -34,6 +40,8 @@
     "xgap",
     "yaxis",
     "ygap",
+    "yref",
+    "zeroline",
     "zmax",
     "zmin"
   ]
