@@ -27,7 +27,7 @@
   "contributors": [
     "Lance Gliser <lance.gliser@howso.com>"
   ],
-  "license": "ISC",
+  "license": "AGPL-3.0",
   "files": [
     "lib"
   ],
