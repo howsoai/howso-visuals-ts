@@ -38,13 +38,17 @@ export type FeatureImportancesBaseProps = BaseVisualProps &
 
 export type FeatureImportancesContributionsProps =
   FeatureImportancesBaseProps & {
-    metric: "feature_contributions";
-    data: Record<string, { feature_contributions_robust: number }> | undefined;
+    metric: "prediction_contributions";
+    data:
+      | Record<string, { feature_robust_prediction_contributions: number }>
+      | undefined;
   };
 
 export type FeatureImportancesMDAProps = FeatureImportancesBaseProps & {
-  metric: "feature_mda";
-  data: Record<string, { feature_mda_robust: number }> | undefined;
+  metric: "accuracy_contributions";
+  data:
+    | Record<string, { feature_robust_accuracy_contributions: number }>
+    | undefined;
 };
 
 /**
@@ -72,9 +76,9 @@ export const FeatureImportances = ({
   | FeatureImportancesMDAProps): ReactNode => {
   name = name
     ? name
-    : metric === "feature_contributions"
-    ? "Feature contributions"
-    : "Feature MDA";
+    : metric === "prediction_contributions"
+    ? "Prediction contributions"
+    : "Accuracy contributions";
   const features = useMemo(
     () => featuresProps || Object.keys(props.data || {}),
     [featuresProps, props.data]
@@ -98,9 +102,9 @@ export const FeatureImportances = ({
         data.push({
           feature,
           value:
-            metric === "feature_contributions"
-              ? details.feature_contributions_robust
-              : details.feature_mda_robust,
+            metric === "prediction_contributions"
+              ? details.feature_robust_prediction_contributions
+              : details.feature_robust_accuracy_contributions,
         });
         return data;
       },

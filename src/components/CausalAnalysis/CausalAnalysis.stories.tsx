@@ -28,7 +28,7 @@ type Story = StoryObj<typeof CausalAnalysis>;
 export const PredictabilityDrivers: Story = {
   // More on args: https://storybook.js.org/docs/react/writing-stories/args
   args: {
-    metric: "feature_contributions",
+    metric: "prediction_contributions",
     data: {
       Source: {
         0: "prev_defaults",
@@ -60,7 +60,7 @@ export const PredictabilityDrivers: Story = {
 
 export const PredictabilityDriversLoading: Story = {
   args: {
-    metric: "feature_contributions",
+    metric: "prediction_contributions",
     data: undefined,
     isLoading: true,
   },
@@ -68,7 +68,7 @@ export const PredictabilityDriversLoading: Story = {
 
 export const UncertaintyDrivers: Story = {
   args: {
-    metric: "MDA",
+    metric: "accuracy_contributions",
     data: {
       Source: {
         "0": "prev_defaults",

@@ -24,7 +24,7 @@ export type CausalAnalysisProps = BaseVisualProps &
       Delta: Record<number, number>;
     };
     formatParams?: Omit<FormatCategoryTickTextParams, "wrap">;
-    metric: "feature_contributions" | "MDA";
+    metric: "prediction_contributions" | "accuracy_contributions";
     style?: CSSProperties;
   };
 
@@ -49,7 +49,7 @@ export function CausalAnalysis({
 }: CausalAnalysisProps): ReactNode {
   const name = nameProp
     ? nameProp
-    : metric === "feature_contributions"
+    : metric === "prediction_contributions"
     ? "Predictability drivers"
     : "Uncertainty drivers";
 
