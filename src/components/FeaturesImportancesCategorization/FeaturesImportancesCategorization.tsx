@@ -19,8 +19,12 @@ export type FeaturesImportancesCategorizationProps = BaseVisualProps &
     /** Scaled data */
     data:
       | {
-          scaled_fc: Record<string, number>;
-          scaled_mda: Record<string, number>;
+          columns: string[];
+          action_feature: string;
+          /** The string is not the feature name. It's the feature's index in columns. */
+          scaled_pc: Record<string, number>;
+          /** The string is not the feature name. It's the feature's index in columns. */
+          scaled_ac: Record<string, number>;
         }
       | undefined;
     className?: string;
@@ -186,7 +190,7 @@ export const FeaturesImportancesCategorization = ({
 
     // Create grouped bundles
 
-    const features = Object.keys(data?.scaled_fc || {});
+    const features_indexes = Object.keys(data?.scaled_pc || {});
 
     const getCategoryDataDefaults = (
       scatterData: Partial<Omit<ScatterData, "text" | "x" | "y">>
@@ -203,18 +207,25 @@ export const FeaturesImportancesCategorization = ({
         "<b>%{text}</b><br />%{xaxis.title.text}: %{x:.4~f}<br />%{yaxis.title.text}: %{y:.4~f}<extra></extra>",
       ...scatterData,
     });
-    const categories = features.reduce(
-      (categories, feature) => {
-        const contribution = data?.scaled_fc[feature];
-        const mda = data?.scaled_mda[feature];
-        if (typeof contribution !== "number" || typeof mda !== "number") {
+    const categories = features_indexes.reduce(
+      (categories, index) => {
+        const prediction_contribution = data?.scaled_pc[index];
+        const accuracy_contribution = data?.scaled_ac[index];
+        if (
+          typeof prediction_contribution !== "number" ||
+          typeof accuracy_contribution !== "number"
+        ) {
           return categories;
         }
+        const feature = data?.columns.at(parseInt(index)) || index;
 
-        const category = getCategory(contribution, mda);
+        const category = getCategory(
+          prediction_contribution,
+          accuracy_contribution
+        );
         (categories[category].text as string[]).push(feature);
-        (categories[category].x as number[]).push(contribution);
-        (categories[category].y as number[]).push(mda);
+        (categories[category].x as number[]).push(prediction_contribution);
+        (categories[category].y as number[]).push(accuracy_contribution);
         return categories;
       },
       {

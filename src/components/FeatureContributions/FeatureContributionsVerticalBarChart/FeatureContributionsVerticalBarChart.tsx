@@ -51,7 +51,7 @@ export function FeatureContributionsVerticalBarChart({
   isDark,
   isLoading,
   isPrint,
-  name = "Feature contributions",
+  name = "Prediction contributions",
   screenSizes,
   ...props
 }: FeatureContributionsVerticalBarChartProps): ReactNode {
