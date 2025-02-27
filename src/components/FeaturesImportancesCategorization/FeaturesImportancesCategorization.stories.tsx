@@ -18,7 +18,7 @@ const meta: Meta<typeof FeaturesImportancesCategorization> = {
       // overflow: "hidden",
     },
     data: {
-      scaled_fc: {
+      scaled_pc: {
         owns_house: 0.07300520600993982,
         customer_id: 0,
         occupation_type: 0.15044392607578705,
@@ -38,7 +38,7 @@ const meta: Meta<typeof FeaturesImportancesCategorization> = {
         name: 0.00940413231455159,
         prev_defaults: 0.34714082665328944,
       },
-      scaled_mda: {
+      scaled_ac: {
         owns_house: -0.0552553553856307,
         customer_id: 0.09966247812637669,
         occupation_type: -0.238054379173555,

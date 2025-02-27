@@ -11,5 +11,8 @@
     `data`: `feature_contributions_robust` -> `feature_robust_prediction_contributions`
   - `metric`: 'feature_mda' -> 'accuracy_contributions'
     `data`: `feature_mda_robust` -> `feature_robust_accuracy_contributions`
+- `FeaturesImportancesCategorizationProps` have changed
+  - `data[].scaled_fc` -> `data[].scaled_pc`
+  - `data[].scaled_mda` -> `data[].scaled_ac`
 
 ## 1.x Initial version

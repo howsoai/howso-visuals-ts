@@ -19,8 +19,8 @@ export type FeaturesImportancesCategorizationProps = BaseVisualProps &
     /** Scaled data */
     data:
       | {
-          scaled_fc: Record<string, number>;
-          scaled_mda: Record<string, number>;
+          scaled_pc: Record<string, number>;
+          scaled_ac: Record<string, number>;
         }
       | undefined;
     className?: string;
@@ -186,7 +186,7 @@ export const FeaturesImportancesCategorization = ({
 
     // Create grouped bundles
 
-    const features = Object.keys(data?.scaled_fc || {});
+    const features = Object.keys(data?.scaled_pc || {});
 
     const getCategoryDataDefaults = (
       scatterData: Partial<Omit<ScatterData, "text" | "x" | "y">>
@@ -205,8 +205,8 @@ export const FeaturesImportancesCategorization = ({
     });
     const categories = features.reduce(
       (categories, feature) => {
-        const contribution = data?.scaled_fc[feature];
-        const mda = data?.scaled_mda[feature];
+        const contribution = data?.scaled_pc[feature];
+        const mda = data?.scaled_ac[feature];
         if (typeof contribution !== "number" || typeof mda !== "number") {
           return categories;
         }
