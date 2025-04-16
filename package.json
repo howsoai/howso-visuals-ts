@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
-    "@fontsource/inter": "^5.0.5",
+    "@fontsource-variable/inter": "^5.2.5",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",

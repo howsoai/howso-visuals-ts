@@ -1,9 +1,8 @@
 import type { Preview } from "@storybook/react";
 import { darkBackground, lightBackground } from "./constants";
 // CSS
-// import "@fontsource/inter";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/700.css";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/inter/wght-italic.css";
 import "./preview.css";
 
 const preview: Preview = {
