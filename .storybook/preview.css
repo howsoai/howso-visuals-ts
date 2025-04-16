@@ -1,8 +1,9 @@
 body {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "Inter Variable", system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
+  font-optical-sizing: auto;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -12,10 +13,4 @@ body {
 
 .sb-show-main.sb-main-centered #storybook-root {
   padding: 0;
-}
-
-@supports (font-variation-settings: normal) {
-  :body {
-    font-family: "Inter var", system-ui, sans-serif;
-  }
 }
