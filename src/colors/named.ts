@@ -202,7 +202,8 @@ function buildDiscreteColorWay(namedColors: NamedColor[]) {
   return shades.reduce((colorway, shade) => {
     return namedColors.reduce((colorway, color) => {
       // @ts-expect-error
-      colorway.push(color[shade]);
+      const value = color[shade];
+      if (!colorway.includes(value)) colorway.push();
       return colorway;
     }, colorway);
   }, [] as Colorway);
